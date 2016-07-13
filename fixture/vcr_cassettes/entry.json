@@ -1,0 +1,44 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "Bearer 560976a1d0e918455da2c5000600f2e7fcdd6ad6d3a0b627b8c8c61ed93ac398",
+        "Accept": "application/json",
+        "User-Agent": "Contentful-Elixir"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/z3aswf9egfi8/entries/5JQ715oDQW68k8EiEuKOk8"
+    },
+    "response": {
+      "body": "{\n  \"sys\": {\n    \"space\": {\n      \"sys\": {\n        \"type\": \"Link\",\n        \"linkType\": \"Space\",\n        \"id\": \"z3aswf9egfi8\"\n      }\n    },\n    \"id\": \"5JQ715oDQW68k8EiEuKOk8\",\n    \"type\": \"Entry\",\n    \"createdAt\": \"2016-06-30T19:34:24.984Z\",\n    \"updatedAt\": \"2016-06-30T19:34:24.984Z\",\n    \"revision\": 1,\n    \"contentType\": {\n      \"sys\": {\n        \"type\": \"Link\",\n        \"linkType\": \"ContentType\",\n        \"id\": \"1kUEViTN4EmGiEaaeC6ouY\"\n      }\n    },\n    \"locale\": \"en-US\"\n  },\n  \"fields\": {\n    \"name\": \"Mike Springer\",\n    \"website\": \"https://plus.google.com/+openculture/posts\",\n    \"profilePhoto\": {\n      \"sys\": {\n        \"type\": \"Link\",\n        \"linkType\": \"Asset\",\n        \"id\": \"2xA3oKlZTuQ0Wgs2Wm2Mkk\"\n      }\n    },\n    \"biography\": \"Mike Springer is a journalist living in Cambridge, Massachusetts, he writes daily for Open Culture.\",\n    \"createdEntries\": [\n      {\n        \"sys\": {\n          \"type\": \"Link\",\n          \"linkType\": \"Entry\",\n          \"id\": \"A96usFSlY4G0W4kwAqswk\"\n        }\n      }\n    ]\n  }\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "Cache-Control": "max-age=0",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "ETag": "W/\"f72b47f999cc0147a36ba5b92c44bab6\"",
+        "Server": "nginx",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Request-Id": "4c3-1112255438",
+        "Content-Length": "1026",
+        "Accept-Ranges": "bytes",
+        "Date": "Wed, 13 Jul 2016 20:48:25 GMT",
+        "Via": "1.1 varnish",
+        "Age": "5739",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-iad2141-IAD",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

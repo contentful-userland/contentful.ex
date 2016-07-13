@@ -1,0 +1,44 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "Bearer 560976a1d0e918455da2c5000600f2e7fcdd6ad6d3a0b627b8c8c61ed93ac398",
+        "Accept": "application/json",
+        "User-Agent": "Contentful-Elixir"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/z3aswf9egfi8/assets/2ReMHJhXoAcy4AyamgsgwQ"
+    },
+    "response": {
+      "body": "{\n  \"sys\": {\n    \"space\": {\n      \"sys\": {\n        \"type\": \"Link\",\n        \"linkType\": \"Space\",\n        \"id\": \"z3aswf9egfi8\"\n      }\n    },\n    \"id\": \"2ReMHJhXoAcy4AyamgsgwQ\",\n    \"type\": \"Asset\",\n    \"createdAt\": \"2016-06-30T19:34:18.415Z\",\n    \"updatedAt\": \"2016-06-30T19:34:18.415Z\",\n    \"revision\": 1,\n    \"locale\": \"en-US\"\n  },\n  \"fields\": {\n    \"title\": \"Lewis Carroll\",\n    \"description\": \"Taken on January 1, 1855\",\n    \"file\": {\n      \"url\": \"//images.contentful.com/z3aswf9egfi8/2ReMHJhXoAcy4AyamgsgwQ/521a4b41550d80f210d627f469171a1c/lewis-carroll-1.jpg\",\n      \"details\": {\n        \"size\": 21113,\n        \"image\": {\n          \"width\": 300,\n          \"height\": 250\n        }\n      },\n      \"fileName\": \"lewis-carroll-1.jpg\",\n      \"contentType\": \"image/jpeg\"\n    }\n  }\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "Cache-Control": "max-age=0",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "ETag": "\"87e48e3c8a130e7ff3ad7969de49a241\"",
+        "Server": "nginx",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Request-Id": "ddd-327061605",
+        "Content-Length": "782",
+        "Accept-Ranges": "bytes",
+        "Date": "Wed, 13 Jul 2016 20:48:25 GMT",
+        "Via": "1.1 varnish",
+        "Age": "9574",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-iad2141-IAD",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

@@ -151,6 +151,7 @@ defmodule Contentful.Delivery do
       end
       fields = item["fields"]
       |> Enum.map(resolver)
+      |> Enum.into(%{})
 
       Map.merge(item, %{"fields" => fields})
     else

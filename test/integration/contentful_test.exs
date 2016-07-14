@@ -3,7 +3,7 @@ defmodule Contentful.DeliveryTest do
   alias Contentful.Delivery
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
-  @access_token  "560976a1d0e918455da2c5000600f2e7fcdd6ad6d3a0b627b8c8c61ed93ac398"
+  @access_token  "ACCESS_TOKEN"
   @space_id      "z3aswf9egfi8"
 
   setup_all do

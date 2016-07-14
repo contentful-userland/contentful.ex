@@ -3,7 +3,7 @@
     "request": {
       "body": "",
       "headers": {
-        "authorization": "Bearer 560976a1d0e918455da2c5000600f2e7fcdd6ad6d3a0b627b8c8c61ed93ac398",
+        "authorization": "Bearer ACCESS_TOKEN",
         "Accept": "application/json",
         "User-Agent": "Contentful-Elixir"
       },
@@ -28,11 +28,11 @@
         "X-Contentful-Request-Id": "4c3-1112174141",
         "Content-Length": "1593",
         "Accept-Ranges": "bytes",
-        "Date": "Wed, 13 Jul 2016 20:48:25 GMT",
+        "Date": "Thu, 14 Jul 2016 17:19:27 GMT",
         "Via": "1.1 varnish",
-        "Age": "9767",
+        "Age": "0",
         "Connection": "keep-alive",
-        "X-Served-By": "cache-iad2141-IAD",
+        "X-Served-By": "cache-iad2645-IAD",
         "X-Cache": "HIT",
         "X-Cache-Hits": "1",
         "Vary": "Accept-Encoding"

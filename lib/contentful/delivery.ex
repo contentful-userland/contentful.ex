@@ -1,4 +1,10 @@
 defmodule Contentful.Delivery do
+  @moduledoc """
+  A HTTP client for Contentful.
+  This module contains the functions to interact with Contentful's read-only
+  Content Delivery API.
+  """
+
   require Logger
   use HTTPoison.Base
 
@@ -93,7 +99,7 @@ defmodule Contentful.Delivery do
   end
 
   defp format_path(path: path, params: params) do
-    unless Enum.empty?(params) do
+    if Enum.any?(params) do
       query = params
         |> Enum.reduce("", fn ({k, v}, acc) -> acc <> "#{k}=#{v}&" end)
         |> String.rstrip(?&)
@@ -114,12 +120,13 @@ defmodule Contentful.Delivery do
   end
 
   defp merge_includes(response, includes) do
-    all_includes = %{"Asset" => includes["Asset"],
-                     "Entry" => Enum.concat(
-                       Dict.get(response, "items", []),
-                       Dict.get(includes, "Entry", [])
-                     )
-                    }
+    all_includes = %{
+      "Asset" => includes["Asset"],
+      "Entry" => Enum.concat(
+        Dict.get(response, "items", []),
+        Dict.get(includes, "Entry", [])
+      )
+    }
 
     items = if Dict.has_key?(response, "items") do
       Enum.map(
@@ -149,8 +156,11 @@ defmodule Contentful.Delivery do
 
   defp resolve_include(item, includes) do
     if item["sys"]["type"] == "Entry" do
+      resolver = fn
+        {name, field} -> {name, resolve_include_field(field, includes)}
+      end
       fields = item["fields"]
-      |> Enum.map(fn {name, field} -> {name, resolve_include_field(field, includes)} end)
+      |> Enum.map(resolver)
 
       Dict.merge(item, %{"fields" => fields})
     else

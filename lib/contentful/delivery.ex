@@ -27,7 +27,7 @@ defmodule Contentful.Delivery do
       entries_url,
       access_token,
       params
-    )
+    ) |> resolve_includes
 
     response["items"]
   end
@@ -113,7 +113,6 @@ defmodule Contentful.Delivery do
   defp process_response_body(body) do
     body
     |> Poison.decode!
-    |> resolve_includes
   end
 
   defp merge_includes(response, includes) do

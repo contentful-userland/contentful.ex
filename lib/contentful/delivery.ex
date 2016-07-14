@@ -33,7 +33,7 @@ defmodule Contentful.Delivery do
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
-    {:ok, entry} = entries(space_id, access_token, Dict.merge(params, %{'sys.id' => entry_id}))
+    {:ok, entry} = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
     |> Enum.fetch(0)
 
     entry
@@ -119,32 +119,26 @@ defmodule Contentful.Delivery do
     all_includes = %{
       "Asset" => includes["Asset"],
       "Entry" => Enum.concat(
-        Dict.get(response, "items", []),
-        Dict.get(includes, "Entry", [])
+        Map.get(response, "items", []),
+        Map.get(includes, "Entry", [])
       )
     }
 
-    items = if Dict.has_key?(response, "items") do
+    items = if Map.has_key?(response, "items") do
       Enum.map(
-        Dict.get(response, "items"), fn (item) ->
-          resolve_include(
-            item,
-            all_includes
-          )
+        Map.get(response, "items"), fn (item) ->
+          resolve_include(item, all_includes)
         end
       )
     end
 
-    Dict.merge(response, %{"items" => items})
+    Map.merge(response, %{"items" => items})
   end
 
   defp resolve_includes(response) do
-    if Dict.has_key?(response, "items") do
-      includes = Dict.get(response, "includes")
-      cond do
-        is_map(includes) -> merge_includes(response, includes)
-        true -> response
-      end
+    if Map.has_key?(response, "items") do
+      includes = Map.get(response, "includes")
+      merge_includes(response, includes)
     else
       response
     end
@@ -158,15 +152,15 @@ defmodule Contentful.Delivery do
       fields = item["fields"]
       |> Enum.map(resolver)
 
-      Dict.merge(item, %{"fields" => fields})
+      Map.merge(item, %{"fields" => fields})
     else
       item
     end
   end
 
   defp resolve_include_field(field, includes) when is_map(field) do
-    if Dict.has_key?(field, "sys") && field["sys"]["type"] == "Link" do
-      if Dict.has_key?(includes, field["sys"]["linkType"]) do
+    if Map.has_key?(field, "sys") && field["sys"]["type"] == "Link" do
+      if Map.has_key?(includes, field["sys"]["linkType"]) do
         includes[field["sys"]["linkType"]]
         |> Enum.find(fn (match) -> match["sys"]["id"] == field["sys"]["id"] end)
       else

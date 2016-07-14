@@ -109,6 +109,67 @@ defmodule Contentful.Delivery do
 
   defp process_response_body(body) do
     body
-      |> Poison.decode!
+    |> Poison.decode!
+    |> resolve_includes
   end
+
+  defp merge_includes(response, includes) do
+    all_includes = %{"Asset" => includes["Asset"],
+                     "Entry" => Enum.concat(
+                       Dict.get(response, "items", []),
+                       Dict.get(includes, "Entry", [])
+                     )
+                    }
+
+    items = if Dict.has_key?(response, "items") do
+      Enum.map(
+        Dict.get(response, "items"), fn (item) ->
+          resolve_include(
+            item,
+            all_includes
+          )
+        end
+      )
+    end
+
+    Dict.merge(response, %{"items" => items})
+  end
+
+  defp resolve_includes(response) do
+    if Dict.has_key?(response, "items") do
+      includes = Dict.get(response, "includes")
+      cond do
+        is_map(includes) -> merge_includes(response, includes)
+        true -> response
+      end
+    else
+      response
+    end
+  end
+
+  defp resolve_include(item, includes) do
+    if item["sys"]["type"] == "Entry" do
+      fields = item["fields"]
+      |> Enum.map(fn {name, field} -> {name, resolve_include_field(field, includes)} end)
+
+      Dict.merge(item, %{"fields" => fields})
+    else
+      item
+    end
+  end
+
+  defp resolve_include_field(field, includes) when is_map(field) do
+    if Dict.has_key?(field, "sys") && field["sys"]["type"] == "Link" do
+      if Dict.has_key?(includes, field["sys"]["linkType"]) do
+        includes[field["sys"]["linkType"]]
+        |> Enum.find(fn (match) -> match["sys"]["id"] == field["sys"]["id"] end)
+      else
+        field
+      end
+    else
+      field
+    end
+  end
+
+  defp resolve_include_field(field, _includes), do: field
 end

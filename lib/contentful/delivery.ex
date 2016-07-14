@@ -33,13 +33,10 @@ defmodule Contentful.Delivery do
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
-    entry_url = "/spaces/#{space_id}/entries/#{entry_id}"
+    {:ok, entry} = entries(space_id, access_token, Dict.merge(params, %{'sys.id' => entry_id}))
+    |> Enum.fetch(0)
 
-    contentful_request(
-      entry_url,
-      access_token,
-      params
-    )
+    entry
   end
 
   def assets(space_id, access_token, params \\ %{}) do

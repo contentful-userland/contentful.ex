@@ -20,26 +20,21 @@ defmodule Contentful.Delivery do
     )
   end
 
-  def entries(space_id, access_token, params \\ %{}) do
+   def entries(space_id, access_token, params \\ %{}) do
     entries_url = "/spaces/#{space_id}/entries"
 
     response = contentful_request(
       entries_url,
       access_token,
-      params
-    )
+      params)
 
-    response["items"]
+    response
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
-    entry_url = "/spaces/#{space_id}/entries/#{entry_id}"
-
-    contentful_request(
-      entry_url,
-      access_token,
-      params
-    )
+     entries = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
+     {:ok, entry} = entries["items"] |> Enum.fetch(0)
+     %{"item" => entry, "includes" => entries["includes"]}
   end
 
   def assets(space_id, access_token, params \\ %{}) do
@@ -116,69 +111,19 @@ defmodule Contentful.Delivery do
   defp process_response_body(body) do
     body
     |> Poison.decode!
-    |> resolve_includes
   end
 
-  defp merge_includes(response, includes) do
-    all_includes = %{"Asset" => includes["Asset"],
-                     "Entry" => Enum.concat(
-                       Dict.get(response, "items", []),
-                       Dict.get(includes, "Entry", [])
-                     )
-                    }
-
-    items = if Dict.has_key?(response, "items") do
-      Enum.map(
-        Dict.get(response, "items"), fn (item) ->
-          resolve_include(
-            item,
-            all_includes
-          )
-        end
-      )
-    end
-
-    Dict.merge(response, %{"items" => items})
+  defp flatten_includes(response, includes) do
+    includes = [] ++ includes["Asset"] ++ Map.get(response, "items", []) ++ Map.get(includes, "Entry", [])
+    Map.merge(response, %{"items" => items})
   end
 
   defp resolve_includes(response) do
-    if Dict.has_key?(response, "items") do
-      includes = Dict.get(response, "includes")
-      cond do
-        is_map(includes) -> merge_includes(response, includes)
-        true -> response
-      end
+    if Map.has_key?(response, "items") do
+      includes = Map.get(response, "includes")
+      flatten_includes(response, includes)
     else
       response
     end
   end
-
-  defp resolve_include(item, includes) do
-    if item["sys"]["type"] == "Entry" do
-      resolver = fn
-        {name, field} -> {name, resolve_include_field(field, includes)}
-      end
-      fields = item["fields"]
-      |> Enum.map(resolver)
-
-      Dict.merge(item, %{"fields" => fields})
-    else
-      item
-    end
-  end
-
-  defp resolve_include_field(field, includes) when is_map(field) do
-    if Dict.has_key?(field, "sys") && field["sys"]["type"] == "Link" do
-      if Dict.has_key?(includes, field["sys"]["linkType"]) do
-        includes[field["sys"]["linkType"]]
-        |> Enum.find(fn (match) -> match["sys"]["id"] == field["sys"]["id"] end)
-      else
-        field
-      end
-    else
-      field
-    end
-  end
-
-  defp resolve_include_field(field, _includes), do: field
 end

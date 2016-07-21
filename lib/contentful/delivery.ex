@@ -20,7 +20,7 @@ defmodule Contentful.Delivery do
     )
   end
 
-  def entries(space_id, access_token, params \\ %{}) do
+   def entries(space_id, access_token, params \\ %{}) do
     entries_url = "/spaces/#{space_id}/entries"
 
     response = contentful_request(
@@ -30,6 +30,7 @@ defmodule Contentful.Delivery do
     ) |> resolve_includes
 
     response["items"]
+    |> IO.inspect
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
@@ -146,12 +147,12 @@ defmodule Contentful.Delivery do
 
   defp resolve_include(item, includes) do
     if item["sys"]["type"] == "Entry" do
-      resolver = fn
-        {name, field} -> {name, resolve_include_field(field, includes)}
-      end
       fields = item["fields"]
-      |> Enum.map(resolver)
+      |> Enum.map(fn {name, field} ->
+        {name, resolve_include_field(field, includes)}
+      end)
       |> Enum.into(%{})
+      |> resolve_include_field(includes)
 
       Map.merge(item, %{"fields" => fields})
     else
@@ -159,18 +160,29 @@ defmodule Contentful.Delivery do
     end
   end
 
+
+  defp resolve_include_field(field, includes) when is_list(field) do
+    Enum.map(field, fn (field) ->
+      resolve_include_field(replace_field(field, includes), includes)
+    end)
+  end
   defp resolve_include_field(field, includes) when is_map(field) do
-    if Map.has_key?(field, "sys") && field["sys"]["type"] == "Link" do
-      if Map.has_key?(includes, field["sys"]["linkType"]) do
+    Enum.map(Map.keys(field), fn (key) ->
+      {key, replace_field(field[key], includes)}
+    end)
+    |> Enum.into(%{})
+  end
+  defp resolve_include_field(field, _includes), do: field
+
+  defp replace_field(field, includes) do
+    cond do
+      is_map(field) && field["sys"]["type"] == "Link" && (field["sys"]["linkType"] == "Asset" || field["sys"]["linkType"] == "Entry") ->
         includes[field["sys"]["linkType"]]
         |> Enum.find(fn (match) -> match["sys"]["id"] == field["sys"]["id"] end)
-      else
-        field
-      end
-    else
-      field
+        |> resolve_include_field(includes)
+
+      true ->
+        resolve_include_field(field, includes)
     end
   end
-
-  defp resolve_include_field(field, _includes), do: field
 end

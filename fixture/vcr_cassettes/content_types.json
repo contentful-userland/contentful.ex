@@ -1,0 +1,44 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "Bearer ACCESS_TOKEN",
+        "Accept": "application/json",
+        "User-Agent": "Contentful-Elixir"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/z3aswf9egfi8/content_types"
+    },
+    "response": {
+      "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 3,\n  \"skip\": 0,\n  \"limit\": 100,\n  \"items\": [\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"z3aswf9egfi8\"\n          }\n        },\n        \"id\": \"5KMiN6YPvi42icqAUQMCQe\",\n        \"type\": \"ContentType\",\n        \"createdAt\": \"2016-06-30T19:34:14.528Z\",\n        \"updatedAt\": \"2016-06-30T19:34:14.528Z\",\n        \"revision\": 1\n      },\n      \"displayField\": \"title\",\n      \"name\": \"Category\",\n      \"description\": null,\n      \"fields\": [\n        {\n          \"id\": \"title\",\n          \"name\": \"Title\",\n          \"type\": \"Symbol\",\n          \"localized\": false,\n          \"required\": true,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"shortDescription\",\n          \"name\": \"Short description\",\n          \"type\": \"Text\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": true,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"icon\",\n          \"name\": \"Icon\",\n          \"type\": \"Link\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"linkType\": \"Asset\"\n        }\n      ]\n    },\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"z3aswf9egfi8\"\n          }\n        },\n        \"id\": \"1kUEViTN4EmGiEaaeC6ouY\",\n        \"type\": \"ContentType\",\n        \"createdAt\": \"2016-06-30T19:34:14.546Z\",\n        \"updatedAt\": \"2016-06-30T19:34:14.546Z\",\n        \"revision\": 1\n      },\n      \"displayField\": \"name\",\n      \"name\": \"Author\",\n      \"description\": null,\n      \"fields\": [\n        {\n          \"id\": \"name\",\n          \"name\": \"Name\",\n          \"type\": \"Symbol\",\n          \"localized\": false,\n          \"required\": true,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"website\",\n          \"name\": \"Website\",\n          \"type\": \"Symbol\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"profilePhoto\",\n          \"name\": \"Profile Photo\",\n          \"type\": \"Link\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"linkType\": \"Asset\"\n        },\n        {\n          \"id\": \"biography\",\n          \"name\": \"Biography\",\n          \"type\": \"Text\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"createdEntries\",\n          \"name\": \"Created Entries\",\n          \"type\": \"Array\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"items\": {\n            \"type\": \"Link\",\n            \"validations\": [\n              {\n                \"linkContentType\": [\n                  \"2wKn6yEnZewu2SCCkus4as\"\n                ]\n              }\n            ],\n            \"linkType\": \"Entry\"\n          }\n        }\n      ]\n    },\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"z3aswf9egfi8\"\n          }\n        },\n        \"id\": \"2wKn6yEnZewu2SCCkus4as\",\n        \"type\": \"ContentType\",\n        \"createdAt\": \"2016-06-30T19:34:14.544Z\",\n        \"updatedAt\": \"2016-06-30T19:34:14.544Z\",\n        \"revision\": 1\n      },\n      \"displayField\": \"title\",\n      \"name\": \"Post\",\n      \"description\": null,\n      \"fields\": [\n        {\n          \"id\": \"title\",\n          \"name\": \"Title\",\n          \"type\": \"Text\",\n          \"localized\": false,\n          \"required\": true,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"slug\",\n          \"name\": \"Slug\",\n          \"type\": \"Symbol\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"author\",\n          \"name\": \"Author\",\n          \"type\": \"Array\",\n          \"localized\": false,\n          \"required\": true,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"items\": {\n            \"type\": \"Link\",\n            \"validations\": [\n              {\n                \"linkContentType\": [\n                  \"1kUEViTN4EmGiEaaeC6ouY\"\n                ]\n              }\n            ],\n            \"linkType\": \"Entry\"\n          }\n        },\n        {\n          \"id\": \"body\",\n          \"name\": \"Body\",\n          \"type\": \"Text\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"category\",\n          \"name\": \"Category\",\n          \"type\": \"Array\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"items\": {\n            \"type\": \"Link\",\n            \"validations\": [\n              {\n                \"linkContentType\": [\n                  \"5KMiN6YPvi42icqAUQMCQe\"\n                ]\n              }\n            ],\n            \"linkType\": \"Entry\"\n          }\n        },\n        {\n          \"id\": \"tags\",\n          \"name\": \"Tags\",\n          \"type\": \"Array\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"items\": {\n            \"type\": \"Symbol\",\n            \"validations\": []\n          }\n        },\n        {\n          \"id\": \"featuredImage\",\n          \"name\": \"Featured image\",\n          \"type\": \"Link\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false,\n          \"linkType\": \"Asset\"\n        },\n        {\n          \"id\": \"date\",\n          \"name\": \"Date\",\n          \"type\": \"Date\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false\n        },\n        {\n          \"id\": \"comments\",\n          \"name\": \"Comments\",\n          \"type\": \"Boolean\",\n          \"localized\": false,\n          \"required\": false,\n          \"disabled\": false,\n          \"omitted\": false\n        }\n      ]\n    }\n  ]\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "Cache-Control": "max-age=0",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "ETag": "W/\"95249e958b34ed002228a5f3c2e8f9c2\"",
+        "Server": "nginx",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Request-Id": "58b-824471504",
+        "Content-Length": "6295",
+        "Accept-Ranges": "bytes",
+        "Date": "Thu, 14 Jul 2016 17:19:27 GMT",
+        "Via": "1.1 varnish",
+        "Age": "0",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-iad2645-IAD",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

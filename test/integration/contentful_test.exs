@@ -27,7 +27,7 @@ defmodule Contentful.DeliveryTest do
             "fields.slug" => "test-page",
             "include" => "10"}
       )
-      assert is_list(entries)
+      assert is_list(entries["items"])
     end
   end
 
@@ -37,7 +37,7 @@ defmodule Contentful.DeliveryTest do
     use_cassette "entry" do
      entry = Delivery.entry(@space_id, @access_token, "5JQ715oDQW68k8EiEuKOk8")
 
-      assert is_map(entry["fields"])
+      assert is_map(entry["item"]["fields"])
     end
   end
 

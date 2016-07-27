@@ -26,17 +26,21 @@ defmodule Contentful.Delivery do
     response = contentful_request(
       entries_url,
       access_token,
-      params
-    ) |> resolve_includes
+      Map.delete(params, "resolve_includes"))
 
-    response["items"]
+    cond do
+      params["resolve_includes"] == false ->
+        response["items"]
+      true ->
+        response
+        |> Contentful.IncludeResolver.resolve_entry
+        |> Map.fetch!("items")
+    end
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
-    {:ok, entry} = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
-    |> Enum.fetch(0)
-
-    entry
+    entries = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
+    entries |> Enum.fetch!(0)
   end
 
   def assets(space_id, access_token, params \\ %{}) do
@@ -98,8 +102,8 @@ defmodule Contentful.Delivery do
   defp format_path(path: path, params: params) do
     if Enum.any?(params) do
       query = params
-        |> Enum.reduce("", fn ({k, v}, acc) -> acc <> "#{k}=#{v}&" end)
-        |> String.rstrip(?&)
+      |> Enum.reduce("", fn ({k, v}, acc) -> acc <> "#{k}=#{v}&" end)
+      |> String.rstrip(?&)
       "#{path}/?#{query}"
     else
       path
@@ -114,63 +118,4 @@ defmodule Contentful.Delivery do
     body
     |> Poison.decode!
   end
-
-  defp merge_includes(response, includes) do
-    all_includes = %{
-      "Asset" => includes["Asset"],
-      "Entry" => Enum.concat(
-        Map.get(response, "items", []),
-        Map.get(includes, "Entry", [])
-      )
-    }
-
-    items = if Map.has_key?(response, "items") do
-      Enum.map(
-        Map.get(response, "items"), fn (item) ->
-          resolve_include(item, all_includes)
-        end
-      )
-    end
-
-    Map.merge(response, %{"items" => items})
-  end
-
-  defp resolve_includes(response) do
-    if Map.has_key?(response, "items") do
-      includes = Map.get(response, "includes")
-      merge_includes(response, includes)
-    else
-      response
-    end
-  end
-
-  defp resolve_include(item, includes) do
-    if item["sys"]["type"] == "Entry" do
-      resolver = fn
-        {name, field} -> {name, resolve_include_field(field, includes)}
-      end
-      fields = item["fields"]
-      |> Enum.map(resolver)
-      |> Enum.into(%{})
-
-      Map.merge(item, %{"fields" => fields})
-    else
-      item
-    end
-  end
-
-  defp resolve_include_field(field, includes) when is_map(field) do
-    if Map.has_key?(field, "sys") && field["sys"]["type"] == "Link" do
-      if Map.has_key?(includes, field["sys"]["linkType"]) do
-        includes[field["sys"]["linkType"]]
-        |> Enum.find(fn (match) -> match["sys"]["id"] == field["sys"]["id"] end)
-      else
-        field
-      end
-    else
-      field
-    end
-  end
-
-  defp resolve_include_field(field, _includes), do: field
 end

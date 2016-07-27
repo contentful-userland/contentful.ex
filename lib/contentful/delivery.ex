@@ -20,7 +20,7 @@ defmodule Contentful.Delivery do
     )
   end
 
-   def entries(space_id, access_token, params \\ %{}) do
+  def entries(space_id, access_token, params \\ %{}) do
     entries_url = "/spaces/#{space_id}/entries"
 
     response = contentful_request(
@@ -32,9 +32,9 @@ defmodule Contentful.Delivery do
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
-     entries = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
-     {:ok, entry} = entries["items"] |> Enum.fetch(0)
-     %{"item" => entry, "includes" => entries["includes"]}
+    entries = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
+    {:ok, entry} = entries["items"] |> Enum.fetch(0)
+    %{"item" => entry, "includes" => entries["includes"]}
   end
 
   def assets(space_id, access_token, params \\ %{}) do
@@ -96,8 +96,8 @@ defmodule Contentful.Delivery do
   defp format_path(path: path, params: params) do
     if Enum.any?(params) do
       query = params
-        |> Enum.reduce("", fn ({k, v}, acc) -> acc <> "#{k}=#{v}&" end)
-        |> String.rstrip(?&)
+      |> Enum.reduce("", fn ({k, v}, acc) -> acc <> "#{k}=#{v}&" end)
+      |> String.rstrip(?&)
       "#{path}/?#{query}"
     else
       path

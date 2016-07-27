@@ -112,18 +112,4 @@ defmodule Contentful.Delivery do
     body
     |> Poison.decode!
   end
-
-  defp flatten_includes(response, includes) do
-    includes = [] ++ includes["Asset"] ++ Map.get(response, "items", []) ++ Map.get(includes, "Entry", [])
-    Map.merge(response, %{"items" => items})
-  end
-
-  defp resolve_includes(response) do
-    if Map.has_key?(response, "items") do
-      includes = Map.get(response, "includes")
-      flatten_includes(response, includes)
-    else
-      response
-    end
-  end
 end

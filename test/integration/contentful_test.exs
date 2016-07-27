@@ -14,7 +14,7 @@ defmodule Contentful.DeliveryTest do
   test "entries" do
     use_cassette "entries" do
       entries = Delivery.entries(@space_id, @access_token)
-      assert is_list(entries["items"])
+      assert is_list(entries)
     end
   end
 
@@ -27,17 +27,16 @@ defmodule Contentful.DeliveryTest do
             "fields.slug" => "test-page",
             "include" => "10"}
       )
-      assert is_list(entries["items"])
+      assert is_list(entries)
     end
   end
-
 
   @tag timeout: 10000
   test "entry" do
     use_cassette "entry" do
-     entry = Delivery.entry(@space_id, @access_token, "5JQ715oDQW68k8EiEuKOk8")
+      entry = Delivery.entry(@space_id, @access_token, "5JQ715oDQW68k8EiEuKOk8")
 
-      assert is_map(entry["item"]["fields"])
+      assert is_map(entry["fields"])
     end
   end
 

@@ -26,15 +26,21 @@ defmodule Contentful.Delivery do
     response = contentful_request(
       entries_url,
       access_token,
-      params)
+      Map.delete(params, "resolve_includes"))
 
-    response
+    cond do
+      params["resolve_includes"] == true ->
+        response
+        |> Contentful.IncludeResolver.resolve_entry
+        |> Map.fetch!("items")
+      true ->
+        response["items"]
+    end
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
     entries = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
-    {:ok, entry} = entries["items"] |> Enum.fetch(0)
-    %{"item" => entry, "includes" => entries["includes"]}
+    entries |> Enum.fetch!(0)
   end
 
   def assets(space_id, access_token, params \\ %{}) do

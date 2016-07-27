@@ -29,12 +29,12 @@ defmodule Contentful.Delivery do
       Map.delete(params, "resolve_includes"))
 
     cond do
-      params["resolve_includes"] == true ->
+      params["resolve_includes"] == false ->
+        response["items"]
+      true ->
         response
         |> Contentful.IncludeResolver.resolve_entry
         |> Map.fetch!("items")
-      true ->
-        response["items"]
     end
   end
 

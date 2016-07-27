@@ -11,7 +11,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   1. Add contentful to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:contentful, "~> 0.0.1"}]
+          [{:contentful, "~> 0.1.0"}]
         end
 
   2. Ensure contentful is started before your application:

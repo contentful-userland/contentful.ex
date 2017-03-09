@@ -28,14 +28,7 @@ defmodule Contentful.Delivery do
       access_token,
       Map.delete(params, "resolve_includes"))
 
-    cond do
-      params["resolve_includes"] == false ->
-        response["items"]
-      true ->
-        response
-        |> Contentful.IncludeResolver.resolve_entry
-        |> Map.fetch!("items")
-    end
+    response["items"]
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do

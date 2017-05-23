@@ -3,7 +3,7 @@ defmodule Contentful.Mixfile do
 
   def project do
     [app: :contentful,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -37,7 +37,7 @@ defmodule Contentful.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 0.8.0"},
+      {:httpoison, "~> 0.8"},
       {:poison, "~> 2.0"},
       {:exvcr, "~> 0.7", only: :test},
       {:dogma, "~> 0.1", only: :dev}

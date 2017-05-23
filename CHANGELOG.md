@@ -2,6 +2,13 @@
 
 ## Master
 
+## 0.1.1
+
+### Fixed
+
+* Fixed issue on empty includes
+* Fixed compatibility with Elixir 1.4
+
 ## 0.1.0
 
 ### Added

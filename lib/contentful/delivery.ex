@@ -30,11 +30,11 @@ defmodule Contentful.Delivery do
 
     cond do
       params["resolve_includes"] == false ->
-        response["items"]
+        response[:items]
       true ->
         response
         |> Contentful.IncludeResolver.resolve_entry
-        |> Map.fetch!("items")
+        |> Map.fetch!(:items)
     end
   end
 
@@ -50,7 +50,7 @@ defmodule Contentful.Delivery do
       assets_url,
       access_token,
       params
-    )["items"]
+    ).items
   end
 
   def asset(space_id, access_token, asset_id, params \\ %{}) do
@@ -70,7 +70,7 @@ defmodule Contentful.Delivery do
       content_types_url,
       access_token,
       params
-    )["items"]
+    ).items
   end
 
   def content_type(space_id, access_token, content_type_id, params \\ %{}) do
@@ -116,6 +116,6 @@ defmodule Contentful.Delivery do
 
   defp process_response_body(body) do
     body
-    |> Poison.decode!
+    |> Poison.decode!([keys: :atoms])
   end
 end

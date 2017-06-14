@@ -16,7 +16,6 @@ defmodule Contentful.IncludeResolverTest do
     use_cassette "entries" do
       entries =
         Delivery.entries(@space_id, @access_token, %{"resolve_includes" => true})
-
       assert is_list(entries)
     end
   end

@@ -1,5 +1,6 @@
 defmodule Contentful.Functions do
-  @moduledoc "Generic functions"
+  @moduledoc "Functions for interacting with Contentful API"
+  
   @callback process_url(String.t) :: String.t
   
   defmacro __using__(_params) do

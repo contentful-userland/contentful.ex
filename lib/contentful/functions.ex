@@ -1,6 +1,6 @@
 defmodule Contentful.Functions do
   @moduledoc "Functions for interacting with Contentful API"
-  
+
   @callback process_url(String.t) :: String.t
   
   defmacro __using__(_params) do
@@ -111,12 +111,6 @@ defmodule Contentful.Functions do
         body
         |> Poison.decode!
       end
-    end
-
-    #defoverridable [space: 0, entry: 0, entries: 0, assets: 0, asset: 0, content_types: 0, content_type: 0, contentful_request: 0, client_headers: 0, format_path: 0, process_url: 0, process_response_body: 0]
-    #defoverridable [space: 0, entry: 0, entries: 0, assets: 0, asset: 0, content_types: 0, content_type: 0, contentful_request: 0]
-    
+    end    
   end
-  
-
 end

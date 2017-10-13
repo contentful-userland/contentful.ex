@@ -35,7 +35,6 @@ defmodule Contentful.IncludeResolverTest do
     end
   end
 
-
   @tag timeout: 10000
   test "entry" do
     use_cassette "entry" do

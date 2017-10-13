@@ -56,6 +56,7 @@ defmodule Contentful.IncludeResolver do
         includes
         |> Enum.find(fn (match) ->
           match["sys"]["id"] == field["sys"]["id"] end)
+        |> resolve_include_field(includes)
 
       true ->
         resolve_include_field(field, includes)

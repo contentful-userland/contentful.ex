@@ -113,6 +113,13 @@ ACCESS_TOKEN = "my_access_token"
 space = Contentful.Delivery.space(SPACE_ID, ACCESS_TOKEN)
 ```
 
+### Delivery vs Preview
+
+Delivery and Preview modules implement the same set of functions but refer to two different endpoints.
+The Delivery endpoint is set to cdn.contentful.com which delivers content in published state.
+The Preview endpoint is set to preview.contentful.com which delivers both published and draft content and is useful to preview changes.
+
+
 ## Contributing
 
 1. Fork it

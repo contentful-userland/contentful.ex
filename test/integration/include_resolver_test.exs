@@ -3,12 +3,16 @@ defmodule Contentful.IncludeResolverTest do
   alias Contentful.Delivery
   alias Contentful.IncludeResolver
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  alias ExVCR.Config, as: VCR
+
 
   @access_token  "ACCESS_TOKEN"
   @space_id      "z3aswf9egfi8"
 
   setup_all do
     HTTPoison.start
+    VCR.cassette_library_dir("fixture/vcr_cassettes/delivery")
+    :ok
   end
 
   @tag timeout: 10000

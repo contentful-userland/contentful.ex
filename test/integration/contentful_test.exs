@@ -3,11 +3,11 @@ defmodule Contentful.DeliveryTest do
   alias Contentful.Delivery
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
-  @access_token  "ACCESS_TOKEN"
-  @space_id      "z3aswf9egfi8"
+  @access_token "ACCESS_TOKEN"
+  @space_id "z3aswf9egfi8"
 
   setup_all do
-    HTTPoison.start
+    HTTPoison.start()
   end
 
   @tag timeout: 10000
@@ -22,11 +22,14 @@ defmodule Contentful.DeliveryTest do
   test "search entry with includes" do
     use_cassette "single_entry_with_includes" do
       space_id = "if4k9hkjacuz"
-      entries = Delivery.entries(space_id, @access_token, %{
-            "content_type" => "6pFEhaSgDKimyOCE0AKuqe",
-            "fields.slug" => "test-page",
-            "include" => "10"}
-      )
+
+      entries =
+        Delivery.entries(space_id, @access_token, %{
+          "content_type" => "6pFEhaSgDKimyOCE0AKuqe",
+          "fields.slug" => "test-page",
+          "include" => "10"
+        })
+
       assert is_list(entries)
     end
   end
@@ -42,8 +45,9 @@ defmodule Contentful.DeliveryTest do
 
   test "content_types" do
     use_cassette "content_types" do
-      first_content_type = Delivery.content_types(@space_id, @access_token)
-      |> List.first
+      first_content_type =
+        Delivery.content_types(@space_id, @access_token)
+        |> List.first()
 
       assert is_list(first_content_type["fields"])
     end
@@ -59,8 +63,9 @@ defmodule Contentful.DeliveryTest do
 
   test "assets" do
     use_cassette "assets" do
-      first_asset = Delivery.assets(@space_id, @access_token)
-      |> List.first
+      first_asset =
+        Delivery.assets(@space_id, @access_token)
+        |> List.first()
 
       assert is_map(first_asset["fields"])
     end
@@ -78,8 +83,10 @@ defmodule Contentful.DeliveryTest do
   test "space" do
     use_cassette "space" do
       space = Delivery.space(@space_id, @access_token)
-      locales = space["locales"]
-      |> List.first
+
+      locales =
+        space["locales"]
+        |> List.first()
 
       assert locales["code"] == "en-US"
     end

@@ -23,17 +23,16 @@ defmodule Contentful.Delivery do
   def entries(space_id, access_token, params \\ %{}) do
     entries_url = "/spaces/#{space_id}/entries"
 
-    response = contentful_request(
-      entries_url,
-      access_token,
-      Map.delete(params, "resolve_includes"))
+    response =
+      contentful_request(entries_url, access_token, Map.delete(params, "resolve_includes"))
 
     cond do
       params["resolve_includes"] == false ->
         response["items"]
+
       true ->
         response
-        |> Contentful.IncludeResolver.resolve_entry
+        |> Contentful.IncludeResolver.resolve_entry()
         |> Map.fetch!("items")
     end
   end
@@ -86,7 +85,7 @@ defmodule Contentful.Delivery do
   defp contentful_request(uri, access_token, params \\ %{}) do
     final_url = format_path(path: uri, params: params)
 
-    Logger.debug "GET #{final_url}"
+    Logger.debug("GET #{final_url}")
 
     get!(final_url, client_headers(access_token)).body
   end
@@ -101,9 +100,11 @@ defmodule Contentful.Delivery do
 
   defp format_path(path: path, params: params) do
     if Enum.any?(params) do
-      query = params
-      |> Enum.reduce("", fn ({k, v}, acc) -> acc <> "#{k}=#{v}&" end)
-      |> String.rstrip(?&)
+      query =
+        params
+        |> Enum.reduce("", fn {k, v}, acc -> acc <> "#{k}=#{v}&" end)
+        |> String.rstrip(?&)
+
       "#{path}/?#{query}"
     else
       path
@@ -116,6 +117,6 @@ defmodule Contentful.Delivery do
 
   defp process_response_body(body) do
     body
-    |> Poison.decode!
+    |> Poison.decode!()
   end
 end

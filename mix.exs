@@ -2,17 +2,21 @@ defmodule Contentful.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :contentful,
-     version: "0.1.1",
-     elixir: "~> 1.2",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps(),
-     preferred_cli_env: [
-       vcr: :test, "vcr.delete": :test, "vcr.check": :test, "vcr.show": :test
-     ],
+    [
+      app: :contentful,
+      version: "0.1.1",
+      elixir: "~> 1.2",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
+      deps: deps(),
+      preferred_cli_env: [
+        vcr: :test,
+        "vcr.delete": :test,
+        "vcr.check": :test,
+        "vcr.show": :test
+      ]
     ]
   end
 
@@ -20,10 +24,12 @@ defmodule Contentful.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [
-      :logger,
-      :httpoison
-    ]]
+    [
+      applications: [
+        :logger,
+        :httpoison
+      ]
+    ]
   end
 
   # Dependencies can be Hex packages:
@@ -51,14 +57,15 @@ defmodule Contentful.Mixfile do
   end
 
   defp package do
-    [# These are the default files included in the package
-     name: :contentful,
-     files: ["lib", "mix.exs", "README*", "LICENSE*"],
-     maintainers: ["Contentful GmbH (David Litvak Bruno)"],
-     licenses: ["MIT"],
-     links: %{
-       "GitHub" => "https://github.com/contentful-labs/contentful.ex"
-     }
+    # These are the default files included in the package
+    [
+      name: :contentful,
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Contentful GmbH (David Litvak Bruno)"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/contentful-labs/contentful.ex"
+      }
     ]
   end
 end

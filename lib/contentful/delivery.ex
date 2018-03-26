@@ -23,23 +23,21 @@ defmodule Contentful.Delivery do
   def entries(space_id, access_token, params \\ %{}) do
     entries_url = "/spaces/#{space_id}/entries"
 
-    response =
-      contentful_request(entries_url, access_token, Map.delete(params, "resolve_includes"))
-
-    cond do
-      params["resolve_includes"] == false ->
-        response["items"]
-
-      true ->
-        response
-        |> Contentful.IncludeResolver.resolve_entry()
-        |> Map.fetch!("items")
+    with {:ok, body} <-
+           contentful_request(entries_url, access_token, Map.delete(params, "resolve_includes")) do
+      parse_entries(body, params)
+    else
+      error -> error
     end
   end
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
-    entries = entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id}))
-    entries |> Enum.fetch!(0)
+    with {:ok, %{"items" => [first | _]}} <-
+           entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id})) do
+      first
+    else
+      error -> error
+    end
   end
 
   def assets(space_id, access_token, params \\ %{}) do
@@ -49,7 +47,7 @@ defmodule Contentful.Delivery do
       assets_url,
       access_token,
       params
-    )["items"]
+    )
   end
 
   def asset(space_id, access_token, asset_id, params \\ %{}) do
@@ -69,7 +67,7 @@ defmodule Contentful.Delivery do
       content_types_url,
       access_token,
       params
-    )["items"]
+    )
   end
 
   def content_type(space_id, access_token, content_type_id, params \\ %{}) do
@@ -82,12 +80,30 @@ defmodule Contentful.Delivery do
     )
   end
 
+  defp parse_entries(body, %{"resolve_includes" => _}) do
+    {:ok, Contentful.IncludeResolver.resolve_entry(body)}
+  end
+
+  defp parse_entries(body, _), do: {:ok, body}
+
   defp contentful_request(uri, access_token, params \\ %{}) do
     final_url = format_path(path: uri, params: params)
 
     Logger.debug("GET #{final_url}")
 
-    get!(final_url, client_headers(access_token)).body
+    case get(final_url, client_headers(access_token)) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        {:ok, body}
+
+      {:ok, %HTTPoison.Response{status_code: 404}} ->
+        {:error, :not_found}
+
+      {:ok, %HTTPoison.Response{status_code: 401}} ->
+        {:error, :not_authorized}
+
+      {:error, %HTTPoison.Error{} = error} ->
+        {:error, error}
+    end
   end
 
   defp client_headers(access_token) do

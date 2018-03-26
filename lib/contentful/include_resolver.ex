@@ -2,8 +2,8 @@ defmodule Contentful.IncludeResolver do
   @moduledoc """
   This module contains functions to resolve the includes.
   Later, this module will also have the responsability to make new
-  contentful API request to satisfy the missing link to satisfy
-  the current missing links if they are not part of the includes.
+  contentful API request to satisfy the current missing links if they
+  are not part of the includes.
   """
 
   def resolve_entry(entries) do

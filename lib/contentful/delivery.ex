@@ -119,7 +119,7 @@ defmodule Contentful.Delivery do
       query =
         params
         |> Enum.reduce("", fn {k, v}, acc -> acc <> "#{k}=#{v}&" end)
-        |> String.rstrip(?&)
+        |> String.trim_trailing()
 
       "#{path}/?#{query}"
     else

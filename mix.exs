@@ -3,9 +3,9 @@ defmodule Contentful.Mixfile do
 
   def project do
     [
-      app: :contentful,
-      version: "0.1.1",
-      elixir: "~> 1.2",
+      apps_path: "apps",
+      version: version(),
+      elixir: elixir_version(),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -16,18 +16,6 @@ defmodule Contentful.Mixfile do
         "vcr.delete": :test,
         "vcr.check": :test,
         "vcr.show": :test
-      ]
-    ]
-  end
-
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
-  def application do
-    [
-      applications: [
-        :logger,
-        :httpoison
       ]
     ]
   end
@@ -67,5 +55,13 @@ defmodule Contentful.Mixfile do
         "GitHub" => "https://github.com/contentful-labs/contentful.ex"
       }
     ]
+  end
+
+  def version do
+    "0.2.0"
+  end
+
+  def elixir_version do
+    "~> 1.6"
   end
 end

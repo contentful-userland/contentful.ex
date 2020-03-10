@@ -1,9 +1,10 @@
 [
   inputs: [
-    "{lib,config,test}/**/*.{ex,exs}",
-    "mix.exs"
+    "apps/{lib,config,test}/**/*.{ex,exs}",
+    "mix.exs",
+    "apps/**/*/mix.exs"
   ],
-  line_length: 100,
+  line_length: 80,
   locals_without_parens: [
     # Phoenix
     action_fallback: 1,

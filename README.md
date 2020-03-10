@@ -1,8 +1,28 @@
-# Contentful Delivery SDK
+# Contentful Elixir SDK
 
-Elixir client for the [Contentful](https://www.contentful.com) Content Delivery API.
+Elixir SDK for the [Contentful](https://www.contentful.com) Content APIs.
 
 [Contentful](https://www.contentful.com) provides a content infrastructure for digital teams to power content in websites, apps, and devices. Unlike a CMS, Contentful was built to integrate with the modern software stack. It offers a central hub for structured content, powerful management and delivery APIs, and a customizable web app that enable developers and content creators to ship digital products faster.
+
+## API Overview
+
+### Contentful Delivery API (CDA)
+
+The official docs can be found here: https://www.contentful.com/developers/docs/references/content-delivery-api/.
+
+The read only API provides the content for Contenful apps. It's read only and the recommended way to deliver large amounts of content.
+
+### Contentful Management API (CMA)
+
+The official docs can be found here: https://www.contentful.com/developers/docs/references/content-management-api/.
+
+The API provides the capability to manage content you have stored with Contentful.
+
+### Contentful Preview API (CPA)
+
+The official docs can be found here: https://www.contentful.com/developers/docs/references/content-preview-api/.
+
+The Preview API can be used to access the latest versions and drafts of your content. It maintains compatibility with the Contentful Delivery API.
 
 ## Installation
 

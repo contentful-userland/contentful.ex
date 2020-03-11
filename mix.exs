@@ -1,11 +1,13 @@
 defmodule Contentful.Mixfile do
   use Mix.Project
 
+  @version "0.1.1"
+
   def project do
     [
       apps_path: "apps",
-      version: version(),
-      elixir: elixir_version(),
+      version: @version,
+      elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -16,6 +18,18 @@ defmodule Contentful.Mixfile do
         "vcr.delete": :test,
         "vcr.check": :test,
         "vcr.show": :test
+      ],
+
+      # Docs
+      name: "Contentful SDK",
+      source_url: "https://github.com/contentful-labs/contentful.ex",
+      docs: [
+        extras: [
+          "README.md",
+          "apps/contentful_delivery/README.md",
+          "apps/contentful_preview/README.md",
+          "apps/contentful_management/README.md"
+        ]
       ]
     ]
   end
@@ -34,7 +48,8 @@ defmodule Contentful.Mixfile do
       {:httpoison, "~> 0.8"},
       {:poison, "~> 2.0"},
       {:exvcr, "~> 0.7", only: :test},
-      {:dogma, "~> 0.1", only: :dev}
+      {:dogma, "~> 0.1", only: :dev},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
 
@@ -55,13 +70,5 @@ defmodule Contentful.Mixfile do
         "GitHub" => "https://github.com/contentful-labs/contentful.ex"
       }
     ]
-  end
-
-  def version do
-    "0.2.0"
-  end
-
-  def elixir_version do
-    "~> 1.6"
   end
 end

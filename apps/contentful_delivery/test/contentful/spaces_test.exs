@@ -15,6 +15,7 @@ defmodule Contentful.Delivery.SpacesTest do
 
   setup do
     ExVCR.Config.cassette_library_dir("../../fixture/vcr_cassettes")
+    ExVCR.Config.filter_request_headers("authorization")
     :ok
   end
 
@@ -22,6 +23,18 @@ defmodule Contentful.Delivery.SpacesTest do
     test "will fetch one space" do
       use_cassette "space" do
         {:ok, %Space{name: "testspace"}} = Spaces.one(@space_id, @access_token)
+      end
+    end
+
+    test "will give an error upon requesting a non existing space" do
+      use_cassette "non existing space" do
+        {:error, :not_found, original_message: _} = Spaces.one("foobarfoo", @access_token)
+      end
+    end
+
+    test "will give an error indicating wrong credentials" do
+      use_cassette "non accessible space" do
+        {:error, :unauthorized, original_message: _} = Spaces.one(@space_id, "fooo")
       end
     end
   end

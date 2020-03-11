@@ -62,9 +62,6 @@ defmodule Contentful.Delivery.Spaces do
       {:ok, %Response{status_code: 401, body: body}} ->
         body |> make_error(:unauthorized)
 
-      {:ok, %Response{status_code: 403, body: body}} ->
-        body |> make_error(:unauthorized)
-
       {:ok, %Response{status_code: 404, body: body}} ->
         body |> make_error(:not_found)
 

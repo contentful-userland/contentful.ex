@@ -4,86 +4,51 @@ defmodule Contentful.Delivery.Spaces do
   through the Contentful Delivery API
   """
 
-  alias Contentful.Space
-  import HTTPoison, only: [get: 2]
+  alias Contentful.{Delivery, Space}
+
   import Contentful.Delivery, only: [json_library: 0]
   alias HTTPoison.Response
 
-  @endpoint "cdn.contentful.com"
-  @protocol "https"
-
-  @agent_header [
-    "User-Agent": "Contentful Elixir SDK"
-  ]
-
-  @accept_header [
-    accept: "application/json"
-  ]
-
   @doc """
-  one() will retrieve one space by it's space id
+    one() will retrieve one space by it's space id
+
+    # Example
+
+      iex> Contentful.Delivery.Spaces.one("space_id")
+      %Contentful.Space{name: "a space name", _}
   """
   @spec one(String.t(), String.t()) ::
-          {:ok, Space.t()} | {:error, String.t(), String.t()}
-  def one(id, api_key \\ api_key()) do
+          {:ok, Space.t()} | {:error, atom(), list(keyword())}
+  def one(id, api_key \\ nil) do
     id
     |> build_request(api_key)
-    |> send_request
+    |> Delivery.send_request()
     |> parse_response
   end
 
   defp build_request(space_id, api_key) do
-    headers =
-      api_key
-      |> authorization_header()
-      |> Keyword.merge(@agent_header)
-      |> Keyword.merge(@accept_header)
-
-    url = "#{@protocol}://#{@endpoint}/spaces/#{space_id}"
-    {url, headers}
-  end
-
-  defp send_request({url, headers}) do
-    get(url, headers)
-  end
-
-  defp authorization_header(token) do
-    [
-      authorization: "Bearer #{token}"
-    ]
+    url = "#{Delivery.url()}/spaces/#{space_id}"
+    {url, api_key |> Delivery.request_headers()}
   end
 
   defp parse_response(response) do
     case response do
       {:ok, %Response{status_code: 200, body: body}} ->
         # parse to object here
-        body |> json_library().decode! |> make_space
+        body |> json_library().decode! |> build_space
 
       {:ok, %Response{status_code: 401, body: body}} ->
-        body |> make_error(:unauthorized)
+        body |> Delivery.build_error(:unauthorized)
 
       {:ok, %Response{status_code: 404, body: body}} ->
-        body |> make_error(:not_found)
+        body |> Delivery.build_error(:not_found)
 
-      _ ->
-        make_error()
+      {:ok, %Response{} = unknown_response} ->
+        Delivery.build_error(unknown_response)
     end
   end
 
-  defp api_key() do
-    Application.get_env(:contentful_delivery, :access_token, "")
-  end
-
-  defp make_error(response_body, status) do
-    {:ok, %{"message" => message}} = response_body |> json_library().decode()
-    {:error, status, original_message: message}
-  end
-
-  defp make_error do
-    {:error, :unknown}
-  end
-
-  defp make_space(%{
+  defp build_space(%{
          "locales" => _locales,
          "name" => name,
          "sys" => %{"id" => id, "type" => "Space"}

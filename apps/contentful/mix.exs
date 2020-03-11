@@ -1,17 +1,15 @@
-defmodule Contentful.Delivery.MixProject do
+defmodule Contentful.MixProject do
   use Mix.Project
-
-  @version "0.1.0"
 
   def project do
     [
-      app: :contentful_delivery,
-      version: @version,
+      app: :contentful,
+      version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.6",
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -21,7 +19,7 @@ defmodule Contentful.Delivery.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Contentful.Delivery.Application, []}
+      mod: {Contentful.Application, []}
     ]
   end
 

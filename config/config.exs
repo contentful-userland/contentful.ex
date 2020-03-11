@@ -8,6 +8,17 @@ use Mix.Config
 # if you want to provide default values for your application for
 # 3rd-party users, it should be done in your "mix.exs" file.
 
+# optionally, 
+config :contentful, json_library: Jason
+
+# config :contentful, json_library: Poison
+# config :contentful_management, json_library: Poison
+config :contentful_delivery, json_library: Poison
+# config :contentful_preview, json_library: Poison
+# config :contentful_management, json_library: Jason
+# config :contentful_delivery, json_library: Jason
+# config :contentful_preview, json_library: Jason
+
 # You can configure for your application as:
 #
 #     config :contentful, key: :value

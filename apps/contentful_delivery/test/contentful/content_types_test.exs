@@ -29,4 +29,13 @@ defmodule Contentful.Delivery.ContentTypesTest do
       end
     end
   end
+
+  describe ".fetch_one" do
+    test "fetches a single content type by id for a given space" do
+      use_cassette "single_content_type" do
+        {:ok, %ContentType{description: "A product model"}} =
+          ContentTypes.fetch_one("product", @space_id, "master", @access_token)
+      end
+    end
+  end
 end

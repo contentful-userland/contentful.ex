@@ -4,7 +4,7 @@ defmodule Contentful.Delivery.Spaces do
   through the Contentful Delivery API
   """
 
-  alias Contentful.{Delivery, Space}
+  alias Contentful.{Delivery, MetaData, Space}
 
   import Contentful.Delivery, only: [json_library: 0]
   alias HTTPoison.Response
@@ -53,7 +53,6 @@ defmodule Contentful.Delivery.Spaces do
          "name" => name,
          "sys" => %{"id" => id, "type" => "Space"}
        }) do
-    meta = %Contentful.MetaData{id: id}
-    {:ok, %Contentful.Space{name: name, meta_data: meta}}
+    {:ok, %Space{name: name}}
   end
 end

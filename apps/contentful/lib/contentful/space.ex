@@ -1,18 +1,11 @@
 defmodule Contentful.Space do
-  alias Contentful.MetaData
-  defstruct [:name, locales: [], meta_data: %MetaData{type: "space"}]
+  defstruct [:name, meta_data: %Contentful.MetaData{}]
 
   @typedoc """
     A Space represents a space on contentful.
   """
-  @type t(name, locales, meta_data) :: %__MODULE__{
-          name: name,
-          locales: locales,
-          meta_data: meta_data
-        }
   @type t :: %Contentful.Space{
           name: String.t(),
-          locales: list(),
-          meta_data: MetaData.t()
+          meta_data: Contentful.MetaData.t()
         }
 end

@@ -16,11 +16,6 @@ defmodule Contentful do
       iex> Contentful.json_library(:contentful)
       Jason
 
-      # also works for the other contentful apps:
-      config :contentful_delivery, json_library: Poison
-      iex> Contentful.json_library(:contentful_delivery)
-      Poison
-
   """
   @spec json_library(atom()) :: module()
   def json_library(app \\ __MODULE__) do

@@ -2,7 +2,7 @@ defmodule ContentfulTest do
   use ExUnit.Case
   doctest Contentful
 
-  test "greets the world" do
-    assert Contentful.hello() == :world
+  test "json_library checks the lib in use" do
+    assert Contentful.json_library() == Jason
   end
 end

@@ -23,19 +23,19 @@ defmodule Contentful.Delivery.Spaces do
   @doc """
   one() will retrieve one space by it's space id
   """
-  @spec one(String.t()) :: {:ok, Space.t()} | {:error, String.t(), String.t()}
-  def one(id) do
+  @spec one(String.t(), String.t()) ::
+          {:ok, Space.t()} | {:error, String.t(), String.t()}
+  def one(id, api_key \\ api_key()) do
     id
-    |> build_request
+    |> build_request(api_key)
     |> send_request
     |> parse_response
   end
 
-  defp build_request(space_id) do
+  defp build_request(space_id, api_key) do
     headers =
-      api_key()
+      api_key
       |> authorization_header()
-      |> IO.inspect()
       |> Keyword.merge(@agent_header)
       |> Keyword.merge(@accept_header)
 
@@ -57,7 +57,7 @@ defmodule Contentful.Delivery.Spaces do
     case response do
       {:ok, %Response{status_code: 200, body: body}} ->
         # parse to object here
-        body |> json_library().decode!
+        body |> json_library().decode! |> make_space
 
       {:ok, %Response{status_code: 401, body: body}} ->
         body |> make_error(:unauthorized)
@@ -84,5 +84,14 @@ defmodule Contentful.Delivery.Spaces do
 
   defp make_error do
     {:error, :unknown}
+  end
+
+  defp make_space(%{
+         "locales" => _locales,
+         "name" => name,
+         "sys" => %{"id" => id, "type" => "Space"}
+       }) do
+    meta = %Contentful.MetaData{id: id}
+    {:ok, %Contentful.Space{name: name, meta_data: meta}}
   end
 end

@@ -8,19 +8,6 @@ defmodule Contentful.Delivery do
   on the config/config.exs. Will override the central configuration
   option if set.
 
-
-  ## Examples
-
-      # in config/config.exs
-      config :contentful, json_library: Jason
-      config :contentful, json_library: Poison
-
-      The fallback is Jason, in case no option is set.
-
-
-      iex> Contentful.Delivery.json_library()
-      Poison
-
   """
   @spec json_library :: module()
   def json_library do

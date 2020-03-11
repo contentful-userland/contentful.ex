@@ -13,7 +13,7 @@ config :contentful, json_library: Jason
 
 # config :contentful, json_library: Poison
 # config :contentful_management, json_library: Poison
-config :contentful_delivery, json_library: Poison
+# config :contentful_delivery, json_library: Poison
 
 # access token should probably go into a secrets file
 # config :contentful_delivery, access_token: "<your_cda_access_token>"
@@ -43,6 +43,6 @@ config :contentful_delivery, json_library: Poison
 # here (which is why it is important to import them last).
 #
 
-if Mix.env() == :dev do
-  import_config "secrets.test.exs"
-end
+import_config "#{Mix.env()}.exs"
+
+import_config "secrets.#{Mix.env()}.exs"

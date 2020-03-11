@@ -4,7 +4,7 @@ defmodule Contentful.Delivery do
   """
 
   @doc """
-  Gets the json library for the Contetnful Delivery API based 
+  Gets the json library for the Contentful Delivery API based 
   on the config/config.exs. Will override the central configuration
   option if set.
 

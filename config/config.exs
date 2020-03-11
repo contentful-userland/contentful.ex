@@ -14,6 +14,10 @@ config :contentful, json_library: Jason
 # config :contentful, json_library: Poison
 # config :contentful_management, json_library: Poison
 config :contentful_delivery, json_library: Poison
+
+# access token should probably go into a secrets file
+# config :contentful_delivery, access_token: "<your_cda_access_token>"
+
 # config :contentful_preview, json_library: Poison
 # config :contentful_management, json_library: Jason
 # config :contentful_delivery, json_library: Jason
@@ -38,4 +42,7 @@ config :contentful_delivery, json_library: Poison
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-#     import_config "#{Mix.env}.exs"
+
+if Mix.env() == :dev do
+  import_config "secrets.test.exs"
+end

@@ -1,5 +1,5 @@
 defmodule Contentful.MetaData do
-  defstruct [:id, :revision]
+  defstruct [:id, :revision, :version]
 
   @typedoc """
     The MetaData represents internal additional data for Contetnful API objects, usually found in the 
@@ -7,6 +7,7 @@ defmodule Contentful.MetaData do
   """
   @type t :: %Contentful.MetaData{
           id: String.t(),
-          revision: integer() | nil
+          revision: integer() | nil,
+          version: integer() | nil
         }
 end

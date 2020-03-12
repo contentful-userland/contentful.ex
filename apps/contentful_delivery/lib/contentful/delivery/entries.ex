@@ -53,6 +53,9 @@ defmodule Contentful.Delivery.Entries do
     end
   end
 
+  defp parse_response({:error, %HTTPoison.Error{} = error}),
+    do: {:error, :unknown}
+
   defp build_entry(%{
          "fields" => fields,
          "sys" => %{"id" => id, "revision" => rev}

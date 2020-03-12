@@ -25,10 +25,10 @@ defmodule Contentful.Mixfile do
       source_url: "https://github.com/contentful-labs/contentful.ex",
       docs: [
         extras: [
-          "README.md",
-          "apps/contentful_delivery/README.md",
-          "apps/contentful_preview/README.md",
-          "apps/contentful_management/README.md"
+          # "README.md",
+          # "apps/contentful_delivery/README.md",
+          # "apps/contentful_preview/README.md",
+          # "apps/contentful_management/README.md"
         ]
       ]
     ]
@@ -48,10 +48,13 @@ defmodule Contentful.Mixfile do
       {:httpoison, "~> 1.6"},
       {:poison, "~> 2.0", optional: true},
       {:jason, "~> 1.1", optional: true},
+
+      # dev / test
       {:exvcr, "~> 0.11", only: :test},
       {:dogma, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
+      {:credo, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
 

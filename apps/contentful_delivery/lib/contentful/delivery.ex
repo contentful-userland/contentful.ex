@@ -38,7 +38,7 @@ defmodule Contentful.Delivery do
   @doc """
     Build the request headers for a request against the CDA. 
   """
-  @spec request_headers(String.t()) :: list(keyword())
+  @spec request_headers(String.t()) :: keyword()
   def request_headers(api_key) do
     api_key
     |> authorization_header()

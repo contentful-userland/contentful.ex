@@ -14,22 +14,18 @@ defmodule Contentful.Delivery.ContentTypes do
       # fetches all content types by a given space id
       iex> {:ok, [%Contentful.ContentType{description: "a description"} | _]} = Contentful.Delivery.ContentTypes.fetch_all("a space_id")
   """
-  def fetch_all(space, env \\ "master", api_key \\ nil)
-
-  @spec fetch_all(Space.t(), String.t(), String.t() | nil) ::
+  @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
           {:ok, list(ContentType.t())}
           | {:error, atom(), original_message: String.t()}
+  def fetch_all(space, env \\ "master", api_key \\ nil)
+
   def fetch_all(%Space{meta_data: %{id: id}}, env, api_key) do
     id
     |> build_multiple_request(env, api_key)
     |> Delivery.send_request()
-    |> parse_response()
-    |> build_content_types()
+    |> parse_response(&build_content_types/1)
   end
 
-  @spec fetch_all(String.t(), String.t(), String.t() | nil) ::
-          {:ok, list(ContentType.t())}
-          | {:error, atom(), original_message: String.t()}
   def fetch_all(space_id, env, api_key) do
     fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
   end
@@ -44,30 +40,30 @@ defmodule Contentful.Delivery.ContentTypes do
       {:ok, %Contentful.ContentType{description: "a description"}} 
         = space |> Contentful.Delivery.ContentTypes.fetch_one("my_content_type_id")
   """
-  def fetch_one(space, content_type_id, env \\ "master", api_key \\ nil)
-
-  @spec fetch_one(Space.t(), String.t(), String.t(), String.t() | nil) ::
+  @spec fetch_one(
+          Space.t() | String.t(),
+          String.t(),
+          String.t(),
+          String.t() | nil
+        ) ::
           {:ok, ContentType.t()}
           | {:error, atom(), original_message: String.t()}
           | {:error, :unknown}
+  def fetch_one(space, content_type_id, env \\ "master", api_key \\ nil)
+
   def fetch_one(%Space{meta_data: %{id: id}}, content_type_id, env, api_key) do
     content_type =
       content_type_id
       |> build_single_request(id, env, api_key)
       |> Delivery.send_request()
-      |> parse_response()
-      |> build_content_type()
+      |> parse_response(&build_content_type/1)
 
     case content_type do
-      {:error, _} -> content_type
-      content_type -> {:ok, content_type}
+      %ContentType{} -> {:ok, content_type}
+      _ -> content_type
     end
   end
 
-  @spec fetch_one(String.t(), String.t(), String.t(), String.t() | nil) ::
-          {:ok, ContentType.t()}
-          | {:error, atom(), original_message: String.t()}
-          | {:error, :unknown}
   def fetch_one(space_id, content_type_id, env, api_key) do
     fetch_one(%Space{meta_data: %{id: space_id}}, content_type_id, env, api_key)
   end
@@ -99,11 +95,11 @@ defmodule Contentful.Delivery.ContentTypes do
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp parse_response(response) do
-    with {:ok, %Response{status_code: code, body: body}} <- response do
+  defp parse_response(response, callback) do
+    with {:ok, %Response{status_code: code, body: body} = resp} <- response do
       case code do
         200 ->
-          body |> Contentful.json_library().decode!
+          body |> Contentful.json_library().decode! |> callback.()
 
         401 ->
           body |> Delivery.build_error(:unauthorized)
@@ -112,7 +108,7 @@ defmodule Contentful.Delivery.ContentTypes do
           body |> Delivery.build_error(:not_found)
 
         _ ->
-          Delivery.build_error(response)
+          Delivery.build_error(resp)
       end
     end
   end
@@ -124,12 +120,14 @@ defmodule Contentful.Delivery.ContentTypes do
   defp build_content_type(%{
          "name" => name,
          "description" => description,
+         "displayField" => display_field,
          "sys" => %{"id" => id, "revision" => rev},
          "fields" => fields
        }) do
     %ContentType{
       name: name,
       description: description,
+      display_field: display_field,
       fields: Enum.map(fields, &build_field/1),
       meta_data: %MetaData{id: id, revision: rev}
     }

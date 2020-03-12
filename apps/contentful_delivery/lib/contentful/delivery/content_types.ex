@@ -7,7 +7,12 @@ defmodule Contentful.Delivery.ContentTypes do
   alias HTTPoison.Response
 
   @doc """
-    Used to query the content types for a given space
+  Used to query all the content types for a given space
+
+  ## Examples
+
+      # fetches all content types by a given space id
+      iex> {:ok, [%Contentful.ContentType{description: "a description"} | _]} = Contentful.Delivery.ContentTypes.fetch_all("a space_id")
   """
   def fetch_all(space, env \\ "master", api_key \\ nil)
 
@@ -30,7 +35,14 @@ defmodule Contentful.Delivery.ContentTypes do
   end
 
   @doc """
-    Used to fetch a single ContentType
+  Used to fetch a single ContentType by a space
+
+  ## Examples
+
+      # fetches a content type for a space given
+      iex> {:ok, %Contentful.Space{} = space} = Contentful.Delivery.Spaces.fetch_one("a_space_id")
+      {:ok, %Contentful.ContentType{description: "a description"}} 
+        = space |> Contentful.Delivery.ContentTypes.fetch_one("my_content_type_id")
   """
   def fetch_one(content_type_id, space, env \\ "master", api_key \\ nil)
 

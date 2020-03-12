@@ -19,22 +19,25 @@ defmodule Contentful.Delivery.SpacesTest do
     :ok
   end
 
-  describe ".one" do
+  describe ".fetch_one" do
     test "will fetch one space" do
       use_cassette "space" do
-        {:ok, %Space{name: "testspace"}} = Spaces.one(@space_id, @access_token)
+        {:ok, %Space{name: "testspace", meta_data: %{id: id}}} =
+          Spaces.fetch_one(@space_id, @access_token)
+
+        assert id == @space_id
       end
     end
 
     test "will give an error upon requesting a non existing space" do
       use_cassette "non existing space" do
-        {:error, :not_found, original_message: _} = Spaces.one("foobarfoo", @access_token)
+        {:error, :not_found, original_message: _} = Spaces.fetch_one("foobarfoo", @access_token)
       end
     end
 
     test "will give an error indicating wrong credentials" do
       use_cassette "non accessible space" do
-        {:error, :unauthorized, original_message: _} = Spaces.one(@space_id, "fooo")
+        {:error, :unauthorized, original_message: _} = Spaces.fetch_one(@space_id, "fooo")
       end
     end
   end

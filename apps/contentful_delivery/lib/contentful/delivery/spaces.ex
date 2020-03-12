@@ -10,16 +10,25 @@ defmodule Contentful.Delivery.Spaces do
   alias HTTPoison.Response
 
   @doc """
-    one() will retrieve one space by it's space id
+  fetch_one() will retrieve one space by it's space id
 
-    # Example
+  ## Examples
 
-      iex> Contentful.Delivery.Spaces.one("space_id")
-      %Contentful.Space{name: "a space name", _}
+      # space you have access to, token will be read from config/config.exs
+      iex> {:ok, space} = Contentful.Delivery.Spaces.fetch_one("space_id")
+      {:ok, %Contentful.Space{name: "a space name", meta_data: %{id: "space_id"}}}
+
+      # space that does not exist
+      iex> {:error, :not_found, original_message: _message} 
+        = Contentful.Delivery.Spaces.fetch_one("non_existing_space", "<your_api_key>")
+
+      # no access
+      iex> {:error, :unauthorized, original_message: _message} 
+        = Contentful.Delivery.Spaces.fetch_one("non_existing_space", "<your_api_key>")
   """
-  @spec one(String.t(), String.t()) ::
+  @spec fetch_one(String.t(), String.t()) ::
           {:ok, Space.t()} | {:error, atom(), list(keyword())}
-  def one(id, api_key \\ nil) do
+  def fetch_one(id, api_key \\ nil) do
     id
     |> build_request(api_key)
     |> Delivery.send_request()
@@ -53,6 +62,6 @@ defmodule Contentful.Delivery.Spaces do
          "name" => name,
          "sys" => %{"id" => id, "type" => "Space"}
        }) do
-    {:ok, %Space{name: name}}
+    {:ok, %Space{name: name, meta_data: %MetaData{id: id}}}
   end
 end

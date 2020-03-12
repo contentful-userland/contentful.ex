@@ -7,6 +7,6 @@ defmodule Contentful.MetaData do
   """
   @type t :: %Contentful.MetaData{
           id: String.t(),
-          revision: integer()
+          revision: integer() | nil
         }
 end

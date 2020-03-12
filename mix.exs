@@ -50,7 +50,8 @@ defmodule Contentful.Mixfile do
       {:jason, "~> 1.1", optional: true},
       {:exvcr, "~> 0.11", only: :test},
       {:dogma, "~> 0.1", only: :dev},
-      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false}
     ]
   end
 

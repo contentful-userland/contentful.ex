@@ -21,17 +21,48 @@ defmodule Contentful.Delivery.Entries do
 
   def fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key) do
     space_id
-    |> build_request(entry_id, env, api_key)
+    |> build_single_request(entry_id, env, api_key)
     |> Delivery.send_request()
     |> parse_response(&build_entry/1)
   end
 
-  defp build_request(space_id, entry_id, env, api_key) do
+  @doc """
+  fetch_all will fetch all entries associated with a space _that_ are *published*
+  """
+  @spec fetch_all(Space.t(), String.t(), String.t() | nil) ::
+          {:ok, list(Entry.t())}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :unknown}
+  def fetch_all(space, env \\ "master", api_key \\ nil)
+
+  def fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key) do
+    space_id
+    |> build_multi_request(env, api_key)
+    |> Delivery.send_request()
+    |> parse_response(&build_entries/1)
+  end
+
+  def fetch_all(space_id, env, api_key) when is_binary(space_id) do
+    fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
+  end
+
+  defp build_single_request(space_id, entry_id, env, api_key) do
     url = [
       "#{Delivery.url()}",
       "/spaces/#{space_id}",
       "/environments/#{env}",
       "/entries/#{entry_id}"
+    ]
+
+    {url, api_key |> Delivery.request_headers()}
+  end
+
+  defp build_multi_request(space_id, env, api_key) do
+    url = [
+      "#{Delivery.url()}",
+      "/spaces/#{space_id}",
+      "/environments/#{env}",
+      "/entries"
     ]
 
     {url, api_key |> Delivery.request_headers()}
@@ -53,8 +84,12 @@ defmodule Contentful.Delivery.Entries do
     end
   end
 
-  defp parse_response({:error, %HTTPoison.Error{} = error}),
+  defp parse_response({:error, %HTTPoison.Error{}}, _callback),
     do: {:error, :unknown}
+
+  defp build_entries(%{"sys" => %{"type" => "Array"}, "items" => items}) do
+    {:ok, items |> Enum.map(&build_entry/1)}
+  end
 
   defp build_entry(%{
          "fields" => fields,

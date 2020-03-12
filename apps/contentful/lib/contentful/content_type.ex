@@ -1,8 +1,12 @@
 defmodule Contentful.ContentType do
+  alias Contentful.MetaData
+  alias Contentful.ContentType.Field
+
   defstruct [
     :name,
     :description,
-    meta_data: %Contentful.MetaData{}
+    meta_data: %MetaData{},
+    fields: []
   ]
 
   @typedoc """
@@ -12,6 +16,7 @@ defmodule Contentful.ContentType do
   @type t :: %Contentful.ContentType{
           name: String.t(),
           description: String.t(),
-          meta_data: Contentful.MetaData.t()
+          fields: list(Field.t()),
+          meta_data: MetaData.t()
         }
 end

@@ -44,13 +44,13 @@ defmodule Contentful.Delivery.ContentTypes do
       {:ok, %Contentful.ContentType{description: "a description"}} 
         = space |> Contentful.Delivery.ContentTypes.fetch_one("my_content_type_id")
   """
-  def fetch_one(content_type_id, space, env \\ "master", api_key \\ nil)
+  def fetch_one(space, content_type_id, env \\ "master", api_key \\ nil)
 
-  @spec fetch_one(String.t(), Space.t(), String.t(), String.t() | nil) ::
+  @spec fetch_one(Space.t(), String.t(), String.t(), String.t() | nil) ::
           {:ok, ContentType.t()}
           | {:error, atom(), original_message: String.t()}
           | {:error, :unknown}
-  def fetch_one(content_type_id, %Space{meta_data: %{id: id}}, env, api_key) do
+  def fetch_one(%Space{meta_data: %{id: id}}, content_type_id, env, api_key) do
     content_type =
       content_type_id
       |> build_single_request(id, env, api_key)
@@ -68,8 +68,8 @@ defmodule Contentful.Delivery.ContentTypes do
           {:ok, ContentType.t()}
           | {:error, atom(), original_message: String.t()}
           | {:error, :unknown}
-  def fetch_one(content_type_id, space_id, env, api_key) do
-    fetch_one(content_type_id, %Space{meta_data: %{id: space_id}}, env, api_key)
+  def fetch_one(space_id, content_type_id, env, api_key) do
+    fetch_one(%Space{meta_data: %{id: space_id}}, content_type_id, env, api_key)
   end
 
   defp build_multiple_request(space_id, environment, api_key) do
@@ -124,14 +124,33 @@ defmodule Contentful.Delivery.ContentTypes do
   defp build_content_type(%{
          "name" => name,
          "description" => description,
-         "sys" => %{"id" => id, "revision" => rev}
+         "sys" => %{"id" => id, "revision" => rev},
+         "fields" => fields
        }) do
-    meta = %MetaData{id: id, revision: rev}
-
     %ContentType{
       name: name,
       description: description,
-      meta_data: meta
+      fields: Enum.map(fields, &build_field/1),
+      meta_data: %MetaData{id: id, revision: rev}
+    }
+  end
+
+  defp build_field(%{
+         "required" => req,
+         "name" => name,
+         "localized" => loc,
+         "disabled" => disabled,
+         "omitted" => omit,
+         "type" => type
+       }) do
+    %ContentType.Field{
+      required: req,
+      name: name,
+      localized: loc,
+      disabled: disabled,
+      omitted: omit,
+      type: type,
+      validations: []
     }
   end
 end

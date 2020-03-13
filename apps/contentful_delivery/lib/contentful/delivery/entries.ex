@@ -6,7 +6,7 @@ defmodule Contentful.Delivery.Entries do
   alias HTTPoison.Response
 
   @doc """
-  fetch_one will fetch a single entry for a given space within an environment
+  will fetch a single entry for a given space within an environment
   """
   @spec fetch_one(
           Space.t() | String.t(),
@@ -27,7 +27,7 @@ defmodule Contentful.Delivery.Entries do
   end
 
   @doc """
-  fetch_all will fetch all entries associated with a space _that_ are *published*
+  will fetch all entries associated with a space __that are **published**__
   """
   @spec fetch_all(Space.t(), String.t(), String.t() | nil) ::
           {:ok, list(Entry.t())}

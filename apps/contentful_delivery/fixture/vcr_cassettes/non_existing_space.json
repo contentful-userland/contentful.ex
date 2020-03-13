@@ -1,0 +1,44 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/foobarfoo"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Error\",\n    \"id\": \"NotFound\"\n  },\n  \"message\": \"The resource could not be found.\",\n  \"requestId\": \"dfcdd46b-9293-42de-8ab8-f617ec0d75c9\"\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Content-Length": "165",
+        "Accept-Ranges": "bytes",
+        "Date": "Fri, 13 Mar 2020 08:01:27 GMT",
+        "Via": "1.1 varnish",
+        "Age": "312",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-hhn4056-HHN",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "x-contentful-request-id": "23a60342-ccc3-4b27-9560-3a925e6d18c0"
+      },
+      "status_code": 404,
+      "type": "ok"
+    }
+  }
+]

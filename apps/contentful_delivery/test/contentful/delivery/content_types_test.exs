@@ -7,14 +7,14 @@ defmodule Contentful.Delivery.ContentTypesTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   @space_id "bmehzfuz4raf"
-  @access_token "AN_ACCESS_TOKEN"
+  @access_token nil
 
   setup_all do
     HTTPoison.start()
   end
 
   setup do
-    ExVCR.Config.cassette_library_dir("../../fixture/vcr_cassettes")
+    # ExVCR.Config.cassette_library_dir("../../fixture/vcr_cassettes")
     ExVCR.Config.filter_request_headers("authorization")
     :ok
   end

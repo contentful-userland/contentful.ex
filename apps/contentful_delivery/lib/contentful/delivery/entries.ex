@@ -20,10 +20,20 @@ defmodule Contentful.Delivery.Entries do
   def fetch_one(space_id, entry_id, env \\ "master", api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key) do
-    space_id
-    |> build_single_request(entry_id, env, api_key)
-    |> Delivery.send_request()
-    |> parse_response(&build_entry/1)
+    entry =
+      space_id
+      |> build_single_request(entry_id, env, api_key)
+      |> Delivery.send_request()
+      |> parse_response(&build_entry/1)
+
+    case entry do
+      %Entry{} -> {:ok, entry}
+      _ -> entry
+    end
+  end
+
+  def fetch_one(space_id, entry_id, env, api_key) do
+    fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key)
   end
 
   @doc """

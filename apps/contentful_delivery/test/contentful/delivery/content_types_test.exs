@@ -14,7 +14,6 @@ defmodule Contentful.Delivery.ContentTypesTest do
   end
 
   setup do
-    # ExVCR.Config.cassette_library_dir("../../fixture/vcr_cassettes")
     ExVCR.Config.filter_request_headers("authorization")
     :ok
   end

@@ -12,7 +12,7 @@ defmodule Contentful.Delivery.ContentTypes do
   ## Examples
 
       # fetches all content types by a given space id
-      iex> {:ok, [%Contentful.ContentType{description: "a description"} | _]} = Contentful.Delivery.ContentTypes.fetch_all("a space_id")
+      iex> {:ok, [%Contentful.ContentType{description: "a description"}]} = Contentful.Delivery.ContentTypes.fetch_all("a space_id")
   """
   @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
           {:ok, list(ContentType.t())}

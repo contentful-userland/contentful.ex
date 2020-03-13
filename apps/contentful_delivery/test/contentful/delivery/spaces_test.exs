@@ -7,7 +7,7 @@ defmodule Contentful.Delivery.SpacesTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   @space_id "bmehzfuz4raf"
-  @access_token nil
+  @access_token "a token"
 
   setup_all do
     HTTPoison.start()

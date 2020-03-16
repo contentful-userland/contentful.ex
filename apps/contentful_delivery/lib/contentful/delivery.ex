@@ -5,6 +5,8 @@ defmodule Contentful.Delivery do
 
   import HTTPoison, only: [get: 2]
 
+  alias HTTPoison.Response
+
   @endpoint "cdn.contentful.com"
   @protocol "https"
   @separator "/"
@@ -76,9 +78,43 @@ defmodule Contentful.Delivery do
   @doc """
     Sends a request against the CDA
   """
-  @spec send_request(tuple()) :: {:ok, HTTPoison.Response.t()}
+  @spec send_request(tuple()) :: {:ok, Response.t()}
   def send_request({url, headers}) do
     get(url, headers)
+  end
+
+  @doc """
+  parses the response from the CDA and triggers a callback on success
+  """
+  @spec parse_response({:ok, Response.t()}, fun()) ::
+          {:ok, struct() | list(struct())}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, atom(), original_message: String.t()}
+  def parse_response(
+        {:ok, %Response{status_code: code, body: body} = resp},
+        callback
+      ) do
+    case code do
+      200 ->
+        body |> json_library().decode! |> callback.()
+
+      401 ->
+        body |> build_error(:unauthorized)
+
+      404 ->
+        body |> build_error(:not_found)
+
+      _ ->
+        resp |> build_error()
+    end
+  end
+
+  @doc """
+  catch all for any errors furing flight (conneciton loss, etc.)
+  """
+  @spec parse_response({:error, any()}, fun()) :: {:error, :unknown}
+  def parse_response({:error, _}, _callback) do
+    build_error()
   end
 
   @doc """
@@ -92,11 +128,11 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-    Used for the rate limit exceeded error  
+    Used for the rate limit exceeded error, as it gives the user extra information on wait times
   """
-  @spec build_error(HTTPoison.Response.t()) ::
+  @spec build_error(Response.t()) ::
           {:error, :rate_limit_exceeded, wait_for: integer()}
-  def build_error(%HTTPoison.Response{
+  def build_error(%Response{
         status_code: 429,
         headers: [{"x-contentful-rate-limit-exceeded", seconds}, _]
       }) do

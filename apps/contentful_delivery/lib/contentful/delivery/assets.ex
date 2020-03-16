@@ -7,8 +7,6 @@ defmodule Contentful.Delivery.Assets do
 
   alias Contentful.{Asset, Delivery, Space}
 
-  alias HTTPoison.Response
-
   @doc """
   fetches one asset from a given space
 
@@ -26,7 +24,7 @@ defmodule Contentful.Delivery.Assets do
     space_id
     |> build_single_request(asset_id, env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_asset/1)
+    |> Delivery.parse_response(&build_asset/1)
   end
 
   def fetch_one(space_id, asset_id, env, api_key) do
@@ -37,8 +35,8 @@ defmodule Contentful.Delivery.Assets do
   Fetches all assets for a given Contentful.Space
 
   ## Examples
-    space = "my_space_id"
-    {:ok, [%Asset{} | _]} = space |> Contentful.Delivery.Assets.fetch_all()
+      space = "my_space_id"
+      {:ok, [%Asset{} | _]} = space |> Contentful.Delivery.Assets.fetch_all()
   """
   @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
           {:ok, list(Contentful.Asset.t())}
@@ -50,7 +48,7 @@ defmodule Contentful.Delivery.Assets do
     id
     |> build_multi_request(env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_assets/1)
+    |> Delivery.parse_response(&build_assets/1)
   end
 
   def fetch_all(space_id, env, api_key) do
@@ -73,29 +71,6 @@ defmodule Contentful.Delivery.Assets do
     ]
 
     {url, api_key |> Delivery.request_headers()}
-  end
-
-  defp parse_response(
-         {:ok, %Response{status_code: code, body: body} = resp},
-         callback
-       ) do
-    case code do
-      200 ->
-        body |> Delivery.json_library().decode! |> callback.()
-
-      401 ->
-        body |> Delivery.build_error(:unauthorized)
-
-      404 ->
-        body |> Delivery.build_error(:not_found)
-
-      _ ->
-        resp |> Delivery.build_error()
-    end
-  end
-
-  defp parse_response({:error, _}, _callback) do
-    Delivery.build_error()
   end
 
   defp build_asset(%{"fields" => fields, "sys" => sys}) do

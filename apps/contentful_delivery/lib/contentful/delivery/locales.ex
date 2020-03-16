@@ -3,7 +3,6 @@ defmodule Contentful.Delivery.Locales do
   Handles the fetching of locales within a given space
   """
   alias Contentful.{Delivery, Locale, Space}
-  alias HTTPoison.Response
 
   @doc """
   will attempt to fetch all locales for a given space
@@ -16,7 +15,7 @@ defmodule Contentful.Delivery.Locales do
     space_id
     |> build_request(env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_locales/1)
+    |> Delivery.parse_response(&build_locales/1)
   end
 
   def fetch_all(space_id, env, api_key) do
@@ -30,29 +29,6 @@ defmodule Contentful.Delivery.Locales do
     ]
 
     {url, api_key |> Delivery.request_headers()}
-  end
-
-  defp parse_response(
-         {:ok, %Response{status_code: code, body: body}} = resp,
-         callback
-       ) do
-    case code do
-      200 ->
-        body |> Delivery.json_library().decode! |> callback.()
-
-      401 ->
-        body |> Delivery.build_error(:unauthorized)
-
-      404 ->
-        body |> Delivery.build_error(:not_found)
-
-      _ ->
-        resp |> Delivery.build_error()
-    end
-  end
-
-  defp parse_response({:error, _}, _callback) do
-    Delivery.build_error()
   end
 
   defp build_locales(%{"items" => items}) do

@@ -3,7 +3,6 @@ defmodule Contentful.Delivery.Entries do
   Entries collects function around the reading of entries from spaces
   """
   alias Contentful.{Delivery, Entry, MetaData, Space}
-  alias HTTPoison.Response
 
   @doc """
   will fetch a single entry for a given space within an environment
@@ -23,7 +22,7 @@ defmodule Contentful.Delivery.Entries do
     space_id
     |> build_single_request(entry_id, env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_entry/1)
+    |> Delivery.parse_response(&build_entry/1)
   end
 
   def fetch_one(space_id, entry_id, env, api_key) do
@@ -43,7 +42,7 @@ defmodule Contentful.Delivery.Entries do
     space_id
     |> build_multi_request(env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_entries/1)
+    |> Delivery.parse_response(&build_entries/1)
   end
 
   def fetch_all(space_id, env, api_key) when is_binary(space_id) do
@@ -67,28 +66,6 @@ defmodule Contentful.Delivery.Entries do
 
     {url, api_key |> Delivery.request_headers()}
   end
-
-  defp parse_response(
-         {:ok, %Response{status_code: code, body: body} = resp},
-         callback
-       ) do
-    case code do
-      200 ->
-        body |> Delivery.json_library().decode! |> callback.()
-
-      401 ->
-        body |> Delivery.build_error(:unauthorized)
-
-      404 ->
-        body |> Delivery.build_error(:not_found)
-
-      _ ->
-        resp |> Delivery.build_error()
-    end
-  end
-
-  defp parse_response({:error, %HTTPoison.Error{}}, _callback),
-    do: {:error, :unknown}
 
   defp build_entries(%{"sys" => %{"type" => "Array"}, "items" => items}) do
     {:ok, items |> Enum.map(&build_entry/1) |> Enum.map(fn {:ok, entry} -> entry end)}

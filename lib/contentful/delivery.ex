@@ -24,7 +24,11 @@ defmodule Contentful.Delivery do
     entries_url = "/spaces/#{space_id}/entries"
 
     with {:ok, body} <-
-           contentful_request(entries_url, access_token, Map.delete(params, "resolve_includes")) do
+           contentful_request(
+             entries_url,
+             access_token,
+             Map.delete(params, "resolve_includes")
+           ) do
       parse_entries(body, params)
     else
       error -> error
@@ -33,7 +37,11 @@ defmodule Contentful.Delivery do
 
   def entry(space_id, access_token, entry_id, params \\ %{}) do
     with {:ok, %{"items" => [first | _]}} <-
-           entries(space_id, access_token, Map.merge(params, %{'sys.id' => entry_id})) do
+           entries(
+             space_id,
+             access_token,
+             Map.merge(params, %{'sys.id' => entry_id})
+           ) do
       first
     else
       error -> error

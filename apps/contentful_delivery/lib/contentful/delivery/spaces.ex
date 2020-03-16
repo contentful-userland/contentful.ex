@@ -6,9 +6,6 @@ defmodule Contentful.Delivery.Spaces do
 
   alias Contentful.{Delivery, MetaData, Space}
 
-  import Contentful.Delivery, only: [json_library: 0]
-  alias HTTPoison.Response
-
   @doc """
   fetch_one() will retrieve one space by it's space id
 
@@ -34,29 +31,12 @@ defmodule Contentful.Delivery.Spaces do
     id
     |> build_request(api_key)
     |> Delivery.send_request()
-    |> parse_response
+    |> Delivery.parse_response(&build_space/1)
   end
 
   defp build_request(space_id, api_key) do
     url = space_id |> Delivery.url()
     {url, api_key |> Delivery.request_headers()}
-  end
-
-  defp parse_response(response) do
-    case response do
-      {:ok, %Response{status_code: 200, body: body}} ->
-        # parse to object here
-        body |> json_library().decode! |> build_space
-
-      {:ok, %Response{status_code: 401, body: body}} ->
-        body |> Delivery.build_error(:unauthorized)
-
-      {:ok, %Response{status_code: 404, body: body}} ->
-        body |> Delivery.build_error(:not_found)
-
-      {:ok, %Response{} = unknown_response} ->
-        Delivery.build_error(unknown_response)
-    end
   end
 
   defp build_space(%{

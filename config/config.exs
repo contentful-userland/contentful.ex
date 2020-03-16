@@ -46,10 +46,10 @@ config :contentful, json_library: Jason
 extendend_config = "#{Mix.env()}.exs"
 extendend_config_secret = "secrets.#{Mix.env()}.exs"
 
-if File.exists?(extendend_config) do
+if File.exists?("config/#{extendend_config}") do
   import_config extendend_config
 end
 
-if File.exists?(extendend_config_secret) do
+if File.exists?("config/#{extendend_config_secret}") do
   import_config extendend_config_secret
 end

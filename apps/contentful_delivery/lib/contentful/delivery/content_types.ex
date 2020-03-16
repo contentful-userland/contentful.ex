@@ -4,7 +4,6 @@ defmodule Contentful.Delivery.ContentTypes do
   """
 
   alias Contentful.{ContentType, Delivery, MetaData, Space}
-  alias HTTPoison.Response
 
   @doc """
   Used to query all the content types for a given space
@@ -17,13 +16,14 @@ defmodule Contentful.Delivery.ContentTypes do
   @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
           {:ok, list(ContentType.t())}
           | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
   def fetch_all(space, env \\ "master", api_key \\ nil)
 
   def fetch_all(%Space{meta_data: %{id: id}}, env, api_key) do
     id
     |> build_multiple_request(env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_content_types/1)
+    |> Delivery.parse_response(&build_content_types/1)
   end
 
   def fetch_all(space_id, env, api_key) do
@@ -55,7 +55,7 @@ defmodule Contentful.Delivery.ContentTypes do
     content_type_id
     |> build_single_request(id, env, api_key)
     |> Delivery.send_request()
-    |> parse_response(&build_content_type/1)
+    |> Delivery.parse_response(&build_content_type/1)
   end
 
   def fetch_one(space_id, content_type_id, env, api_key) do
@@ -79,24 +79,6 @@ defmodule Contentful.Delivery.ContentTypes do
     ]
 
     {url, api_key |> Delivery.request_headers()}
-  end
-
-  defp parse_response(response, callback) do
-    with {:ok, %Response{status_code: code, body: body} = resp} <- response do
-      case code do
-        200 ->
-          body |> Contentful.json_library().decode! |> callback.()
-
-        401 ->
-          body |> Delivery.build_error(:unauthorized)
-
-        404 ->
-          body |> Delivery.build_error(:not_found)
-
-        _ ->
-          resp |> Delivery.build_error()
-      end
-    end
   end
 
   defp build_content_types(%{"items" => items}) do

@@ -13,32 +13,32 @@ defmodule Contentful.Delivery.ContentTypes do
   ## Examples
 
       # fetches all content types by a given space id
-      {:ok, [%Contentful.ContentType{description: "a description"}]} 
+      {:ok, [%Contentful.ContentType{description: "a description"}], total: _} 
         = ContentTypes.fetch_all("a space_id")
 
       # with collection params
       space = "my_space_id"
-      {:ok, [%ContentType{ description: "first one"} | _]} 
+      {:ok, [%ContentType{ description: "first one"} | _], total: 3} 
         = space |> ContentTypes.fetch_all()
 
       {:ok, [
         %ContentType{ description: "first one"}}, 
         %ContentType{ description: "second one"}}, 
         %ContentType{ description: "third one"}}
-      ]} = space |> ContentTypes.fetch_all
+      ], total: 3} = space |> ContentTypes.fetch_all
       
       {:ok, [
         %ContentType{ description: "second one"}}, 
         %ContentType{ description: "third one"}}
-      ]} = space |> ContentTypes.fetch_all(skip: 1)
+      ], total: 3} = space |> ContentTypes.fetch_all(skip: 1)
 
       {:ok, [
         %ContentType{ description: "first one" }
-      ]} = space |> ContentTypes.fetch_all(limit: 1)
+      ], total: 3} = space |> ContentTypes.fetch_all(limit: 1)
 
       {:ok, [
         %ContentType{ description: "third one" }
-      ]} = space |> ContentTypes.fetch_all(limit: 1, skip: 2)
+      ], total: 3} = space |> ContentTypes.fetch_all(limit: 1, skip: 2)
   """
   @spec fetch_all(
           Space.t() | String.t(),
@@ -114,11 +114,13 @@ defmodule Contentful.Delivery.ContentTypes do
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_content_types(%{"items" => items}) do
-    {:ok,
-     items
-     |> Enum.map(&build_content_type/1)
-     |> Enum.map(fn {:ok, ct} -> ct end)}
+  defp build_content_types(%{"items" => items, "total" => total}) do
+    content_types =
+      items
+      |> Enum.map(&build_content_type/1)
+      |> Enum.map(fn {:ok, ct} -> ct end)
+
+    {:ok, content_types, total: total}
   end
 
   defp build_content_type(%{

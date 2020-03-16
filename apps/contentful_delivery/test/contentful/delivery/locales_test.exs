@@ -21,8 +21,11 @@ defmodule Contentful.Delivery.LocalesTest do
   describe ".fetch_all" do
     test "will fetch all locales for a given space" do
       use_cassette "locales" do
-        {:ok, [%Locale{code: "en-US"}, %Locale{code: "de"}]} =
-          @space_id |> Locales.fetch_all("master", @access_token)
+        {:ok,
+         [
+           %Locale{code: "en-US", default: true},
+           %Locale{code: "de", default: false}
+         ]} = @space_id |> Locales.fetch_all("master", @access_token)
       end
     end
   end

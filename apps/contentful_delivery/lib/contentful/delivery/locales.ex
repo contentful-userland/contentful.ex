@@ -5,9 +5,36 @@ defmodule Contentful.Delivery.Locales do
   alias Contentful.{Delivery, Locale, Space}
 
   @doc """
-  will attempt to fetch all locales for a given space
+  Will attempt to fetch all locales for a given space
+
+  Does currently *not* accept collection parameters, as the API does not support them
+
+  ## Examples
+
+      space = "my_space_id"
+      space |> Locales.fetch_all()
+      {:ok,
+       [
+         %Contentful.Locale{ 
+           code: "en-US",
+           default: true,
+           fallback_code: nil,
+           name: "English (United States)"
+         },
+         %Contentful.Locale{
+           code: "de",
+           default: false,
+           fallback_code: "en-US",
+           name: "German"
+         }
+       ]}
+
   """
-  @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
+  @spec fetch_all(
+          Space.t() | String.t(),
+          String.t(),
+          String.t() | nil
+        ) ::
           list(Locale.t())
   def fetch_all(space, env \\ "master", api_key \\ nil)
 
@@ -37,9 +64,15 @@ defmodule Contentful.Delivery.Locales do
      |> Enum.map(fn %{
                       "name" => name,
                       "code" => code,
-                      "fallbackCode" => fallback_code
+                      "fallbackCode" => fallback_code,
+                      "default" => default
                     } ->
-       %Locale{name: name, code: code, fallback_code: fallback_code}
+       %Locale{
+         name: name,
+         code: code,
+         fallback_code: fallback_code,
+         default: default
+       }
      end)}
   end
 end

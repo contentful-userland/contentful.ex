@@ -35,5 +35,25 @@ defmodule Contentful.Delivery.AssetsTest do
          ]} = @space_id |> Assets.fetch_all()
       end
     end
+
+    test "will fetch all published entries for a space, respecting the limit parameter" do
+      use_cassette "mutlipe assets, limit filter" do
+        {:ok, [%Asset{fields: %{title: "bafoo"}}]} = @space_id |> Assets.fetch_all(limit: 1)
+      end
+    end
+
+    test "will fetch all published entries for a space, respecting the skip param" do
+      use_cassette "mutlipe assets, skip filter" do
+        {:ok, [%Asset{fields: %{title: "Foobar"}}]} = @space_id |> Assets.fetch_all(skip: 1)
+      end
+    end
+
+    test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
+      use_cassette "mutlipe assets, all filters" do
+        {:ok, [%Asset{fields: %{title: "Foobar"}}]} =
+          @space_id
+          |> Assets.fetch_all(skip: 1, limit: 1)
+      end
+    end
   end
 end

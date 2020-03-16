@@ -11,7 +11,6 @@ defmodule Contentful.Delivery do
   @protocol "https"
   @separator "/"
   @collection_filters [:limit, :skip, :order]
-  @collection_filter_values ["createdAt", "updatedAt"]
 
   @agent_header [
     "User-Agent": "Contentful Elixir SDK"

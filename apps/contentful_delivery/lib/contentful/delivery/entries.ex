@@ -30,7 +30,30 @@ defmodule Contentful.Delivery.Entries do
   end
 
   @doc """
-  will fetch all entries associated with a space __that are **published**__
+  Can be used fetch all entries associated with a space __that are **published**__
+
+  Will take basic collection filters into account, specifically :limit and :skip to traverse and 
+  limit the collection of entries.
+
+  ## Examples
+      {:ok, [
+        %Entry{ meta_data: %{ id: "foobar_0"}}, 
+        %Entry{ meta_data: %{ id: "foobar_1"}}, 
+        %Entry{ meta_data: %{ id: "foobar_2"}}
+      ]} = space |> Entries.fetch_all
+      
+      {:ok, [
+        %Entry{ meta_data: %{ id: "foobar_1"}}, 
+        %Entry{ meta_data: %{ id: "foobar_2"}}
+      ]} = space |> Entries.fetch_all(skip: 1)
+
+      {:ok, [
+        %Entry{ meta_data: %{ id: "foobar_0"}}
+      ]} = space |> Entries.fetch_all(limit: 1)
+
+      {:ok, [
+        %Entry{ meta_data: %{ id: "foobar_2"}}
+      ]} = space |> Entries.fetch_all(limit: 1, skip: 2)
   """
   @spec fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
           {:ok, list(Entry.t())}

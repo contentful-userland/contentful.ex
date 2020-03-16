@@ -32,27 +32,54 @@ defmodule Contentful.Delivery.Assets do
   end
 
   @doc """
-  Fetches all assets for a given Contentful.Space
+  Fetches all assets for a given Contentful.Space.
+
+  Will take basic collection filters into account, specifically :limit and :skip to traverse and 
+  limit the collection of entries.
 
   ## Examples
       space = "my_space_id"
       {:ok, [%Asset{} | _]} = space |> Contentful.Delivery.Assets.fetch_all()
+
+      {:ok, [
+        %Asset{ meta_data: %{ id: "foobar_0"}}, 
+        %Asset{ meta_data: %{ id: "foobar_1"}}, 
+        %Asset{ meta_data: %{ id: "foobar_2"}}
+      ]} = space |> Assets.fetch_all
+      
+      {:ok, [
+        %Asset{ meta_data: %{ id: "foobar_1"}}, 
+        %Asset{ meta_data: %{ id: "foobar_2"}}
+      ]} = space |> Assets.fetch_all(skip: 1)
+
+      {:ok, [
+        %Asset{ meta_data: %{ id: "foobar_0"}}
+      ]} = space |> Assets.fetch_all(limit: 1)
+
+      {:ok, [
+        %Asset{ meta_data: %{ id: "foobar_2"}}
+      ]} = space |> Assets.fetch_all(limit: 1, skip: 2)
   """
-  @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
+  @spec fetch_all(
+          Space.t() | String.t(),
+          list(keyword()),
+          String.t(),
+          String.t() | nil
+        ) ::
           {:ok, list(Contentful.Asset.t())}
           | {:error, atom(), original_message: String.t()}
           | {:error, :unknown}
-  def fetch_all(space, env \\ "master", api_key \\ nil)
+  def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
 
-  def fetch_all(%Space{meta_data: %{id: id}}, env, api_key) do
+  def fetch_all(%Space{meta_data: %{id: id}}, options, env, api_key) do
     id
-    |> build_multi_request(env, api_key)
+    |> build_multi_request(options, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_assets/1)
   end
 
-  def fetch_all(space_id, env, api_key) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
+  def fetch_all(space_id, options, env, api_key) do
+    fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
   end
 
   defp build_single_request(space, asset, env, api_key) do
@@ -64,10 +91,11 @@ defmodule Contentful.Delivery.Assets do
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_multi_request(space, env, api_key) do
+  defp build_multi_request(space, options, env, api_key) do
     url = [
       Delivery.url(space, env),
-      "/assets"
+      "/assets",
+      Delivery.collection_query_params(options)
     ]
 
     {url, api_key |> Delivery.request_headers()}

@@ -13,21 +13,26 @@ defmodule Contentful.Delivery.ContentTypes do
       # fetches all content types by a given space id
       iex> {:ok, [%Contentful.ContentType{description: "a description"}]} = Contentful.Delivery.ContentTypes.fetch_all("a space_id")
   """
-  @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
+  @spec fetch_all(
+          Space.t() | String.t(),
+          list(keyword()),
+          String.t(),
+          String.t() | nil
+        ) ::
           {:ok, list(ContentType.t())}
           | {:error, atom(), original_message: String.t()}
           | {:error, :rate_limit_exceeded, wait_for: integer()}
-  def fetch_all(space, env \\ "master", api_key \\ nil)
+  def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
 
-  def fetch_all(%Space{meta_data: %{id: id}}, env, api_key) do
+  def fetch_all(%Space{meta_data: %{id: id}}, options, env, api_key) do
     id
-    |> build_multiple_request(env, api_key)
+    |> build_multiple_request(options, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_content_types/1)
   end
 
-  def fetch_all(space_id, env, api_key) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
+  def fetch_all(space_id, options, env, api_key) do
+    fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
   end
 
   @doc """
@@ -62,10 +67,11 @@ defmodule Contentful.Delivery.ContentTypes do
     fetch_one(%Space{meta_data: %{id: space_id}}, content_type_id, env, api_key)
   end
 
-  defp build_multiple_request(space, env, api_key) do
+  defp build_multiple_request(space, options, env, api_key) do
     url = [
       space |> Delivery.url(env),
-      "/content_types"
+      "/content_types",
+      options |> Delivery.collection_query_params()
     ]
 
     {url, api_key |> Delivery.request_headers()}

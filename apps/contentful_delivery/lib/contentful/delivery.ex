@@ -10,6 +10,8 @@ defmodule Contentful.Delivery do
   @endpoint "cdn.contentful.com"
   @protocol "https"
   @separator "/"
+  @collection_filters [:limit, :skip, :order]
+  @collection_filter_values ["createdAt", "updatedAt"]
 
   @agent_header [
     "User-Agent": "Contentful Elixir SDK"
@@ -81,6 +83,28 @@ defmodule Contentful.Delivery do
   @spec send_request(tuple()) :: {:ok, Response.t()}
   def send_request({url, headers}) do
     get(url, headers)
+  end
+
+  @doc """
+    prevents parsing of empty options
+  """
+  @spec collection_query_params(list()) :: String.t()
+  def collection_query_params([]) do
+    ""
+  end
+
+  @doc """
+  parses the options for retrieving a collection. will drop any option that is not in 
+  @collection_filters
+  """
+  @spec collection_query_params(list(keyword())) :: String.t()
+  def collection_query_params(options) do
+    params =
+      options
+      |> Keyword.take(@collection_filters)
+      |> URI.encode_query()
+
+    "?#{params}"
   end
 
   @doc """

@@ -32,21 +32,21 @@ defmodule Contentful.Delivery.Entries do
   @doc """
   will fetch all entries associated with a space __that are **published**__
   """
-  @spec fetch_all(Space.t(), String.t(), String.t() | nil) ::
+  @spec fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
           {:ok, list(Entry.t())}
           | {:error, atom(), original_message: String.t()}
           | {:error, :unknown}
-  def fetch_all(space, env \\ "master", api_key \\ nil)
+  def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
 
-  def fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key) do
+  def fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key) do
     space_id
-    |> build_multi_request(env, api_key)
+    |> build_multi_request(options, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_entries/1)
   end
 
-  def fetch_all(space_id, env, api_key) when is_binary(space_id) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
+  def fetch_all(space_id, options, env, api_key) when is_binary(space_id) do
+    fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
   end
 
   defp build_single_request(space_id, entry_id, env, api_key) do
@@ -58,10 +58,11 @@ defmodule Contentful.Delivery.Entries do
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_multi_request(space, env, api_key) do
+  defp build_multi_request(space, options, env, api_key) do
     url = [
       space |> Delivery.url(env),
-      "/entries"
+      "/entries",
+      options |> Delivery.collection_query_params()
     ]
 
     {url, api_key |> Delivery.request_headers()}

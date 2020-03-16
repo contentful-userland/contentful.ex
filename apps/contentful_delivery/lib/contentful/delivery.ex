@@ -36,7 +36,7 @@ defmodule Contentful.Delivery do
 
   ## Examples
 
-      "https://cdn.contentful.com" = Contentful.Delivery.url()
+      "https://cdn.contentful.com" = url()
   """
   @spec url() :: String.t()
   def url do
@@ -47,7 +47,7 @@ defmodule Contentful.Delivery do
   constructs the base url with the extension for a given space
   ## Examples
 
-      "https://cdn.contentful.com/spaces/foo" = Contentful.Delivery.url("foo")
+      "https://cdn.contentful.com/spaces/foo" = url("foo")
   """
   @spec url(String.t()) :: String.t()
   def url(space) do
@@ -59,14 +59,22 @@ defmodule Contentful.Delivery do
 
   ## Examples
 
-      "https://cdn.contentful.com/spaces/foo/environments/bar" = Contentful.Delivery.url("foo", "bar")
+      "https://cdn.contentful.com/spaces/foo/environments/bar" = url("foo", "bar")
   """
   def url(space, env) do
     [space |> url(), "environments", env] |> Enum.join(@separator)
   end
 
   @doc """
-    Build the request headers for a request against the CDA. 
+  Builds the request headers for a request against the CDA, taking api access tokens into account
+
+  ## Examples
+      my_access_token = "foobarfoob4z"
+      [
+         "Authorization": "Bearer foobarfoob4z",
+         "User-Agent": "Contentful Elixir SDK",
+         "Accept": "application/json"
+       ] = my_access_token |> request_headers()
   """
   @spec request_headers(String.t()) :: keyword()
   def request_headers(api_key) do
@@ -77,7 +85,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-    Sends a request against the CDA
+  Sends a request against the CDA. It's really just a wrapper around HTTPoison.get/2
   """
   @spec send_request(tuple()) :: {:ok, Response.t()}
   def send_request({url, headers}) do
@@ -85,7 +93,12 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-    prevents parsing of empty options
+  Prevents parsing of empty options.
+
+  ## Examples
+
+      "" = collection_query_params([])
+
   """
   @spec collection_query_params(list()) :: String.t()
   def collection_query_params([]) do
@@ -93,8 +106,14 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  parses the options for retrieving a collection. will drop any option that is not in 
-  @collection_filters
+  parses the options for retrieving a collection. It will drop any option that is not in 
+  @collection_filters ([:limit, :skip, :order])
+
+  ## Examples
+
+      "?limit=50&skip=25&order=foobar" 
+        = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)      
+
   """
   @spec collection_query_params(list(keyword())) :: String.t()
   def collection_query_params(options) do
@@ -107,7 +126,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  parses the response from the CDA and triggers a callback on success
+  Parses the response from the CDA and triggers a callback on success
   """
   @spec parse_response({:ok, Response.t()}, fun()) ::
           {:ok, struct()}

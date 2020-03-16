@@ -27,7 +27,9 @@ defmodule Contentful.Delivery.Spaces do
         = Contentful.Delivery.Spaces.fetch_one("non_existing_space", "<your_api_key>")
   """
   @spec fetch_one(String.t(), String.t()) ::
-          {:ok, Space.t()} | {:error, atom(), list(keyword())}
+          {:ok, Space.t()}
+          | {:error, atom(), list(keyword())}
+          | {:error, :unknown}
   def fetch_one(id, api_key \\ nil) do
     id
     |> build_request(api_key)
@@ -36,7 +38,7 @@ defmodule Contentful.Delivery.Spaces do
   end
 
   defp build_request(space_id, api_key) do
-    url = "#{Delivery.url()}/spaces/#{space_id}"
+    url = space_id |> Delivery.url()
     {url, api_key |> Delivery.request_headers()}
   end
 

@@ -7,6 +7,7 @@ defmodule Contentful.Delivery do
 
   @endpoint "cdn.contentful.com"
   @protocol "https"
+  @separator "/"
 
   @agent_header [
     "User-Agent": "Contentful Elixir SDK"
@@ -28,11 +29,37 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-    constructs the base url with protocol for the CDA
+  constructs the base url with protocol for the CDA
+
+  ## Examples
+
+      "https://cdn.contentful.com" = Contentful.Delivery.url()
   """
   @spec url() :: String.t()
   def url do
     "#{@protocol}://#{@endpoint}"
+  end
+
+  @doc """
+  constructs the base url with the extension for a given space
+  ## Examples
+
+      "https://cdn.contentful.com/spaces/foo" = Contentful.Delivery.url("foo")
+  """
+  @spec url(String.t()) :: String.t()
+  def url(space) do
+    [url(), "spaces", space] |> Enum.join(@separator)
+  end
+
+  @doc """
+  constructs the base url for the delivery endpoint for a given space and environment
+
+  ## Examples
+
+      "https://cdn.contentful.com/spaces/foo/environments/bar" = Contentful.Delivery.url("foo", "bar")
+  """
+  def url(space, env) do
+    [space |> url(), "environments", env] |> Enum.join(@separator)
   end
 
   @doc """

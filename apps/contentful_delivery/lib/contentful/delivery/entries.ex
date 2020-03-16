@@ -20,16 +20,10 @@ defmodule Contentful.Delivery.Entries do
   def fetch_one(space_id, entry_id, env \\ "master", api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key) do
-    entry =
-      space_id
-      |> build_single_request(entry_id, env, api_key)
-      |> Delivery.send_request()
-      |> parse_response(&build_entry/1)
-
-    case entry do
-      %Entry{} -> {:ok, entry}
-      _ -> entry
-    end
+    space_id
+    |> build_single_request(entry_id, env, api_key)
+    |> Delivery.send_request()
+    |> parse_response(&build_entry/1)
   end
 
   def fetch_one(space_id, entry_id, env, api_key) do
@@ -58,27 +52,26 @@ defmodule Contentful.Delivery.Entries do
 
   defp build_single_request(space_id, entry_id, env, api_key) do
     url = [
-      "#{Delivery.url()}",
-      "/spaces/#{space_id}",
-      "/environments/#{env}",
+      space_id |> Delivery.url(env),
       "/entries/#{entry_id}"
     ]
 
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_multi_request(space_id, env, api_key) do
+  defp build_multi_request(space, env, api_key) do
     url = [
-      "#{Delivery.url()}",
-      "/spaces/#{space_id}",
-      "/environments/#{env}",
+      space |> Delivery.url(env),
       "/entries"
     ]
 
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp parse_response({:ok, %Response{status_code: code, body: body}}, callback) do
+  defp parse_response(
+         {:ok, %Response{status_code: code, body: body} = resp},
+         callback
+       ) do
     case code do
       200 ->
         body |> Delivery.json_library().decode! |> callback.()
@@ -90,7 +83,7 @@ defmodule Contentful.Delivery.Entries do
         body |> Delivery.build_error(:not_found)
 
       _ ->
-        Delivery.build_error()
+        resp |> Delivery.build_error()
     end
   end
 
@@ -98,16 +91,17 @@ defmodule Contentful.Delivery.Entries do
     do: {:error, :unknown}
 
   defp build_entries(%{"sys" => %{"type" => "Array"}, "items" => items}) do
-    {:ok, items |> Enum.map(&build_entry/1)}
+    {:ok, items |> Enum.map(&build_entry/1) |> Enum.map(fn {:ok, entry} -> entry end)}
   end
 
   defp build_entry(%{
          "fields" => fields,
          "sys" => %{"id" => id, "revision" => rev}
        }) do
-    %Entry{
-      fields: fields,
-      meta_data: %MetaData{id: id, revision: rev}
-    }
+    {:ok,
+     %Entry{
+       fields: fields,
+       meta_data: %MetaData{id: id, revision: rev}
+     }}
   end
 end

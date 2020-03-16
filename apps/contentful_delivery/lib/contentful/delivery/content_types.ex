@@ -52,45 +52,31 @@ defmodule Contentful.Delivery.ContentTypes do
   def fetch_one(space, content_type_id, env \\ "master", api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: id}}, content_type_id, env, api_key) do
-    content_type =
-      content_type_id
-      |> build_single_request(id, env, api_key)
-      |> Delivery.send_request()
-      |> parse_response(&build_content_type/1)
-
-    case content_type do
-      %ContentType{} -> {:ok, content_type}
-      _ -> content_type
-    end
+    content_type_id
+    |> build_single_request(id, env, api_key)
+    |> Delivery.send_request()
+    |> parse_response(&build_content_type/1)
   end
 
   def fetch_one(space_id, content_type_id, env, api_key) do
     fetch_one(%Space{meta_data: %{id: space_id}}, content_type_id, env, api_key)
   end
 
-  defp build_multiple_request(space_id, environment, api_key) do
-    url =
-      [
-        Delivery.url(),
-        "/spaces/#{space_id}",
-        "/environments/#{environment}",
-        "/content_types"
-      ]
-      |> Enum.join()
+  defp build_multiple_request(space, env, api_key) do
+    url = [
+      space |> Delivery.url(env),
+      "/content_types"
+    ]
 
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_single_request(content_type_id, space_id, environment, api_key) do
-    url =
-      [
-        Delivery.url(),
-        "/spaces/#{space_id}",
-        "/environments/#{environment}",
-        "/content_types",
-        "/#{content_type_id}"
-      ]
-      |> Enum.join()
+  defp build_single_request(content_type_id, space, env, api_key) do
+    url = [
+      space |> Delivery.url(env),
+      "/content_types",
+      "/#{content_type_id}"
+    ]
 
     {url, api_key |> Delivery.request_headers()}
   end
@@ -108,13 +94,16 @@ defmodule Contentful.Delivery.ContentTypes do
           body |> Delivery.build_error(:not_found)
 
         _ ->
-          Delivery.build_error(resp)
+          resp |> Delivery.build_error()
       end
     end
   end
 
   defp build_content_types(%{"items" => items}) do
-    {:ok, items |> Enum.map(&build_content_type/1)}
+    {:ok,
+     items
+     |> Enum.map(&build_content_type/1)
+     |> Enum.map(fn {:ok, ct} -> ct end)}
   end
 
   defp build_content_type(%{
@@ -124,13 +113,14 @@ defmodule Contentful.Delivery.ContentTypes do
          "sys" => %{"id" => id, "revision" => rev},
          "fields" => fields
        }) do
-    %ContentType{
-      name: name,
-      description: description,
-      display_field: display_field,
-      fields: Enum.map(fields, &build_field/1),
-      meta_data: %MetaData{id: id, revision: rev}
-    }
+    {:ok,
+     %ContentType{
+       name: name,
+       description: description,
+       display_field: display_field,
+       fields: Enum.map(fields, &build_field/1),
+       meta_data: %MetaData{id: id, revision: rev}
+     }}
   end
 
   defp build_field(%{

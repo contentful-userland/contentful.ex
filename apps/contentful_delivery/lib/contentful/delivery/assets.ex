@@ -59,9 +59,7 @@ defmodule Contentful.Delivery.Assets do
 
   defp build_single_request(space, asset, env, api_key) do
     url = [
-      Delivery.url(),
-      "/spaces/#{space}",
-      "/environments/#{env}",
+      Delivery.url(space, env),
       "/assets/#{asset}"
     ]
 
@@ -70,9 +68,7 @@ defmodule Contentful.Delivery.Assets do
 
   defp build_multi_request(space, env, api_key) do
     url = [
-      Delivery.url(),
-      "/spaces/#{space}",
-      "/environments/#{env}",
+      Delivery.url(space, env),
       "/assets"
     ]
 

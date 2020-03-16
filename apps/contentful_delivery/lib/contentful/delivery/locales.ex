@@ -23,11 +23,9 @@ defmodule Contentful.Delivery.Locales do
     fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
-  defp build_request(space_id, env, api_key) do
+  defp build_request(space, env, api_key) do
     url = [
-      Delivery.url(),
-      "/spaces/#{space_id}",
-      "/environments/#{env}",
+      space |> Delivery.url(env),
       "/locales"
     ]
 

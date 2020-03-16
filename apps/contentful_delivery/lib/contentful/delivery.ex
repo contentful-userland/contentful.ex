@@ -110,7 +110,8 @@ defmodule Contentful.Delivery do
   parses the response from the CDA and triggers a callback on success
   """
   @spec parse_response({:ok, Response.t()}, fun()) ::
-          {:ok, struct() | list(struct())}
+          {:ok, struct()}
+          | {:ok, list(struct()), total: integer()}
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, atom(), original_message: String.t()}
   def parse_response(

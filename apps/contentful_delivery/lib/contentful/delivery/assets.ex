@@ -45,20 +45,20 @@ defmodule Contentful.Delivery.Assets do
         %Asset{ meta_data: %{ id: "foobar_0"}}, 
         %Asset{ meta_data: %{ id: "foobar_1"}}, 
         %Asset{ meta_data: %{ id: "foobar_2"}}
-      ]} = space |> Assets.fetch_all
+      ], total: 3} = space |> Assets.fetch_all
       
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_1"}}, 
         %Asset{ meta_data: %{ id: "foobar_2"}}
-      ]} = space |> Assets.fetch_all(skip: 1)
+      ], total: 3} = space |> Assets.fetch_all(skip: 1)
 
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_0"}}
-      ]} = space |> Assets.fetch_all(limit: 1)
+      ], total: 3} = space |> Assets.fetch_all(limit: 1)
 
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_2"}}
-      ]} = space |> Assets.fetch_all(limit: 1, skip: 2)
+      ], total: 3} = space |> Assets.fetch_all(limit: 1, skip: 2)
   """
   @spec fetch_all(
           Space.t() | String.t(),
@@ -66,7 +66,7 @@ defmodule Contentful.Delivery.Assets do
           String.t(),
           String.t() | nil
         ) ::
-          {:ok, list(Contentful.Asset.t())}
+          {:ok, list(Contentful.Asset.t()), total: integer()}
           | {:error, atom(), original_message: String.t()}
           | {:error, :unknown}
   def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
@@ -105,7 +105,12 @@ defmodule Contentful.Delivery.Assets do
     {:ok, Asset.from_api_fields(fields, sys)}
   end
 
-  defp build_assets(%{"items" => items}) do
-    {:ok, items |> Enum.map(&build_asset/1) |> Enum.map(fn {:ok, asset} -> asset end)}
+  defp build_assets(%{"items" => items, "total" => total}) do
+    assets =
+      items
+      |> Enum.map(&build_asset/1)
+      |> Enum.map(fn {:ok, asset} -> asset end)
+
+    {:ok, assets, total: total}
   end
 end

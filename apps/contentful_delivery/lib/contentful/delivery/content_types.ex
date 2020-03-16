@@ -8,10 +8,37 @@ defmodule Contentful.Delivery.ContentTypes do
   @doc """
   Used to query all the content types for a given space
 
+  Supports collection parameters for :skip and :limit.
+
   ## Examples
 
       # fetches all content types by a given space id
-      iex> {:ok, [%Contentful.ContentType{description: "a description"}]} = Contentful.Delivery.ContentTypes.fetch_all("a space_id")
+      {:ok, [%Contentful.ContentType{description: "a description"}]} 
+        = ContentTypes.fetch_all("a space_id")
+
+      # with collection params
+      space = "my_space_id"
+      {:ok, [%ContentType{ description: "first one"} | _]} 
+        = space |> ContentTypes.fetch_all()
+
+      {:ok, [
+        %ContentType{ description: "first one"}}, 
+        %ContentType{ description: "second one"}}, 
+        %ContentType{ description: "third one"}}
+      ]} = space |> ContentTypes.fetch_all
+      
+      {:ok, [
+        %ContentType{ description: "second one"}}, 
+        %ContentType{ description: "third one"}}
+      ]} = space |> ContentTypes.fetch_all(skip: 1)
+
+      {:ok, [
+        %ContentType{ description: "first one" }
+      ]} = space |> ContentTypes.fetch_all(limit: 1)
+
+      {:ok, [
+        %ContentType{ description: "third one" }
+      ]} = space |> ContentTypes.fetch_all(limit: 1, skip: 2)
   """
   @spec fetch_all(
           Space.t() | String.t(),

@@ -1,7 +1,13 @@
 defmodule Contentful.Delivery.Locales do
+  @moduledoc """
+  Handles the fetching of locales within a given space
+  """
   alias Contentful.{Delivery, Locale, Space}
   alias HTTPoison.Response
 
+  @doc """
+  will attempt to fetch all locales for a given space
+  """
   @spec fetch_all(Space.t() | String.t(), String.t(), String.t() | nil) ::
           list(Locale.t())
   def fetch_all(space, env \\ "master", api_key \\ nil)

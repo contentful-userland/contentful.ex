@@ -43,6 +43,13 @@ config :contentful, json_library: Jason
 # here (which is why it is important to import them last).
 #
 
-import_config "#{Mix.env()}.exs"
+extendend_config = "#{Mix.env()}.exs"
+extendend_config_secret = "secrets.#{Mix.env()}.exs"
 
-import_config "secrets.#{Mix.env()}.exs"
+if File.exists?(extendend_config) do
+  import_config extendend_config
+end
+
+if File.exists?(extendend_config_secret) do
+  import_config extendend_config_secret
+end

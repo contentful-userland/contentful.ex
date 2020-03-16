@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf/environments/master/locales"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 2,\n  \"skip\": 0,\n  \"limit\": 1000,\n  \"items\": [\n    {\n      \"code\": \"en-US\",\n      \"name\": \"English (United States)\",\n      \"default\": true,\n      \"fallbackCode\": null,\n      \"sys\": {\n        \"id\": \"6qgbedUwve5SCIxraCJBYa\",\n        \"type\": \"Locale\",\n        \"version\": 1\n      }\n    },\n    {\n      \"code\": \"de\",\n      \"name\": \"German\",\n      \"default\": false,\n      \"fallbackCode\": \"en-US\",\n      \"sys\": {\n        \"id\": \"5PqvOzUfywtgqTZ4rrqsW2\",\n        \"type\": \"Locale\",\n        \"version\": 1\n      }\n    }\n  ]\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "CF-Environment-Id": "master",
+        "CF-Environment-Uuid": "69b0fe47-9d71-4e0c-a7e0-4e12cb573930",
+        "CF-Organization-Id": "0bEbsBel9WL3OIaiqx0MnO",
+        "CF-Space-Id": "bmehzfuz4raf",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "\"4689490781371251477\"",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Content-Length": "560",
+        "Accept-Ranges": "bytes",
+        "Date": "Mon, 16 Mar 2020 09:31:57 GMT",
+        "Via": "1.1 varnish",
+        "Age": "302",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-hhn4081-HHN",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "7e038c60-d736-47de-8ee3-9f14aef2323a"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

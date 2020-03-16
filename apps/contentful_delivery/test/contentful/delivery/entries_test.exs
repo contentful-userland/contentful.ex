@@ -30,27 +30,28 @@ defmodule Contentful.Delivery.EntriesTest do
   describe ".fetch_all" do
     test "will fetch all published entries for a given space" do
       use_cassette "multiple entries" do
-        {:ok, [%Entry{}, %Entry{}]} = %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all()
+        {:ok, [%Entry{}, %Entry{}], total: 2} =
+          %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all()
       end
     end
 
     test "will fetch all published entries for a space, respecting the limit parameter" do
       use_cassette "multiple entries, limit filter" do
-        {:ok, [%Entry{fields: %{"name" => "Purple Thunder"}}]} =
+        {:ok, [%Entry{fields: %{"name" => "Purple Thunder"}}], total: 2} =
           %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all(limit: 1)
       end
     end
 
     test "will fetch all published entries for a space, respecting the skip param" do
       use_cassette "multiple entries, skip filter" do
-        {:ok, [%Entry{fields: %{"name" => "Blue steel"}}]} =
+        {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
           %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all(skip: 1)
       end
     end
 
     test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
       use_cassette "multiple entries, all filters" do
-        {:ok, [%Entry{fields: %{"name" => "Blue steel"}}]} =
+        {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
           %Space{meta_data: %{id: @space_id}}
           |> Entries.fetch_all(skip: 1, limit: 1)
       end

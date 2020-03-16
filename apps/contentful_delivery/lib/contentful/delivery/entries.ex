@@ -40,20 +40,20 @@ defmodule Contentful.Delivery.Entries do
         %Entry{ meta_data: %{ id: "foobar_0"}}, 
         %Entry{ meta_data: %{ id: "foobar_1"}}, 
         %Entry{ meta_data: %{ id: "foobar_2"}}
-      ]} = space |> Entries.fetch_all
+      ], total: 3} = space |> Entries.fetch_all
       
       {:ok, [
         %Entry{ meta_data: %{ id: "foobar_1"}}, 
         %Entry{ meta_data: %{ id: "foobar_2"}}
-      ]} = space |> Entries.fetch_all(skip: 1)
+      ], total: 3} = space |> Entries.fetch_all(skip: 1)
 
       {:ok, [
         %Entry{ meta_data: %{ id: "foobar_0"}}
-      ]} = space |> Entries.fetch_all(limit: 1)
+      ], total: 3} = space |> Entries.fetch_all(limit: 1)
 
       {:ok, [
         %Entry{ meta_data: %{ id: "foobar_2"}}
-      ]} = space |> Entries.fetch_all(limit: 1, skip: 2)
+      ], total: 3} = space |> Entries.fetch_all(limit: 1, skip: 2)
   """
   @spec fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
           {:ok, list(Entry.t())}
@@ -91,8 +91,13 @@ defmodule Contentful.Delivery.Entries do
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_entries(%{"sys" => %{"type" => "Array"}, "items" => items}) do
-    {:ok, items |> Enum.map(&build_entry/1) |> Enum.map(fn {:ok, entry} -> entry end)}
+  defp build_entries(%{"total" => total, "items" => items}) do
+    entries =
+      items
+      |> Enum.map(&build_entry/1)
+      |> Enum.map(fn {:ok, entry} -> entry end)
+
+    {:ok, entries, total: total}
   end
 
   defp build_entry(%{

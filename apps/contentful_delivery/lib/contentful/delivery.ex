@@ -134,7 +134,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  catch all for any errors furing flight (conneciton loss, etc.)
+  catch_all for any errors furing flight (connection loss, etc.)
   """
   @spec parse_response({:error, any()}, fun()) :: {:error, :unknown}
   def parse_response({:error, _}, _callback) do
@@ -142,7 +142,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-    Used to construct generic errors for calls against the CDA
+  Used to construct generic errors for calls against the CDA
   """
   @spec build_error(String.t(), atom()) ::
           {:error, atom(), original_message: String.t()}

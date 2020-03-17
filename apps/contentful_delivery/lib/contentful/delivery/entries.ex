@@ -2,11 +2,43 @@ defmodule Contentful.Delivery.Entries do
   @moduledoc """
   Entries collects function around the reading of entries from spaces
   """
-  alias Contentful.{Delivery, Entry, MetaData, Space}
+  alias Contentful.{
+    Collection,
+    CollectionStream,
+    Delivery,
+    Entry,
+    MetaData,
+    Space
+  }
+
+  @behaviour Collection
+  @behaviour CollectionStream
 
   @doc """
-  will fetch a single entry for a given space within an environment
+  Will fetch a single entry for a given Contentful.Space within an `environment`.
+
+  Actually fetches the entry eagerly and will call the API immediately.
+
+  ## Examples
+
+      space = "my_space_id"
+      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}} 
+        = space |> Entries.fetch_one("my_entry_id")
+
+      # for envs other than "master"
+      environment =  "staging"
+      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}} 
+        = space |> Entries.fetch_one("my_entry_id", environment)
+
+      # override access token
+      environment =  "my_personal_env"
+      my_access_token = "foobarBAZ"
+      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}} 
+        = space |> Entries.fetch_one("my_entry_id", environment, my_access_token)
+
+
   """
+  @impl Collection
   @spec fetch_one(
           Space.t() | String.t(),
           String.t(),
@@ -30,10 +62,12 @@ defmodule Contentful.Delivery.Entries do
   end
 
   @doc """
-  Can be used fetch all entries associated with a space __that are **published**__
+  Can be used fetch all entries associated with a space __that are **published**__.
 
-  Will take basic collection filters into account, specifically :limit and :skip to traverse and 
+  Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and 
   limit the collection of entries.
+
+  Will fetch a single page as defined by its params and will fetch it eagerly (calls the API immediately.).
 
   ## Examples
       {:ok, [
@@ -55,6 +89,7 @@ defmodule Contentful.Delivery.Entries do
         %Entry{ meta_data: %{ id: "foobar_2"}}
       ], total: 3} = space |> Entries.fetch_all(limit: 1, skip: 2)
   """
+  @impl Collection
   @spec fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
           {:ok, list(Entry.t())}
           | {:error, atom(), original_message: String.t()}
@@ -72,51 +107,49 @@ defmodule Contentful.Delivery.Entries do
     fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
   end
 
-  def stream_all(
-        space,
-        options \\ [],
-        env \\ "master",
-        api_key \\ nil
-      )
+  @impl CollectionStream
+  @spec stream(
+          Space.t() | String.t(),
+          list(keyword()),
+          String.t(),
+          String.t() | nil
+        ) :: Stream.t()
+  @doc """
+  Constructs a stream around __all entries__ of a Contentful.Space __that are published__.
 
-  def stream_all(space, options, env, api_key) do
-    options = options |> Keyword.put_new(:skip, 0) |> Keyword.put_new(:limit, 100)
+  Will return a stream of entries that can be composed with the standard libraries functions. 
+  This function calls the API endpoint for entries on demand, e.g. until the upper limit 
+  (the total of all entries) is reached.
 
-    Stream.resource(
-      fn -> fetch_page(space, options, env, api_key) end,
-      &process_page/1,
-      fn _ -> nil end
-    )
-  end
+  __Warning__: With very large entry collections, this can quickly run into the request limit of the API! 
 
-  defp process_page({[], nil}) do
-    {:halt, nil}
-  end
+  ## Examples
+      space = "my_space_id"
+      # API calls calculated by the stream (in this case two calls)
+      ["first_entry_id", "second_entry_id"] 
+        = space 
+          |> Entries.stream(limit: 1) 
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
+          |> Enum.take(2) 
 
-  defp process_page({[], total: total, options: opts, env: env, api_key: api_key, space: space}) do
-    limit = opts[:limit]
-    skip = opts[:skip]
-
-    if limit < total do
-      space
-      |> fetch_page([skip: skip + limit, limit: limit], env, api_key)
-    else
-      {[], {[], nil}}
-    end
-  end
-
-  defp process_page({[head | tail], meta}) do
-    {[head], {tail, meta}}
-  end
-
-  defp fetch_page(space, options, env, api_key) do
-    case space |> fetch_all(options, env, api_key) do
-      {:ok, items, total: total} ->
-        {items, total: total, options: options, env: env, api_key: api_key, space: space}
-
-      {:error, _} ->
-        {[], nil}
-    end
+      environment = "staging"
+      api_token = "foobar?foob4r"
+      ["first_entry_id"] 
+        = space 
+          |> Entries.stream(limit: 1, environment, api_token) 
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
+          |> Enum.take(2) 
+    
+      # Use the :limit parameter to set the page size 
+      ["first_entry_id", "second_entry_id", "third_entry_id", "fourth_entry_id"] 
+        = space 
+          |> Entries.stream(limit: 4) 
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
+          |> Enum.take(4) 
+    
+  """
+  def stream(space, options \\ [], env \\ "master", api_key \\ nil) do
+    space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 
   defp build_single_request(space_id, entry_id, env, api_key) do

@@ -14,10 +14,22 @@ defmodule Contentful.Delivery.Assets do
 
   ## Examples
       space = "my_space_id"
-      {:ok, %Asset{} = asset} =  space |>Contentful.Delivery.Assets.fetch_one("<asset_id>")
+      {:ok, %Asset{ meta_data: %{ id: "<asset_id>"}} = asset} 
+        =  space |> Assets.fetch_one("<asset_id>")
   """
   @impl Collection
-  def fetch_one(space, asset, env \\ "master", api_key \\ nil)
+  @spec fetch_one(
+          Space.t() | String.t(),
+          String.t(),
+          String.t() | nil,
+          String.t() | nil
+        ) ::
+          {:ok, Asset.t()}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, :unknown}
+
+  def fetch_one(space, asset, env \\ nil, api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: space_id}}, asset_id, env, api_key) do
     space_id
@@ -33,7 +45,7 @@ defmodule Contentful.Delivery.Assets do
   @doc """
   Fetches all assets for a given `Contentful.Space`.
 
-  Will take basic collection filters into account, specifically :limit and :skip to traverse and 
+  Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and 
   limit the collection of assets.
 
   ## Examples
@@ -60,7 +72,18 @@ defmodule Contentful.Delivery.Assets do
       ], total: 3} = space |> Assets.fetch_all(limit: 1, skip: 2)
   """
   @impl Collection
-  def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
+  @spec fetch_all(
+          Space.t(),
+          list(keyword()),
+          String.t() | nil,
+          String.t() | nil
+        ) ::
+          {:ok, list(Asset.t())}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, :unknown}
+
+  def fetch_all(space, options \\ [], env \\ nil, api_key \\ nil)
 
   def fetch_all(%Space{meta_data: %{id: id}}, options, env, api_key) do
     id
@@ -107,7 +130,7 @@ defmodule Contentful.Delivery.Assets do
           |> Enum.take(4) 
   """
   @impl CollectionStream
-  def stream(space, options \\ [], env \\ "master", api_key \\ nil) do
+  def stream(space, options \\ [], env \\ nil, api_key \\ nil) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 

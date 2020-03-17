@@ -36,7 +36,7 @@ defmodule Contentful.Delivery.Locales do
           String.t() | nil
         ) ::
           list(Locale.t())
-  def fetch_all(space, env \\ "master", api_key \\ nil)
+  def fetch_all(space, env \\ nil, api_key \\ nil)
 
   def fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key) do
     space_id

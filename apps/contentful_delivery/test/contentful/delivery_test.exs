@@ -6,8 +6,10 @@ defmodule Contentful.DeliveryTest do
   @moduledoc """
   General tips for testing
 
-  1. The library can be configured with an api key for the function calls, keep it lean during tests
-  2. Most requests are recorded against an existing space, so if you rererecord, check the generated json
+  1. The library can be configured with an api key for the function calls, keep it lean during tests, 
+     i.e. you do not have to pass env and api token to every function call
+  2. Most requests are recorded against an existing space, so if you rerecord, check the generated 
+     json for changes
   3. You can put a config/secrets.test locally with a token only you have access to
 
   """

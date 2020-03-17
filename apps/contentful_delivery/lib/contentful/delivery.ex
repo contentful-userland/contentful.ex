@@ -54,6 +54,12 @@ defmodule Contentful.Delivery do
     [url(), "spaces", space] |> Enum.join(@separator)
   end
 
+  @spec url(String.t(), nil) :: String.t()
+  def url(space, env) when is_nil(env) do
+    [space |> url(), "environments", environment_from_config()]
+    |> Enum.join(@separator)
+  end
+
   @doc """
   constructs the base url for the delivery endpoint for a given space and environment
 
@@ -153,7 +159,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  catch_all for any errors furing flight (connection loss, etc.)
+  catch_all for any errors during flight (connection loss, etc.)
   """
   @spec parse_response({:error, any()}, fun()) :: {:error, :unknown}
   def parse_response({:error, _}, _callback) do
@@ -200,5 +206,9 @@ defmodule Contentful.Delivery do
 
   defp api_key_from_configuration() do
     Application.get_env(:contentful_delivery, :access_token, "")
+  end
+
+  defp environment_from_config do
+    Application.get_env(:contentful_delivery, :environment, "master")
   end
 end

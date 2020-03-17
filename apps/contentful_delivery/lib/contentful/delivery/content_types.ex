@@ -18,7 +18,7 @@ defmodule Contentful.Delivery.ContentTypes do
   @doc """
   Used to query all the content types for a given `Contentful.Space`
 
-  Supports collection parameters for :skip and :limit. Will eagerly call the API.
+  Supports collection parameters for `:skip` and `:limit`. Will eagerly call the API.
 
   ## Examples
 
@@ -51,7 +51,18 @@ defmodule Contentful.Delivery.ContentTypes do
       ], total: 3} = space |> ContentTypes.fetch_all(limit: 1, skip: 2)
   """
   @impl Collection
-  def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
+  @spec fetch_all(
+          Space.t() | String.t(),
+          String.t(),
+          String.t() | nil,
+          String.t() | nil
+        ) ::
+          {:ok, list(ContentType.t())}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, :unknown}
+
+  def fetch_all(space, options \\ [], env \\ nil, api_key \\ nil)
 
   def fetch_all(%Space{meta_data: %{id: id}}, options, env, api_key) do
     id
@@ -70,12 +81,23 @@ defmodule Contentful.Delivery.ContentTypes do
   ## Examples
 
       # fetches a content type for a space given
-      iex> {:ok, %Contentful.Space{} = space} = Contentful.Delivery.Spaces.fetch_one("a_space_id")
-      {:ok, %Contentful.ContentType{description: "a description"}} 
-        = space |> Contentful.Delivery.ContentTypes.fetch_one("my_content_type_id")
+      iex> {:ok, %Space{} = space} = Spaces.fetch_one("a_space_id")
+      {:ok, %ContentType{description: "a description"}} 
+        = space |> ContentTypes.fetch_one("my_content_type_id")
   """
   @impl Collection
-  def fetch_one(space, content_type_id, env \\ "master", api_key \\ nil)
+  @spec fetch_one(
+          Space.t() | String.t(),
+          String.t(),
+          String.t() | nil,
+          String.t() | nil
+        ) ::
+          {:ok, ContentType.t()}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, :unknown}
+
+  def fetch_one(space, content_type_id, env \\ nil, api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: id}}, content_type_id, env, api_key) do
     content_type_id
@@ -123,7 +145,7 @@ defmodule Contentful.Delivery.ContentTypes do
     
   """
   @impl CollectionStream
-  def stream(space, options \\ [], env \\ "master", api_key \\ nil) do
+  def stream(space, options \\ [], env \\ nil, api_key \\ nil) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 

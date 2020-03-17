@@ -25,7 +25,8 @@ defmodule Contentful.Delivery.Spaces do
   """
   @spec fetch_one(String.t(), String.t()) ::
           {:ok, Space.t()}
-          | {:error, atom(), list(keyword())}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
   def fetch_one(id, api_key \\ nil) do
     id

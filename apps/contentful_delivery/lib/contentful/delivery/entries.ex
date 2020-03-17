@@ -39,7 +39,18 @@ defmodule Contentful.Delivery.Entries do
 
   """
   @impl Collection
-  def fetch_one(space_id, entry_id, env \\ "master", api_key \\ nil)
+  @spec fetch_one(
+          Space.t() | String.t(),
+          String.t(),
+          String.t() | nil,
+          String.t() | nil
+        ) ::
+          {:ok, Entry.t()}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, :unknown}
+
+  def fetch_one(space_id, entry_id, env \\ nil, api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key) do
     space_id
@@ -81,7 +92,18 @@ defmodule Contentful.Delivery.Entries do
       ], total: 3} = space |> Entries.fetch_all(limit: 1, skip: 2)
   """
   @impl Collection
-  def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
+  @spec fetch_all(
+          Space.t() | String.t(),
+          String.t(),
+          String.t() | nil,
+          String.t() | nil
+        ) ::
+          {:ok, list(Entry.t())}
+          | {:error, atom(), original_message: String.t()}
+          | {:error, :rate_limit_exceeded, wait_for: integer()}
+          | {:error, :unknown}
+
+  def fetch_all(space, options \\ [], env \\ nil, api_key \\ nil)
 
   def fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key) do
     space_id
@@ -129,7 +151,7 @@ defmodule Contentful.Delivery.Entries do
     
   """
   @impl CollectionStream
-  def stream(space, options \\ [], env \\ "master", api_key \\ nil) do
+  def stream(space, options \\ [], env \\ nil, api_key \\ nil) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 

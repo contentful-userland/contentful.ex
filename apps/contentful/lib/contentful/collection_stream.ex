@@ -25,7 +25,7 @@ defmodule Contentful.CollectionStream do
           String.t(),
           String.t() | nil
         ) :: Stream.t()
-  def stream_all(space, func, options \\ [], env \\ "master", api_key \\ nil)
+  def stream_all(space, func, options \\ [], env \\ nil, api_key \\ nil)
 
   def stream_all(space, func, options, env, api_key) do
     options = options |> Keyword.put_new(:skip, 0) |> Keyword.put_new(:limit, 100)

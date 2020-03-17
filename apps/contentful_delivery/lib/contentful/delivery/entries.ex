@@ -39,15 +39,6 @@ defmodule Contentful.Delivery.Entries do
 
   """
   @impl Collection
-  @spec fetch_one(
-          Space.t() | String.t(),
-          String.t(),
-          String.t(),
-          String.t() | nil
-        ) ::
-          {:ok, Entry.t()}
-          | {:error, atom(), original_message: String.t()}
-          | {:error, :unknown}
   def fetch_one(space_id, entry_id, env \\ "master", api_key \\ nil)
 
   def fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key) do
@@ -62,7 +53,7 @@ defmodule Contentful.Delivery.Entries do
   end
 
   @doc """
-  Can be used fetch all entries associated with a space __that are **published**__.
+  Can be used fetch all entries associated with a `Contentful.Space` __that are **published**__.
 
   Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and 
   limit the collection of entries.
@@ -90,10 +81,6 @@ defmodule Contentful.Delivery.Entries do
       ], total: 3} = space |> Entries.fetch_all(limit: 1, skip: 2)
   """
   @impl Collection
-  @spec fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
-          {:ok, list(Entry.t())}
-          | {:error, atom(), original_message: String.t()}
-          | {:error, :unknown}
   def fetch_all(space, options \\ [], env \\ "master", api_key \\ nil)
 
   def fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key) do
@@ -107,15 +94,8 @@ defmodule Contentful.Delivery.Entries do
     fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
   end
 
-  @impl CollectionStream
-  @spec stream(
-          Space.t() | String.t(),
-          list(keyword()),
-          String.t(),
-          String.t() | nil
-        ) :: Stream.t()
   @doc """
-  Constructs a stream around __all entries__ of a Contentful.Space __that are published__.
+  Constructs a stream around __all entries__ of a `Contentful.Space` __that are published__.
 
   Will return a stream of entries that can be composed with the standard libraries functions. 
   This function calls the API endpoint for entries on demand, e.g. until the upper limit 
@@ -148,6 +128,7 @@ defmodule Contentful.Delivery.Entries do
           |> Enum.take(4) 
     
   """
+  @impl CollectionStream
   def stream(space, options \\ [], env \\ "master", api_key \\ nil) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end

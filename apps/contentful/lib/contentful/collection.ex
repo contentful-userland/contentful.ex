@@ -5,6 +5,7 @@ defmodule Contentful.Collection do
   @callback fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
               {:ok, list(struct())}
               | {:error, atom(), original_message: String.t()}
+              | {:error, :rate_limit_exceeded, wait_for: integer()}
               | {:error, :unknown}
   @callback fetch_one(
               Space.t() | String.t(),
@@ -14,5 +15,6 @@ defmodule Contentful.Collection do
             ) ::
               {:ok, struct()}
               | {:error, atom(), original_message: String.t()}
+              | {:error, :rate_limit_exceeded, wait_for: integer()}
               | {:error, :unknown}
 end

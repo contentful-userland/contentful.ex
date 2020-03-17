@@ -72,6 +72,53 @@ defmodule Contentful.Delivery.Entries do
     fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
   end
 
+  def stream_all(
+        space,
+        options \\ [],
+        env \\ "master",
+        api_key \\ nil
+      )
+
+  def stream_all(space, options, env, api_key) do
+    options = options |> Keyword.put_new(:skip, 0) |> Keyword.put_new(:limit, 100)
+
+    Stream.resource(
+      fn -> fetch_page(space, options, env, api_key) end,
+      &process_page/1,
+      fn _ -> nil end
+    )
+  end
+
+  defp process_page({[], nil}) do
+    {:halt, nil}
+  end
+
+  defp process_page({[], total: total, options: opts, env: env, api_key: api_key, space: space}) do
+    limit = opts[:limit]
+    skip = opts[:skip]
+
+    if limit < total do
+      space
+      |> fetch_page([skip: skip + limit, limit: limit], env, api_key)
+    else
+      {[], {[], nil}}
+    end
+  end
+
+  defp process_page({[head | tail], meta}) do
+    {[head], {tail, meta}}
+  end
+
+  defp fetch_page(space, options, env, api_key) do
+    case space |> fetch_all(options, env, api_key) do
+      {:ok, items, total: total} ->
+        {items, total: total, options: options, env: env, api_key: api_key, space: space}
+
+      {:error, _} ->
+        {[], nil}
+    end
+  end
+
   defp build_single_request(space_id, entry_id, env, api_key) do
     url = [
       space_id |> Delivery.url(env),

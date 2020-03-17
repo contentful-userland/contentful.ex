@@ -2,7 +2,7 @@ defmodule Contentful.Locale do
   @moduledoc """
   Represents a single locale available in a given Space - see
 
-  https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/locales
+  See the [official docs for more information](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/locales)
   """
 
   defstruct [:name, :code, :fallback_code, :default]

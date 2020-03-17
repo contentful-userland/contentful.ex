@@ -54,6 +54,19 @@ defmodule Contentful.Delivery do
     [url(), "spaces", space] |> Enum.join(@separator)
   end
 
+  @doc """
+  When explicilty given `nil`, will fetch the `environment` from the environments 
+  current config (see `config/config.exs`). Will fall back to `"master"` if no environment
+  is set.
+
+  ## Examples
+
+    "https://cdn.contentful.com/spaces/foo/environments/master" = url("foo", nil)
+
+    # With config set in config/config.exs
+    config :contentful_delivery, environment: "staging"
+    "https://cdn.contentful.com/spaces/foo/environments/staging" = url("foo", nil)
+  """
   @spec url(String.t(), nil) :: String.t()
   def url(space, env) when is_nil(env) do
     [space |> url(), "environments", environment_from_config()]

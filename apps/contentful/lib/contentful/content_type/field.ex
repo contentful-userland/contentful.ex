@@ -1,4 +1,10 @@
 defmodule Contentful.ContentType.Field do
+  @moduledoc """
+  Represents a single field in the field defintion of a `Contentful.ContentType`.
+
+  See the [content model documentation for more information](https://www.contentful.com/developers/docs/concepts/data-model/)
+
+  """
   defstruct [
     :name,
     :type,

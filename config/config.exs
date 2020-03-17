@@ -11,32 +11,12 @@ use Mix.Config
 # optional parameters
 config :contentful, json_library: Jason
 
-# config :contentful_delivery, environment: "staging"
-
 # config :contentful, json_library: Poison
-# config :contentful_management, json_library: Poison
-# config :contentful_delivery, json_library: Poison
+
+# config :contentful_delivery, environment: "staging"
 
 # access token should probably go into a secrets file
 # config :contentful_delivery, access_token: "<your_cda_access_token>"
-
-# config :contentful_preview, json_library: Poison
-# config :contentful_management, json_library: Jason
-# config :contentful_delivery, json_library: Jason
-# config :contentful_preview, json_library: Jason
-
-# You can configure for your application as:
-#
-#     config :contentful, key: :value
-#
-# And access this configuration in your application as:
-#
-#     Application.get_env(:contentful, :key)
-#
-# Or configure a 3rd-party app:
-#
-#     config :logger, level: :info
-#
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

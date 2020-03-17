@@ -1,12 +1,14 @@
 defmodule Contentful do
   @moduledoc """
   Contentful holds some helper functions for the available 
-  Contentful API implementations
+  Contentful API implementations and serves as a container 
+  for the shared structs.
+
   """
 
   @doc """
-  The JSON library to use. Can be either configured to Jason or Poison
-  using the :contentful key in config.exs
+  The JSON library to use. Can be either configured to `Jason` or `Poison`
+  using the `:contentful` key in `config/config.exs`
 
   ## Examples
 

@@ -1,4 +1,7 @@
 defmodule Contentful.Collection do
+  @moduledoc """
+  Describes a Contentful collection, which is usually an API response of type Array.
+  """
   @callback fetch_all(Space.t(), list(keyword()), String.t(), String.t() | nil) ::
               {:ok, list(struct())}
               | {:error, atom(), original_message: String.t()}

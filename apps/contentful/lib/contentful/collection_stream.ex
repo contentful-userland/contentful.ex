@@ -1,4 +1,8 @@
 defmodule Contentful.CollectionStream do
+  @moduledoc """
+  A CollectionStream provides functions to make a Contentful.Collection streamable,
+  allowing the user to just iterate over the pages of resources in the Contentful API.
+  """
   alias Contentful.Space
 
   @callback stream(
@@ -8,6 +12,12 @@ defmodule Contentful.CollectionStream do
               String.t() | nil
             ) :: Stream.t()
 
+  @doc """
+  Allows for a callback function to be used as a resource and returns a Stream based on a resource.
+
+  Constructs the `start` function, the `next` and the `after` function to construct the stream and
+  keeps the state around for emitting individual items from pages fetched.
+  """
   @spec stream_all(
           Space.t() | String.t(),
           fun(),

@@ -1,6 +1,6 @@
 # Contentful
 
-**TODO: Add description**
+The `Contentful` application holds functions and structures shared across the other APIs, to ensure that similar functions can use similar data structures.
 
 ## Installation
 
@@ -18,4 +18,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/contentful](https://hexdocs.pm/contentful).
-

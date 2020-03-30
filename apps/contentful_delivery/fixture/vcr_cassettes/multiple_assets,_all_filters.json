@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf/environments/master/assets?skip=1&limit=1"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 2,\n  \"skip\": 1,\n  \"limit\": 1,\n  \"items\": [\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"bmehzfuz4raf\"\n          }\n        },\n        \"id\": \"5ECf6ltDUOnX441PtBR8Wk\",\n        \"type\": \"Asset\",\n        \"createdAt\": \"2020-03-16T10:06:11.604Z\",\n        \"updatedAt\": \"2020-03-16T10:06:11.604Z\",\n        \"environment\": {\n          \"sys\": {\n            \"id\": \"master\",\n            \"type\": \"Link\",\n            \"linkType\": \"Environment\"\n          }\n        },\n        \"revision\": 1,\n        \"locale\": \"en-US\"\n      },\n      \"fields\": {\n        \"title\": \"Foobar\",\n        \"description\": \"barfoo\",\n        \"file\": {\n          \"url\": \"//images.ctfassets.net/bmehzfuz4raf/5ECf6ltDUOnX441PtBR8Wk/fa3dc5cde2b4d4c5736566c956f20163/Screenshot_from_2020-03-11_22-56-44.png\",\n          \"details\": {\n            \"size\": 247990,\n            \"image\": {\n              \"width\": 1920,\n              \"height\": 1053\n            }\n          },\n          \"fileName\": \"Screenshot from 2020-03-11 22-56-44.png\",\n          \"contentType\": \"image/png\"\n        }\n      }\n    }\n  ]\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "CF-Environment-Id": "master",
+        "CF-Environment-Uuid": "69b0fe47-9d71-4e0c-a7e0-4e12cb573930",
+        "CF-Organization-Id": "0bEbsBel9WL3OIaiqx0MnO",
+        "CF-Space-Id": "bmehzfuz4raf",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "W/\"18158429364202242911\"",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Content-Length": "1189",
+        "Accept-Ranges": "bytes",
+        "Date": "Tue, 24 Mar 2020 09:25:33 GMT",
+        "Via": "1.1 varnish",
+        "Age": "570371",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-hhn4070-HHN",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "5bbdf095-32f9-40fd-9c0b-6ec39bfc9e87"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

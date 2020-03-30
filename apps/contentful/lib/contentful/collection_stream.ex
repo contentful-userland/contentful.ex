@@ -24,12 +24,10 @@ defmodule Contentful.CollectionStream do
           list(keyword()),
           String.t(),
           String.t() | nil
-        ) :: Stream.t()
+        ) :: fun()
   def stream_all(space, func, options \\ [], env \\ nil, api_key \\ nil)
 
   def stream_all(space, func, options, env, api_key) do
-    options = options |> Keyword.put_new(:skip, 0) |> Keyword.put_new(:limit, 100)
-
     Stream.resource(
       fn -> fetch_page(space, func, options, env, api_key) end,
       &process_page/1,
@@ -37,19 +35,23 @@ defmodule Contentful.CollectionStream do
     )
   end
 
-  defp process_page({[], nil}) do
-    {:halt, nil}
-  end
-
   defp process_page(
-         {[], total: total, options: opts, env: env, api_key: api_key, space: space, func: func}
+         {[],
+          [
+            total: total,
+            options: opts,
+            env: env,
+            api_key: api_key,
+            space: space,
+            func: func
+          ]}
        ) do
-    limit = opts[:limit]
-    skip = opts[:skip]
+    skip = opts |> Keyword.get(:skip, 0)
+    limit = opts |> Keyword.get(:limit, 100)
 
     if limit < total do
       space
-      |> fetch_page(func, [skip: skip + limit, limit: limit], env, api_key)
+      |> fetch_page(func, [limit: limit, skip: skip + limit], env, api_key)
     else
       {[], {[], nil}}
     end
@@ -59,11 +61,29 @@ defmodule Contentful.CollectionStream do
     {[head], {tail, meta}}
   end
 
+  defp process_page(_) do
+    {:halt, nil}
+  end
+
+  @spec fetch_page(
+          Space.t(),
+          fun(),
+          list(keyword()),
+          String.t() | nil,
+          String.t() | nil
+        ) :: {list(), list(keyword())}
   defp fetch_page(space, func, options, env, api_key) do
     case space |> func.(options, env, api_key) do
       {:ok, items, total: total} ->
         {items,
-         total: total, options: options, env: env, api_key: api_key, space: space, func: func}
+         [
+           total: total,
+           options: options,
+           env: env,
+           api_key: api_key,
+           space: space,
+           func: func
+         ]}
 
       {:error, _} ->
         {[], nil}

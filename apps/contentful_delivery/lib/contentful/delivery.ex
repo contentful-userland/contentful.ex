@@ -21,7 +21,7 @@ defmodule Contentful.Delivery do
   ]
 
   @doc """
-  Gets the json library for the Contentful Delivery API based 
+  Gets the json library for the Contentful Delivery API based
   on the config/config.exs. Will override the central configuration
   option if set.
 
@@ -55,7 +55,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  When explicilty given `nil`, will fetch the `environment` from the environments 
+  When explicilty given `nil`, will fetch the `environment` from the environments
   current config (see `config/config.exs`). Will fall back to `"master"` if no environment
   is set.
 
@@ -125,13 +125,13 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  parses the options for retrieving a collection. It will drop any option that is not in 
+  parses the options for retrieving a collection. It will drop any option that is not in
   @collection_filters ([:limit, :skip, :order])
 
   ## Examples
 
-      "?limit=50&skip=25&order=foobar" 
-        = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)      
+      "?limit=50&skip=25&order=foobar"
+        = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)
 
   """
   @spec collection_query_params(list(keyword())) :: String.t()

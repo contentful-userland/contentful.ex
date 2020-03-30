@@ -14,7 +14,7 @@ defmodule Contentful.Delivery.Assets do
 
   ## Examples
       space = "my_space_id"
-      {:ok, %Asset{ meta_data: %{ id: "<asset_id>"}} = asset} 
+      {:ok, %Asset{ meta_data: %{ id: "<asset_id>"}} = asset}
         =  space |> Assets.fetch_one("<asset_id>")
   """
   @impl Collection
@@ -45,7 +45,7 @@ defmodule Contentful.Delivery.Assets do
   @doc """
   Fetches all assets for a given `Contentful.Space`.
 
-  Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and 
+  Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and
   limit the collection of assets.
 
   ## Examples
@@ -53,13 +53,13 @@ defmodule Contentful.Delivery.Assets do
       {:ok, [%Asset{} | _]} = space |> Assets.fetch_all()
 
       {:ok, [
-        %Asset{ meta_data: %{ id: "foobar_0"}}, 
-        %Asset{ meta_data: %{ id: "foobar_1"}}, 
+        %Asset{ meta_data: %{ id: "foobar_0"}},
+        %Asset{ meta_data: %{ id: "foobar_1"}},
         %Asset{ meta_data: %{ id: "foobar_2"}}
       ], total: 3} = space |> Assets.fetch_all
-      
+
       {:ok, [
-        %Asset{ meta_data: %{ id: "foobar_1"}}, 
+        %Asset{ meta_data: %{ id: "foobar_1"}},
         %Asset{ meta_data: %{ id: "foobar_2"}}
       ], total: 3} = space |> Assets.fetch_all(skip: 1)
 
@@ -99,35 +99,35 @@ defmodule Contentful.Delivery.Assets do
   @doc """
   Constructs a stream around __all__ assets of a `Contentful.Space` __that are published__.
 
-  Will return a stream of assets that can be composed with the standard libraries functions. 
-  This function calls the API endpoint for entries on demand, e.g. until the upper limit 
+  Will return a stream of assets that can be composed with the standard libraries functions.
+  This function calls the API endpoint for entries on demand, e.g. until the upper limit
   (the total of all assets) is reached.
 
-  __Warning__: With very large asset collections, this can quickly run into the request limit of the API! 
+  __Warning__: With very large asset collections, this can quickly run into the request limit of the API!
 
   ## Examples
       space = "my_space_id"
       # API calls calculated by the stream (in this case two calls)
-      ["first_asset_id", "second_asset_id"] 
-        = space 
-          |> Assets.stream(limit: 1) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(2) 
+      ["first_asset_id", "second_asset_id"]
+        = space
+          |> Assets.stream(limit: 1)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
-      ["first_asset_id"] 
-        = space 
-          |> Assets.stream(limit: 1, environment, api_token) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(2) 
-    
-      # Use the :limit parameter to set the page size 
-      ["first_asset_id", "second_asset_id", "third_asset_id", "fourth_asset_id"] 
-        = space 
-          |> Assets.stream(limit: 4) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(4) 
+      ["first_asset_id"]
+        = space
+          |> Assets.stream(limit: 1, environment, api_token)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
+
+      # Use the :limit parameter to set the page size
+      ["first_asset_id", "second_asset_id", "third_asset_id", "fourth_asset_id"]
+        = space
+          |> Assets.stream(limit: 4)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(4)
   """
   @impl CollectionStream
   def stream(space, options \\ [], env \\ nil, api_key \\ nil) do

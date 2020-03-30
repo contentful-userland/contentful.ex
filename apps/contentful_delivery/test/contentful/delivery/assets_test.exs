@@ -37,24 +37,32 @@ defmodule Contentful.Delivery.AssetsTest do
     end
 
     test "will fetch all published entries for a space, respecting the limit parameter" do
-      use_cassette "mutlipe assets, limit filter" do
+      use_cassette "multiple assets, limit filter" do
         {:ok, [%Asset{fields: %{title: "bafoo"}}], total: 2} =
           @space_id |> Assets.fetch_all(limit: 1)
       end
     end
 
     test "will fetch all published entries for a space, respecting the skip param" do
-      use_cassette "mutlipe assets, skip filter" do
+      use_cassette "multiple assets, skip filter" do
         {:ok, [%Asset{fields: %{title: "Foobar"}}], total: 2} =
           @space_id |> Assets.fetch_all(skip: 1)
       end
     end
 
     test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
-      use_cassette "mutlipe assets, all filters" do
+      use_cassette "multiple assets, all filters" do
         {:ok, [%Asset{fields: %{title: "Foobar"}}], total: 2} =
           @space_id
           |> Assets.fetch_all(skip: 1, limit: 1)
+      end
+    end
+  end
+
+  describe ".stream" do
+    test "streams asset calls" do
+      use_cassette "multiple assets, limit filter, streamed" do
+        [%Asset{}, %Asset{}] = @space_id |> Assets.stream(limit: 1) |> Enum.to_list()
       end
     end
   end

@@ -25,7 +25,6 @@ defmodule Contentful.Mixfile do
       source_url: "https://github.com/contentful-labs/contentful.ex",
       docs: [
         extras: [
-          "CHANGELOG.md",
           "AUTHORS.md"
         ]
       ]

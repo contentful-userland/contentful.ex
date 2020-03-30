@@ -26,7 +26,7 @@ defmodule Contentful.Mixfile do
       docs: [
         extras: [
           # "README.md",
-          # "apps/contentful_delivery/README.md",
+          "apps/contentful_delivery/README.md"
           # "apps/contentful_preview/README.md",
           # "apps/contentful_management/README.md"
         ]

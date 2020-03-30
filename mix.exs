@@ -69,7 +69,10 @@ defmodule Contentful.Mixfile do
     [
       name: :contentful,
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
-      maintainers: ["Contentful GmbH (David Litvak Bruno)"],
+      maintainers: [
+        "David Litvak Bruno <Contentful GmbH>",
+        "Florian Kraft <Contentful GmbH>"
+      ],
       licenses: ["MIT"],
       links: %{
         "GitHub" => "https://github.com/contentful-labs/contentful.ex"

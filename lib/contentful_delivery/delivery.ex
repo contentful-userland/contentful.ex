@@ -232,28 +232,16 @@ defmodule Contentful.Delivery do
     [authorization: "Bearer #{token}"]
   end
 
-  @doc """
-  retrieves the configured access_token, if there is one. Defaults to the empty string.
-  """
-  @spec api_key_from_configuration() :: String.t()
   defp api_key_from_configuration() do
-    from_config(:api_key, "")
+    config(:api_key, "")
   end
 
-  @doc """
-  retrieves the configured environment, if there is one. Defaults to `master` otherwise.
-  """
-  @spec environment_from_config() :: String.t()
   defp environment_from_config do
-    from_config(:environment, "master")
+    config(:environment, "master")
   end
 
-  @doc """
-  retrieves the space configured for the Delivery API, if there is one
-  """
-  @spec space_from_config() :: String.t() | nil
   defp space_from_config do
-    from_config(:space, nil)
+    config(:space, nil)
   end
 
   @doc """
@@ -264,10 +252,10 @@ defmodule Contentful.Delivery do
         my_config: "foobar"
       ]
 
-      "foobar" = Contentful.Delivery.from_config(:my_config)
+      "foobar" = Contentful.Delivery.config(:my_config)
   """
-  @spec from_config(atom(), any() | nil) :: any()
-  def from_config(setting, default \\ nil) do
+  @spec config(atom(), any() | nil) :: any()
+  def config(setting, default \\ nil) do
     config() |> Keyword.get(setting, default)
   end
 

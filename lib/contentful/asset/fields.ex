@@ -1,6 +1,6 @@
 defmodule Contentful.Asset.Fields do
   @moduledoc """
-  Represents the fields of an asset, which can very depending on the asset.
+  Represents the fields of a `Contentful.Asset`, which can very depending on the `Contentful.Asset`.
   """
 
   alias Contentful.Asset.Fields

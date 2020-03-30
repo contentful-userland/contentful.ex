@@ -37,9 +37,9 @@ defmodule Contentful.Delivery.Locales do
         ) ::
           list(Locale.t())
   def fetch_all(
-        space \\ Delivery.from_config(:space),
-        env \\ Delivery.from_config(:environment),
-        api_key \\ Delivery.from_config(:access_token)
+        space \\ Delivery.config(:space),
+        env \\ Delivery.config(:environment),
+        api_key \\ Delivery.config(:access_token)
       )
 
   def fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key) do

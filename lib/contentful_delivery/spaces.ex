@@ -41,8 +41,8 @@ defmodule Contentful.Delivery.Spaces do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
   def fetch_one(
-        id \\ Delivery.from_config(:space),
-        api_key \\ Delivery.from_config(:access_token)
+        id \\ Delivery.config(:space),
+        api_key \\ Delivery.config(:access_token)
       ) do
     id
     |> build_request(api_key)

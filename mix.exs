@@ -39,6 +39,10 @@ defmodule Contentful.Mixfile do
       source_url: "https://github.com/contentful-labs/contentful.ex",
       docs: [
         main: "Contentful",
+        nest_modules_by_prefix: [
+          Contentful,
+          Contentful.Delivery
+        ],
         groups_for_modules: [
           "Common Structures": [
             Asset,

@@ -52,8 +52,8 @@ defmodule Contentful.Delivery.ContentTypes do
   """
   @impl Collection
   @spec fetch_all(
-          Space.t() | String.t(),
           String.t(),
+          Space.t() | String.t(),
           String.t() | nil,
           String.t() | nil
         ) ::
@@ -62,17 +62,22 @@ defmodule Contentful.Delivery.ContentTypes do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_all(space, options \\ [], env \\ nil, api_key \\ nil)
+  def fetch_all(
+        options \\ [],
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      )
 
-  def fetch_all(%Space{meta_data: %{id: id}}, options, env, api_key) do
+  def fetch_all(options, %Space{meta_data: %{id: id}}, env, api_key) do
     id
     |> build_multiple_request(options, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_content_types/1)
   end
 
-  def fetch_all(space_id, options, env, api_key) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
+  def fetch_all(options, space_id, env, api_key) when is_binary(space_id) do
+    fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -87,8 +92,8 @@ defmodule Contentful.Delivery.ContentTypes do
   """
   @impl Collection
   @spec fetch_one(
-          Space.t() | String.t(),
           String.t(),
+          Space.t() | String.t(),
           String.t() | nil,
           String.t() | nil
         ) ::
@@ -97,17 +102,23 @@ defmodule Contentful.Delivery.ContentTypes do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_one(space, content_type_id, env \\ nil, api_key \\ nil)
+  def fetch_one(
+        content_type_id,
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      )
 
-  def fetch_one(%Space{meta_data: %{id: id}}, content_type_id, env, api_key) do
+  def fetch_one(content_type_id, %Space{meta_data: %{id: id}}, env, api_key) do
     content_type_id
     |> build_single_request(id, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_content_type/1)
   end
 
-  def fetch_one(space_id, content_type_id, env, api_key) do
-    fetch_one(%Space{meta_data: %{id: space_id}}, content_type_id, env, api_key)
+  def fetch_one(content_type_id, space_id, env, api_key)
+      when is_binary(space_id) do
+    fetch_one(content_type_id, %Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -122,30 +133,32 @@ defmodule Contentful.Delivery.ContentTypes do
   ## Examples
       space = "my_space_id"
       # API calls calculated by the stream (in this case two calls)
-      ["first_content_type", "second_content_type"]
-        = space
-          |> ContentTypes.stream(limit: 1)
+      ["first_content_type", "second_content_type"] =
+          ContentTypes.stream([limit: 1], space)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
-      ["first_content_type"]
-        = space
-          |> ContentTypes.stream(limit: 1, environment, api_token)
+      ["first_content_type"] =
+          |> ContentTypes.stream([limit: 1], space, environment, api_token)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       # Use the :limit parameter to set the page size
-      ["first_content_type", "second_content_type", "third_content_type", "fourth_content_type"]
-        = space
-          |> ContentTypes.stream(limit: 4)
+      ["first_content_type", "second_content_type", "third_content_type", "fourth_content_type"] =
+          ContentTypes.stream([limit: 4], space)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(4)
 
   """
   @impl CollectionStream
-  def stream(space, options \\ [], env \\ nil, api_key \\ nil) do
+  def stream(
+        options \\ [],
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      ) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 

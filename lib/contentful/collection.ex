@@ -3,8 +3,8 @@ defmodule Contentful.Collection do
   Describes a Contentful collection, which is usually an API response of sys.type "Array".
   """
   @callback fetch_all(
-              Space.t(),
               list(keyword()),
+              Space.t() | String.t(),
               String.t() | nil,
               String.t() | nil
             ) ::
@@ -13,8 +13,8 @@ defmodule Contentful.Collection do
               | {:error, :rate_limit_exceeded, wait_for: integer()}
               | {:error, :unknown}
   @callback fetch_one(
-              Space.t() | String.t(),
               String.t(),
+              Space.t() | String.t(),
               String.t() | nil,
               String.t() | nil
             ) ::

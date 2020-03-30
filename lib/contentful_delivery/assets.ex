@@ -15,12 +15,17 @@ defmodule Contentful.Delivery.Assets do
   ## Examples
       space = "my_space_id"
       {:ok, %Asset{ meta_data: %{ id: "<asset_id>"}} = asset}
-        =  space |> Assets.fetch_one("<asset_id>")
+        =  Assets.fetch_one("<asset_id>", space)
+
+      # using the configured space from config/config.exs
+      {:ok, %Asset{ meta_data: %{ id: "<asset_id>"}} = asset}
+        =  Assets.fetch_one("<asset_id>")
+
   """
   @impl Collection
   @spec fetch_one(
-          Space.t() | String.t(),
           String.t(),
+          Space.t() | String.t(),
           String.t() | nil,
           String.t() | nil
         ) ::
@@ -29,17 +34,17 @@ defmodule Contentful.Delivery.Assets do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_one(space, asset, env \\ nil, api_key \\ nil)
+  def fetch_one(asset, space \\ nil, env \\ nil, api_key \\ nil)
 
-  def fetch_one(%Space{meta_data: %{id: space_id}}, asset_id, env, api_key) do
+  def fetch_one(asset_id, %Space{meta_data: %{id: space_id}}, env, api_key) do
     space_id
     |> build_single_request(asset_id, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_asset/1)
   end
 
-  def fetch_one(space_id, asset_id, env, api_key) do
-    fetch_one(%Space{meta_data: %{id: space_id}}, asset_id, env, api_key)
+  def fetch_one(asset_id, space_id, env, api_key) do
+    fetch_one(asset_id, %Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -50,31 +55,32 @@ defmodule Contentful.Delivery.Assets do
 
   ## Examples
       space = "my_space_id"
-      {:ok, [%Asset{} | _]} = space |> Assets.fetch_all()
+      {:ok, [%Asset{} | _]} = Assets.fetch_all([], space)
 
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_0"}},
         %Asset{ meta_data: %{ id: "foobar_1"}},
-        %Asset{ meta_data: %{ id: "foobar_2"}}
-      ], total: 3} = space |> Assets.fetch_all
+      ], total: 3} = Assets.fetch_all([limit: 2], space)
 
+
+      # using the configured space
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_1"}},
         %Asset{ meta_data: %{ id: "foobar_2"}}
-      ], total: 3} = space |> Assets.fetch_all(skip: 1)
+      ], total: 3} = Assets.fetch_all(skip: 1)
 
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_0"}}
-      ], total: 3} = space |> Assets.fetch_all(limit: 1)
+      ], total: 3} = Assets.fetch_all(limit: 1)
 
       {:ok, [
         %Asset{ meta_data: %{ id: "foobar_2"}}
-      ], total: 3} = space |> Assets.fetch_all(limit: 1, skip: 2)
+      ], total: 3} = Assets.fetch_all(limit: 1, skip: 2)
   """
   @impl Collection
   @spec fetch_all(
-          Space.t(),
           list(keyword()),
+          Space.t() | String.t(),
           String.t() | nil,
           String.t() | nil
         ) ::
@@ -83,17 +89,22 @@ defmodule Contentful.Delivery.Assets do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_all(space, options \\ [], env \\ nil, api_key \\ nil)
+  def fetch_all(
+        options \\ [],
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      )
 
-  def fetch_all(%Space{meta_data: %{id: id}}, options, env, api_key) do
+  def fetch_all(options, %Space{meta_data: %{id: id}}, env, api_key) do
     id
     |> build_multi_request(options, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_assets/1)
   end
 
-  def fetch_all(space_id, options, env, api_key) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
+  def fetch_all(options, space_id, env, api_key) when is_binary(space_id) do
+    fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -106,31 +117,40 @@ defmodule Contentful.Delivery.Assets do
   __Warning__: With very large asset collections, this can quickly run into the request limit of the API!
 
   ## Examples
+
+      # using the configured space:
+      ["first_asset_id", "second_asset_id"] =
+          Assets.stream(limit: 1)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
+
       space = "my_space_id"
       # API calls calculated by the stream (in this case two calls)
-      ["first_asset_id", "second_asset_id"]
-        = space
-          |> Assets.stream(limit: 1)
+      ["first_asset_id", "second_asset_id"] =
+          Assets.stream([limit: 1], space)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
-      ["first_asset_id"]
-        = space
-          |> Assets.stream(limit: 1, environment, api_token)
+      ["first_asset_id"] =
+          Assets.stream([limit: 1], space, environment, api_token)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       # Use the :limit parameter to set the page size
-      ["first_asset_id", "second_asset_id", "third_asset_id", "fourth_asset_id"]
-        = space
-          |> Assets.stream(limit: 4)
+      ["first_asset_id", "second_asset_id", "third_asset_id", "fourth_asset_id"] =
+          |> Assets.stream([limit: 4], space)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(4)
   """
   @impl CollectionStream
-  def stream(space, options \\ [], env \\ nil, api_key \\ nil) do
+  def stream(
+        options \\ [],
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      ) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 

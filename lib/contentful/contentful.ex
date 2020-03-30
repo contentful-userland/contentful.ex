@@ -1,7 +1,7 @@
 defmodule Contentful do
   @moduledoc """
-  The Contentful SDK provides helper functions and structs for the available
-  Contentful API implementations and serves as a container
+  The [Contentful](https://contentful.com) SDK provides helper functions and structs for a subset of the the available
+  [Contentful APIs](https://www.contentful.com/developers/docs/references/) and serves as a container
   for the shared structs.
 
   The available Contentful APIs are:
@@ -30,12 +30,12 @@ defmodule Contentful do
 
   ```
   # in config.exs
-  config :contentful, json_library: Poison # optional Jason is the default
+  config :contentful, json_library: Poison # optional, as Jason is the default
 
   # per API definition:
 
   config :contentful, delivery: [
-    access_token: "<YOU CDA token>",
+    access_token: "<YOUR CDA token>",
     environment: "my-environment" # default is `master`
   ]
 
@@ -62,7 +62,7 @@ defmodule Contentful do
       Jason
 
   """
-  @spec json_library(atom()) :: module()
+  @spec json_library() :: module()
   def json_library() do
     case Application.get_env(:contentful, :json_library) do
       nil -> Jason

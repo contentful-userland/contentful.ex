@@ -7,6 +7,7 @@ defmodule Contentful.Delivery.LocalesTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   @space_id "bmehzfuz4raf"
+  @env "master"
   @access_token nil
 
   setup_all do
@@ -25,7 +26,7 @@ defmodule Contentful.Delivery.LocalesTest do
          [
            %Locale{code: "en-US", default: true},
            %Locale{code: "de", default: false}
-         ]} = @space_id |> Locales.fetch_all("master", @access_token)
+         ]} = @space_id |> Locales.fetch_all(@env, @access_token)
       end
     end
   end

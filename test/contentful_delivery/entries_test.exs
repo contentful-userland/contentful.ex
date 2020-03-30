@@ -7,6 +7,7 @@ defmodule Contentful.Delivery.EntriesTest do
 
   @space_id "bmehzfuz4raf"
   @entry_id "5UeyMKZrmqMYyMMJvCP3Ls"
+  @env "master"
   @access_token nil
 
   setup_all do
@@ -22,7 +23,7 @@ defmodule Contentful.Delivery.EntriesTest do
     test "will fetch one entry from the given space" do
       use_cassette "single entry" do
         {:ok, %Entry{fields: _, meta_data: %MetaData{id: @entry_id}}} =
-          @space_id |> Entries.fetch_one(@entry_id, "master", @access_token)
+          @entry_id |> Entries.fetch_one(@space_id, @env, @access_token)
       end
     end
   end
@@ -31,29 +32,37 @@ defmodule Contentful.Delivery.EntriesTest do
     test "will fetch all published entries for a given space" do
       use_cassette "multiple entries" do
         {:ok, [%Entry{}, %Entry{}], total: 2} =
-          %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all()
+          Entries.fetch_all([], %Space{meta_data: %{id: @space_id}})
       end
     end
 
     test "will fetch all published entries for a space, respecting the limit parameter" do
       use_cassette "multiple entries, limit filter" do
         {:ok, [%Entry{fields: %{"name" => "Purple Thunder"}}], total: 2} =
-          %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all(limit: 1)
+          Entries.fetch_all([limit: 1], %Space{meta_data: %{id: @space_id}})
       end
     end
 
     test "will fetch all published entries for a space, respecting the skip param" do
       use_cassette "multiple entries, skip filter" do
         {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
-          %Space{meta_data: %{id: @space_id}} |> Entries.fetch_all(skip: 1)
+          Entries.fetch_all(
+            [skip: 1],
+            %Space{meta_data: %{id: @space_id}},
+            @env
+          )
       end
     end
 
     test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
       use_cassette "multiple entries, all filters" do
         {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
-          %Space{meta_data: %{id: @space_id}}
-          |> Entries.fetch_all(skip: 1, limit: 1)
+          Entries.fetch_all(
+            [skip: 1, limit: 1],
+            %Space{meta_data: %{id: @space_id}},
+            @env,
+            @access_token
+          )
       end
     end
   end

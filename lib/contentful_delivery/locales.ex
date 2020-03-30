@@ -31,12 +31,16 @@ defmodule Contentful.Delivery.Locales do
 
   """
   @spec fetch_all(
-          Space.t() | String.t(),
           String.t(),
+          Space.t() | String.t(),
           String.t() | nil
         ) ::
           list(Locale.t())
-  def fetch_all(space, env \\ nil, api_key \\ nil)
+  def fetch_all(
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      )
 
   def fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key) do
     space_id
@@ -45,7 +49,7 @@ defmodule Contentful.Delivery.Locales do
     |> Delivery.parse_response(&build_locales/1)
   end
 
-  def fetch_all(space_id, env, api_key) do
+  def fetch_all(space_id, env, api_key) when is_binary(space_id) do
     fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
   end
 

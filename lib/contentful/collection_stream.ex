@@ -6,8 +6,8 @@ defmodule Contentful.CollectionStream do
   alias Contentful.Space
 
   @callback stream(
-              Space.t() | String.t(),
               list(keyword()),
+              Space.t() | String.t(),
               String.t(),
               String.t() | nil
             ) :: Stream.t()
@@ -73,7 +73,7 @@ defmodule Contentful.CollectionStream do
           String.t() | nil
         ) :: {list(), list(keyword())}
   defp fetch_page(space, func, options, env, api_key) do
-    case space |> func.(options, env, api_key) do
+    case options |> func.(space, env, api_key) do
       {:ok, items, total: total} ->
         {items,
          [

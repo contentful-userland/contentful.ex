@@ -1,7 +1,6 @@
 defmodule Contentful.Delivery do
   @moduledoc """
-  This module holds most of the function common to the more specialized Context modules that provide access
-  to the data.
+  The Contentful Delivery API allows _read only_ access to __published__ content.
   """
 
   import HTTPoison, only: [get: 2]
@@ -44,12 +43,26 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
+  constructs the base url with the space id that got configured in config.exs
+  """
+  @spec url(String.t() | nil) :: String.t()
+  def url(space) when is_nil(space) do
+    case space_from_config() do
+      nil ->
+        url()
+
+      space ->
+        space |> IO.inspect() |> url
+    end
+  end
+
+  @doc """
   constructs the base url with the extension for a given space
   ## Examples
 
       "https://cdn.contentful.com/spaces/foo" = url("foo")
   """
-  @spec url(String.t()) :: String.t()
+  @spec url(String.t() | nil) :: String.t()
   def url(space) do
     [url(), "spaces", space] |> Enum.join(@separator)
   end
@@ -217,12 +230,28 @@ defmodule Contentful.Delivery do
     [authorization: "Bearer #{token}"]
   end
 
-  defp api_key_from_configuration() do
+  @doc """
+  retrieves the configured access_token, if there is one. Defaults to the empty string.
+  """
+  @spec api_key_from_configuration() :: String.t()
+  def api_key_from_configuration() do
     config() |> Keyword.get(:access_token, "")
   end
 
-  defp environment_from_config do
+  @doc """
+  retrieves the configured environment, if there is one. Defaults to `master` otherwise.
+  """
+  @spec environment_from_config() :: String.t()
+  def environment_from_config do
     config() |> Keyword.get(:environment, "master")
+  end
+
+  @doc """
+  retrieves the space configured for the Delivery API, if there is one
+  """
+  @spec space_from_config() :: String.t() | nil
+  def space_from_config do
+    config() |> Keyword.get(:space, nil)
   end
 
   @doc """

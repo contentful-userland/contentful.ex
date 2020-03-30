@@ -40,8 +40,8 @@ defmodule Contentful.Delivery.Entries do
   """
   @impl Collection
   @spec fetch_one(
-          Space.t() | String.t(),
           String.t(),
+          Space.t() | String.t(),
           String.t() | nil,
           String.t() | nil
         ) ::
@@ -50,17 +50,22 @@ defmodule Contentful.Delivery.Entries do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_one(space_id, entry_id, env \\ nil, api_key \\ nil)
+  def fetch_one(
+        entry_id,
+        space_id \\ Delivery.space_from_config(),
+        env \\ nil,
+        api_key \\ nil
+      )
 
-  def fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key) do
+  def fetch_one(entry_id, %Space{meta_data: %{id: space_id}}, env, api_key) do
     space_id
     |> build_single_request(entry_id, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_entry/1)
   end
 
-  def fetch_one(space_id, entry_id, env, api_key) do
-    fetch_one(%Space{meta_data: %{id: space_id}}, entry_id, env, api_key)
+  def fetch_one(entry_id, space_id, env, api_key) do
+    fetch_one(entry_id, %Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -93,8 +98,8 @@ defmodule Contentful.Delivery.Entries do
   """
   @impl Collection
   @spec fetch_all(
+          list(keyword()),
           Space.t() | String.t(),
-          String.t(),
           String.t() | nil,
           String.t() | nil
         ) ::
@@ -103,17 +108,23 @@ defmodule Contentful.Delivery.Entries do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_all(space, options \\ [], env \\ nil, api_key \\ nil)
+  def fetch_all(
+        options \\ [],
+        space \\ Delivery.space_from_config(),
+        env \\ nil,
+        api_key \\ nil
+      )
 
-  def fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key) do
+  def fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key) do
     space_id
     |> build_multi_request(options, env, api_key)
     |> Delivery.send_request()
     |> Delivery.parse_response(&build_entries/1)
   end
 
-  def fetch_all(space_id, options, env, api_key) when is_binary(space_id) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, options, env, api_key)
+  def fetch_all(options, space_id, env, api_key)
+      when is_binary(space_id) do
+    fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -126,32 +137,38 @@ defmodule Contentful.Delivery.Entries do
   __Warning__: With very large entry collections, this can quickly run into the request limit of the API!
 
   ## Examples
+
+      # uses the configured space for streaming
+      Entries.stream() |> Enum.take(1)
+
       space = "my_space_id"
       # API calls calculated by the stream (in this case two calls)
-      ["first_entry_id", "second_entry_id"]
-        = space
-          |> Entries.stream(limit: 1)
+      ["first_entry_id", "second_entry_id"] =
+          Entries.stream([limit: 1], space)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
-      ["first_entry_id"]
-        = space
-          |> Entries.stream(limit: 1, environment, api_token)
+      ["first_entry_id"] =
+          Entries.stream([limit: 1], space, environment, api_token)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       # Use the :limit parameter to set the page size
-      ["first_entry_id", "second_entry_id", "third_entry_id", "fourth_entry_id"]
-        = space
-          |> Entries.stream(limit: 4)
+      ["first_entry_id", "second_entry_id", "third_entry_id", "fourth_entry_id"] =
+          Entries.stream([limit: 4], space)
           |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
           |> Enum.take(4)
 
   """
   @impl CollectionStream
-  def stream(space, options \\ [], env \\ nil, api_key \\ nil) do
+  def stream(
+        options \\ [],
+        space \\ Delivery.space_from_config(),
+        env \\ Delivery.environment_from_config(),
+        api_key \\ Delivery.api_key_from_configuration()
+      ) do
     space |> CollectionStream.stream_all(&fetch_all/4, options, env, api_key)
   end
 

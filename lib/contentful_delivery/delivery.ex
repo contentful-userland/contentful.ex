@@ -1,6 +1,8 @@
 defmodule Contentful.Delivery do
   @moduledoc """
-  The Contentful Delivery API allows _read only_ access to __published__ content.
+  The `Contentful.Delivery` module offers functions to interact with the [Contentful Delivery API](https://www.contentful.com/developers/docs/references/content-delivery-api/) (CDA).
+
+  The API is _read only_. If you wish to manipulate data, have a look at the Management API.
   """
 
   import HTTPoison, only: [get: 2]
@@ -234,24 +236,39 @@ defmodule Contentful.Delivery do
   retrieves the configured access_token, if there is one. Defaults to the empty string.
   """
   @spec api_key_from_configuration() :: String.t()
-  def api_key_from_configuration() do
-    config() |> Keyword.get(:access_token, "")
+  defp api_key_from_configuration() do
+    from_config(:api_key, "")
   end
 
   @doc """
   retrieves the configured environment, if there is one. Defaults to `master` otherwise.
   """
   @spec environment_from_config() :: String.t()
-  def environment_from_config do
-    config() |> Keyword.get(:environment, "master")
+  defp environment_from_config do
+    from_config(:environment, "master")
   end
 
   @doc """
   retrieves the space configured for the Delivery API, if there is one
   """
   @spec space_from_config() :: String.t() | nil
-  def space_from_config do
-    config() |> Keyword.get(:space, nil)
+  defp space_from_config do
+    from_config(:space, nil)
+  end
+
+  @doc """
+  Can be used to retrieve configuration for the `Contentful.Delivery` module
+
+  ## Examples
+      config :contentful, delivery: [
+        my_config: "foobar"
+      ]
+
+      "foobar" = Contentful.Delivery.from_config(:my_config)
+  """
+  @spec from_config(atom(), any() | nil) :: any()
+  def from_config(setting, default \\ nil) do
+    config() |> Keyword.get(setting, default)
   end
 
   @doc """

@@ -11,12 +11,11 @@ use Mix.Config
 # optional parameters
 config :contentful, json_library: Jason
 
-# config :contentful, json_library: Poison
-
-# config :contentful_delivery, environment: "staging"
-
-# access token should probably go into a secrets file
-# config :contentful_delivery, access_token: "<your_cda_access_token>"
+# config :contentful, delivery: [
+#   access_token: "<YOUR_CDA_TOKEN>", # <- recommended to put into secrets
+#   environment: "master" # default for every function call
+#   space: "your-space" # recommended to set, can be passed to all calls as well.
+# ]
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

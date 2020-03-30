@@ -12,7 +12,7 @@ Elixir SDK for the [Contentful](https://www.contentful.com) Content APIs.
 
 The official docs can be found here: https://www.contentful.com/developers/docs/references/content-delivery-api/.
 
-The read only API provides the content for Contenful apps. It's read only and the recommended way to deliver large amounts of content.
+The API provides the content for Contenful apps. It's read only and the recommended way to deliver large amounts of content.
 
 ### Contentful Management API (CMA)
 

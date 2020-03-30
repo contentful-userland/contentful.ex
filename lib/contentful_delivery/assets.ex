@@ -1,6 +1,6 @@
 defmodule Contentful.Delivery.Assets do
   @moduledoc """
-  Deals with the loading of assets from a given Contentful.Space
+  Deals with the loading of assets from a given `Contentful.Space`
 
   https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/assets
   """

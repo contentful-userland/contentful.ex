@@ -1,6 +1,6 @@
 defmodule Contentful.Delivery.Entries do
   @moduledoc """
-  Entries collects function around the reading of entries from spaces
+  Collects functions around the reading of entries from a `Contentful.Space`
   """
   alias Contentful.{
     Collection,
@@ -22,18 +22,18 @@ defmodule Contentful.Delivery.Entries do
   ## Examples
 
       space = "my_space_id"
-      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}} 
+      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}}
         = space |> Entries.fetch_one("my_entry_id")
 
       # for envs other than "master"
       environment =  "staging"
-      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}} 
+      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}}
         = space |> Entries.fetch_one("my_entry_id", environment)
 
       # override access token
       environment =  "my_personal_env"
       my_access_token = "foobarBAZ"
-      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}} 
+      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}}
         = space |> Entries.fetch_one("my_entry_id", environment, my_access_token)
 
 
@@ -66,20 +66,20 @@ defmodule Contentful.Delivery.Entries do
   @doc """
   Can be used fetch all entries associated with a `Contentful.Space` __that are **published**__.
 
-  Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and 
+  Will take basic collection filters into account, specifically `:limit` and `:skip` to traverse and
   limit the collection of entries.
 
   Will fetch a single page as defined by its params and will fetch it eagerly (calls the API immediately.).
 
   ## Examples
       {:ok, [
-        %Entry{ meta_data: %{ id: "foobar_0"}}, 
-        %Entry{ meta_data: %{ id: "foobar_1"}}, 
+        %Entry{ meta_data: %{ id: "foobar_0"}},
+        %Entry{ meta_data: %{ id: "foobar_1"}},
         %Entry{ meta_data: %{ id: "foobar_2"}}
       ], total: 3} = space |> Entries.fetch_all
-      
+
       {:ok, [
-        %Entry{ meta_data: %{ id: "foobar_1"}}, 
+        %Entry{ meta_data: %{ id: "foobar_1"}},
         %Entry{ meta_data: %{ id: "foobar_2"}}
       ], total: 3} = space |> Entries.fetch_all(skip: 1)
 
@@ -119,36 +119,36 @@ defmodule Contentful.Delivery.Entries do
   @doc """
   Constructs a stream around __all entries__ of a `Contentful.Space` __that are published__.
 
-  Will return a stream of entries that can be composed with the standard libraries functions. 
-  This function calls the API endpoint for entries on demand, e.g. until the upper limit 
+  Will return a stream of entries that can be composed with the standard libraries functions.
+  This function calls the API endpoint for entries on demand, e.g. until the upper limit
   (the total of all entries) is reached.
 
-  __Warning__: With very large entry collections, this can quickly run into the request limit of the API! 
+  __Warning__: With very large entry collections, this can quickly run into the request limit of the API!
 
   ## Examples
       space = "my_space_id"
       # API calls calculated by the stream (in this case two calls)
-      ["first_entry_id", "second_entry_id"] 
-        = space 
-          |> Entries.stream(limit: 1) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(2) 
+      ["first_entry_id", "second_entry_id"]
+        = space
+          |> Entries.stream(limit: 1)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
-      ["first_entry_id"] 
-        = space 
-          |> Entries.stream(limit: 1, environment, api_token) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(2) 
-    
-      # Use the :limit parameter to set the page size 
-      ["first_entry_id", "second_entry_id", "third_entry_id", "fourth_entry_id"] 
-        = space 
-          |> Entries.stream(limit: 4) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(4) 
-    
+      ["first_entry_id"]
+        = space
+          |> Entries.stream(limit: 1, environment, api_token)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
+
+      # Use the :limit parameter to set the page size
+      ["first_entry_id", "second_entry_id", "third_entry_id", "fourth_entry_id"]
+        = space
+          |> Entries.stream(limit: 4)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(4)
+
   """
   @impl CollectionStream
   def stream(space, options \\ [], env \\ nil, api_key \\ nil) do

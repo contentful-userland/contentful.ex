@@ -1,6 +1,20 @@
 defmodule Contentful.Mixfile do
   use Mix.Project
 
+  alias Contentful.{
+    Asset,
+    ContentType,
+    Collection,
+    CollectionStream,
+    Delivery,
+    Entry,
+    Locale,
+    MetaData,
+    Space
+  }
+
+  alias Contentful.Delivery.{Assets, ContentTypes, Entries, Locales, Spaces}
+
   @version "0.1.1"
 
   def project do
@@ -24,8 +38,28 @@ defmodule Contentful.Mixfile do
       name: "Contentful SDK",
       source_url: "https://github.com/contentful-labs/contentful.ex",
       docs: [
-        extras: [
-          "AUTHORS.md"
+        main: "Contentful",
+        groups_for_modules: [
+          "Common Structures": [
+            Asset,
+            Asset.Fields,
+            Collection,
+            CollectionStream,
+            ContentType,
+            ContentType.Field,
+            Entry,
+            Locale,
+            MetaData,
+            Space
+          ],
+          "Delivery API": [
+            Assets,
+            ContentTypes,
+            Delivery,
+            Entries,
+            Locales,
+            Spaces
+          ]
         ]
       ]
     ]

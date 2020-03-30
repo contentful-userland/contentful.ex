@@ -1,7 +1,7 @@
 defmodule Contentful.Delivery do
   @moduledoc """
-  Documentation for `Contentful.Delivery`. This module holds most of the function common to the
-  more specialized Context modules.
+  This module holds most of the function common to the more specialized Context modules that provide access
+  to the data.
   """
 
   import HTTPoison, only: [get: 2]

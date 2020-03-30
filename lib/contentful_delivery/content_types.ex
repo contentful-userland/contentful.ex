@@ -1,6 +1,6 @@
 defmodule Contentful.Delivery.ContentTypes do
   @moduledoc """
-  Provides functions around reading content types from spaces
+  Provides functions around reading content types from a given `Contentful.Space`
   """
 
   alias Contentful.{
@@ -23,22 +23,22 @@ defmodule Contentful.Delivery.ContentTypes do
   ## Examples
 
       # fetches all content types by a given space id
-      {:ok, [%Contentful.ContentType{description: "a description"}], total: _} 
+      {:ok, [%Contentful.ContentType{description: "a description"}], total: _}
         = ContentTypes.fetch_all("a space_id")
 
       # with collection params
       space = "my_space_id"
-      {:ok, [%ContentType{ description: "first one"} | _], total: 3} 
+      {:ok, [%ContentType{ description: "first one"} | _], total: 3}
         = space |> ContentTypes.fetch_all()
 
       {:ok, [
-        %ContentType{ description: "first one"}}, 
-        %ContentType{ description: "second one"}}, 
+        %ContentType{ description: "first one"}},
+        %ContentType{ description: "second one"}},
         %ContentType{ description: "third one"}}
       ], total: 3} = space |> ContentTypes.fetch_all
-      
+
       {:ok, [
-        %ContentType{ description: "second one"}}, 
+        %ContentType{ description: "second one"}},
         %ContentType{ description: "third one"}}
       ], total: 3} = space |> ContentTypes.fetch_all(skip: 1)
 
@@ -82,7 +82,7 @@ defmodule Contentful.Delivery.ContentTypes do
 
       # fetches a content type for a space given
       iex> {:ok, %Space{} = space} = Spaces.fetch_one("a_space_id")
-      {:ok, %ContentType{description: "a description"}} 
+      {:ok, %ContentType{description: "a description"}}
         = space |> ContentTypes.fetch_one("my_content_type_id")
   """
   @impl Collection
@@ -113,36 +113,36 @@ defmodule Contentful.Delivery.ContentTypes do
   @doc """
   Constructs a stream around __all content types__ of a `Contentful.Space`.
 
-  Will return a stream of content types that can be composed with the standard libraries functions. 
-  This function calls the API endpoint for content types on demand, e.g. until the upper limit 
+  Will return a stream of content types that can be composed with the standard libraries functions.
+  This function calls the API endpoint for content types on demand, e.g. until the upper limit
   (the total of all content types) is reached.
 
-  __Warning__: With very large entry collections, this can quickly run into the request limit of the API! 
+  __Warning__: With very large entry collections, this can quickly run into the request limit of the API!
 
   ## Examples
       space = "my_space_id"
       # API calls calculated by the stream (in this case two calls)
-      ["first_content_type", "second_content_type"] 
-        = space 
-          |> ContentTypes.stream(limit: 1) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(2) 
+      ["first_content_type", "second_content_type"]
+        = space
+          |> ContentTypes.stream(limit: 1)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
-      ["first_content_type"] 
-        = space 
-          |> ContentTypes.stream(limit: 1, environment, api_token) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(2) 
-    
-      # Use the :limit parameter to set the page size 
-      ["first_content_type", "second_content_type", "third_content_type", "fourth_content_type"] 
-        = space 
-          |> ContentTypes.stream(limit: 4) 
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end) 
-          |> Enum.take(4) 
-    
+      ["first_content_type"]
+        = space
+          |> ContentTypes.stream(limit: 1, environment, api_token)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(2)
+
+      # Use the :limit parameter to set the page size
+      ["first_content_type", "second_content_type", "third_content_type", "fourth_content_type"]
+        = space
+          |> ContentTypes.stream(limit: 4)
+          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Enum.take(4)
+
   """
   @impl CollectionStream
   def stream(space, options \\ [], env \\ nil, api_key \\ nil) do

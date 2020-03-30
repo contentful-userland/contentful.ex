@@ -1,6 +1,6 @@
 defmodule Contentful.Delivery.Locales do
   @moduledoc """
-  Handles the fetching of locales within a given space
+  Handles the fetching of locales within a given `Contentful.Space`
   """
   alias Contentful.{Delivery, Locale, Space}
 
@@ -15,7 +15,7 @@ defmodule Contentful.Delivery.Locales do
       space |> Locales.fetch_all()
       {:ok,
        [
-         %Contentful.Locale{ 
+         %Contentful.Locale{
            code: "en-US",
            default: true,
            fallback_code: nil,

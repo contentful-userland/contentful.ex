@@ -30,23 +30,25 @@ The Preview API can be used to access the latest versions and drafts of your con
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-  1. Add contentful to your list of dependencies in `mix.exs`:
+1. Add contentful to your list of dependencies in `mix.exs`:
 
-        def deps do
-          [{:contentful, "~> 0.1.0"}]
-        end
+```elixir
+  def deps do
+    [{:contentful, "~> 0.1.0"}]
+  end
+```
 
-  2. Ensure contentful is started before your application:
+2. Ensure contentful is started before your application:
 
-        def application do
-          [applications: [:contentful]]
-        end
-
+```elixir
+  def application do
+    [applications: [:contentful]]
+  end
+```
 
 ## Usage
 
-For the usage, see the documentation published to hex. 
-
+For the usage, see the [documentation published to hex]. 
 
 ## Contributing & Development
 

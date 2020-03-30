@@ -114,7 +114,9 @@ defmodule Contentful.Mixfile do
       ],
       licenses: ["MIT"],
       links: %{
-        "GitHub" => "https://github.com/contentful-labs/contentful.ex"
+        "GitHub" => "https://github.com/contentful-labs/contentful.ex",
+        "Contentful" => "https://contentful.com",
+        "Other SDKs" => "https://www.contentful.com/developers/docs/platforms/"
       }
     ]
   end

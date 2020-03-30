@@ -5,7 +5,7 @@ defmodule Contentful.Mixfile do
 
   def project do
     [
-      apps_path: "apps",
+      app: :contentful,
       version: @version,
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
@@ -25,10 +25,8 @@ defmodule Contentful.Mixfile do
       source_url: "https://github.com/contentful-labs/contentful.ex",
       docs: [
         extras: [
-          # "README.md",
-          "apps/contentful_delivery/README.md"
-          # "apps/contentful_preview/README.md",
-          # "apps/contentful_management/README.md"
+          "CHANGELOG.md",
+          "AUTHORS.md"
         ]
       ]
     ]
@@ -46,8 +44,7 @@ defmodule Contentful.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 1.6"},
-      {:poison, "~> 2.0", optional: true},
-      {:jason, "~> 1.1", optional: true},
+      {:jason, "~> 1.1"},
 
       # dev / test
       {:exvcr, "~> 0.11", only: :test},
@@ -68,7 +65,12 @@ defmodule Contentful.Mixfile do
     # These are the default files included in the package
     [
       name: :contentful,
-      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      files: [
+        "lib/",
+        "mix.exs",
+        "README*",
+        "LICENSE*"
+      ],
       maintainers: [
         "David Litvak Bruno <Contentful GmbH>",
         "Florian Kraft <Contentful GmbH>"

@@ -1,6 +1,7 @@
 defmodule Contentful.Delivery do
   @moduledoc """
-  Documentation for `Contentful.Delivery`.
+  Documentation for `Contentful.Delivery`. This module holds most of the function common to the
+  more specialized Context modules.
   """
 
   import HTTPoison, only: [get: 2]
@@ -22,13 +23,12 @@ defmodule Contentful.Delivery do
 
   @doc """
   Gets the json library for the Contentful Delivery API based
-  on the config/config.exs. Will override the central configuration
-  option if set.
+  on the config/config.exs.
 
   """
   @spec json_library :: module()
   def json_library do
-    Contentful.json_library(:contentful_delivery)
+    Contentful.json_library()
   end
 
   @doc """
@@ -218,10 +218,18 @@ defmodule Contentful.Delivery do
   end
 
   defp api_key_from_configuration() do
-    Application.get_env(:contentful_delivery, :access_token, "")
+    config() |> Keyword.get(:access_token, "")
   end
 
   defp environment_from_config do
-    Application.get_env(:contentful_delivery, :environment, "master")
+    config() |> Keyword.get(:environment, "master")
+  end
+
+  @doc """
+  loads the configuration for the delivery module from the contentful app configuration
+  """
+  @spec config() :: list(keyword())
+  def config() do
+    Application.get_env(:contentful, :delivery, [])
   end
 end

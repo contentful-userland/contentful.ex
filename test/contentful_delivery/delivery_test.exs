@@ -15,7 +15,7 @@ defmodule Contentful.DeliveryTest do
   """
 
   describe ".json_library" do
-    test "can ask for it's json lib" do
+    test "can ask for its json lib" do
       assert Delivery.json_library() == Jason
     end
   end

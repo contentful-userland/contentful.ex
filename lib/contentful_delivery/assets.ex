@@ -34,7 +34,12 @@ defmodule Contentful.Delivery.Assets do
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
 
-  def fetch_one(asset, space \\ nil, env \\ nil, api_key \\ nil)
+  def fetch_one(
+        asset, 
+        space \\ Delivery.config(:space), 
+        env \\ Delivery.config(:environment),
+        api_key \\ Delivery.config(:access_token)
+      )
 
   def fetch_one(asset_id, %Space{meta_data: %{id: space_id}}, env, api_key) do
     space_id

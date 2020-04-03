@@ -20,8 +20,7 @@ defmodule Contentful.Delivery.AssetsTest do
   describe ".fetch_one" do
     test "fetches a single asset by it's id from a space" do
       use_cassette "single asset" do
-        {:ok, %Asset{meta_data: %{id: @asset_id}}} =
-          @asset_id |> Assets.fetch_one(@space_id)
+        {:ok, %Asset{meta_data: %{id: @asset_id}}} = @asset_id |> Assets.fetch_one(@space_id)
       end
     end
   end
@@ -62,8 +61,7 @@ defmodule Contentful.Delivery.AssetsTest do
   describe ".stream" do
     test "streams asset calls" do
       use_cassette "multiple assets, limit filter, streamed" do
-        [%Asset{}, %Asset{}] =
-          Assets.stream([limit: 1], @space_id) |> Enum.to_list()
+        [%Asset{}, %Asset{}] = Assets.stream([limit: 1], @space_id) |> Enum.to_list()
       end
     end
   end

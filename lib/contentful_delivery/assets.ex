@@ -35,8 +35,8 @@ defmodule Contentful.Delivery.Assets do
           | {:error, :unknown}
 
   def fetch_one(
-        asset, 
-        space \\ Delivery.config(:space), 
+        asset,
+        space \\ Delivery.config(:space),
         env \\ Delivery.config(:environment),
         api_key \\ Delivery.config(:access_token)
       )

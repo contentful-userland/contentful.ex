@@ -3,7 +3,7 @@
     "{lib,config,test}/**/*.{ex,exs}",
     "mix.exs"
   ],
-  line_length: 80,
+  line_length: 100,
   locals_without_parens: [
     # Phoenix
     action_fallback: 1,

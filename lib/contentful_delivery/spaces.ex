@@ -30,7 +30,7 @@ defmodule Contentful.Delivery.Spaces do
       # in config/config.exs
       config :contentful, delivery: [
         api_key: "<YOUR CDA_TOKEN>"
-        space: "myspace"
+        space_id: "myspace"
       ]
 
       {:ok, %Space{meta_data: %{ id: "myspace "}}} = Contentful.Delivery.Spaces.fetch_one()

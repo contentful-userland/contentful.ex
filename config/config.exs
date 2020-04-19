@@ -8,18 +8,14 @@ use Mix.Config
 # if you want to provide default values for your application for
 # 3rd-party users, it should be done in your "mix.exs" file.
 
-# You can configure for your application as:
-#
-#     config :contentful, key: :value
-#
-# And access this configuration in your application as:
-#
-#     Application.get_env(:contentful, :key)
-#
-# Or configure a 3rd-party app:
-#
-#     config :logger, level: :info
-#
+# optional parameters
+config :contentful, json_library: Jason
+
+# config :contentful, delivery: [
+#   access_token: "<YOUR_CDA_TOKEN>", # <- recommended to put into secrets
+#   environment: "master" # default for every function call
+#   space_id: "your-space" # recommended to set, can be passed to all calls as well.
+# ]
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment
@@ -27,4 +23,14 @@ use Mix.Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-#     import_config "#{Mix.env}.exs"
+
+extendend_config = "#{Mix.env()}.exs"
+extendend_config_secret = "secrets.#{Mix.env()}.exs"
+
+if File.exists?("config/#{extendend_config}") do
+  import_config extendend_config
+end
+
+if File.exists?("config/#{extendend_config_secret}") do
+  import_config extendend_config_secret
+end

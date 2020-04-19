@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Space\",\n    \"id\": \"bmehzfuz4raf\"\n  },\n  \"name\": \"Products\",\n  \"locales\": [\n    {\n      \"code\": \"en-US\",\n      \"default\": true,\n      \"name\": \"English (United States)\",\n      \"fallbackCode\": null\n    },\n    {\n      \"code\": \"de\",\n      \"default\": false,\n      \"name\": \"German\",\n      \"fallbackCode\": \"en-US\"\n    }\n  ]\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "CF-Environment-Id": "master",
+        "CF-Environment-Uuid": "69b0fe47-9d71-4e0c-a7e0-4e12cb573930",
+        "CF-Organization-Id": "0bEbsBel9WL3OIaiqx0MnO",
+        "CF-Space-Id": "bmehzfuz4raf",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "\"9223651612898709983\"",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Content-Length": "344",
+        "Accept-Ranges": "bytes",
+        "Date": "Fri, 13 Mar 2020 08:01:27 GMT",
+        "Via": "1.1 varnish",
+        "Age": "134",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-hhn4056-HHN",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "3d19d930-073a-4602-a758-206a5205ffab"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

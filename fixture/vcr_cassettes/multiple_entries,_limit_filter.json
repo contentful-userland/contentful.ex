@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf/environments/master/entries?limit=1"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 2,\n  \"skip\": 0,\n  \"limit\": 1,\n  \"items\": [\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"bmehzfuz4raf\"\n          }\n        },\n        \"id\": \"2EnlBociVvdk9KD3oSvOp4\",\n        \"type\": \"Entry\",\n        \"createdAt\": \"2019-12-19T17:23:37.908Z\",\n        \"updatedAt\": \"2020-03-13T07:52:07.449Z\",\n        \"environment\": {\n          \"sys\": {\n            \"id\": \"master\",\n            \"type\": \"Link\",\n            \"linkType\": \"Environment\"\n          }\n        },\n        \"revision\": 4,\n        \"contentType\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"ContentType\",\n            \"id\": \"product\"\n          }\n        },\n        \"locale\": \"en-US\"\n      },\n      \"fields\": {\n        \"name\": \"Purple Thunder\",\n        \"sku\": 123456,\n        \"description\": {\n          \"data\": {},\n          \"content\": [\n            {\n              \"data\": {},\n              \"content\": [\n                {\n                  \"data\": {},\n                  \"marks\": [],\n                  \"value\": \"And another fashion visage, just for you!\",\n                  \"nodeType\": \"text\"\n                }\n              ],\n              \"nodeType\": \"paragraph\"\n            }\n          ],\n          \"nodeType\": \"document\"\n        },\n        \"price\": 50,\n        \"stock\": 1\n      }\n    }\n  ]\n}\n",
+      "headers": {
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "CF-Environment-Id": "master",
+        "CF-Environment-Uuid": "69b0fe47-9d71-4e0c-a7e0-4e12cb573930",
+        "CF-Organization-Id": "0bEbsBel9WL3OIaiqx0MnO",
+        "CF-Space-Id": "bmehzfuz4raf",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "W/\"16222448726118732771\"",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Content-Length": "1416",
+        "Accept-Ranges": "bytes",
+        "Date": "Mon, 16 Mar 2020 17:19:57 GMT",
+        "Via": "1.1 varnish",
+        "Age": "1018",
+        "Connection": "keep-alive",
+        "X-Served-By": "cache-hhn4082-HHN",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "ee18f513-82a8-4938-a960-459815abe38b"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

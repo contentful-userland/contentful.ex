@@ -3,39 +3,43 @@
     "request": {
       "body": "",
       "headers": {
-        "authorization": "Bearer bladjksflaksdjflkjkl",
-        "Accept": "application/json",
-        "User-Agent": "Contentful-Elixir"
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
       },
       "method": "get",
       "options": [],
       "request_body": "",
-      "url": "https://cdn.contentful.com/spaces/z3aswf9egfi8/entries"
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf"
     },
     "response": {
-      "body": "{\n  \"sys\": {\n    \"type\": \"Error\",\n    \"id\": \"AccessTokenInvalid\"\n  },\n  \"message\": \"The access token you sent could not be found or is invalid.\",\n  \"requestId\": \"503e974d4cb3f585ed34e988be2fa2d8\"\n}\n",
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Error\",\n    \"id\": \"AccessTokenInvalid\"\n  },\n  \"message\": \"The access token you sent could not be found or is invalid.\",\n  \"requestId\": \"72b7ad93-ffab-46ae-b4bc-2745c541f665\"\n}\n",
       "headers": {
         "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
         "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Expose-Headers": "Etag",
         "Access-Control-Max-Age": "86400",
-        "Cache-Control": "max-age=0",
+        "CF-Environment-Id": "master",
+        "CF-Space-Id": "bmehzfuz4raf",
         "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "\"349130868247710789\"",
         "Server": "Contentful",
         "X-Content-Type-Options": "nosniff",
-        "X-Contentful-Request-Id": "503e974d4cb3f585ed34e988be2fa2d8",
-        "Content-Length": "198",
+        "X-Contentful-Region": "us-east-1",
+        "Content-Length": "202",
         "Accept-Ranges": "bytes",
-        "Date": "Mon, 26 Mar 2018 21:08:05 GMT",
+        "Date": "Fri, 13 Mar 2020 08:01:28 GMT",
         "Via": "1.1 varnish",
-        "Age": "0",
+        "Age": "134",
         "Connection": "keep-alive",
-        "X-Served-By": "cache-sea1044-SEA",
-        "X-Cache": "MISS",
-        "X-Cache-Hits": "0",
-        "X-Timer": "S1522098485.046122,VS0,VE137",
-        "Vary": "Accept-Encoding"
+        "X-Served-By": "cache-hhn4056-HHN",
+        "X-Cache": "HIT",
+        "X-Cache-Hits": "1",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "675521d2-eea4-45c9-b401-0dcb6ea28734"
       },
       "status_code": 401,
       "type": "ok"

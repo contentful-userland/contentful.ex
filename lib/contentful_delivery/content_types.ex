@@ -64,7 +64,7 @@ defmodule Contentful.Delivery.ContentTypes do
 
   def fetch_all(
         options \\ [],
-        space \\ Delivery.config(:space),
+        space \\ Delivery.config(:space_id),
         env \\ Delivery.config(:environment),
         api_key \\ Delivery.config(:access_token)
       )
@@ -104,7 +104,7 @@ defmodule Contentful.Delivery.ContentTypes do
 
   def fetch_one(
         content_type_id,
-        space \\ Delivery.config(:space),
+        space \\ Delivery.config(:space_id),
         env \\ Delivery.config(:environment),
         api_key \\ Delivery.config(:access_token)
       )
@@ -155,7 +155,7 @@ defmodule Contentful.Delivery.ContentTypes do
   @impl CollectionStream
   def stream(
         options \\ [],
-        space \\ Delivery.config(:space),
+        space \\ Delivery.config(:space_id),
         env \\ Delivery.config(:environment),
         api_key \\ Delivery.config(:access_token)
       ) do

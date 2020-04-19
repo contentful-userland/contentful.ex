@@ -1,9 +1,12 @@
 # Elixir CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-elixir/ for more details
+
+
 version: 2
+
 jobs:
-  build:
+  build-1.10: &default_build
     docker:
       # specify the version here
       - image: circleci/elixir:1.10
@@ -22,3 +25,29 @@ jobs:
       - run: mix local.rebar --force
       - run: mix deps.get
       - run: mix test
+  build-1.9:
+    <<: *default_build
+    docker:
+      - image: circleci/elixir:1.9
+  build-1.8:
+    <<: *default_build
+    docker:
+      - image: circleci/elixir:1.8
+  build-1.7:
+    <<: *default_build
+    docker:
+      - image: circleci/elixir:1.7
+  build-1.6:
+    <<: *default_build
+    docker:
+      - image: circleci/elixir:1.6
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-1.10
+      - build-1.9
+      - build-1.8
+      - build-1.7
+      - build-1.6
+

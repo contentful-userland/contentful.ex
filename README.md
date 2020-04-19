@@ -2,7 +2,7 @@
 
 Elixir SDK for the [Contentful](https://www.contentful.com) Content APIs.
 
-[![CircleCI](https://circleci.com/gh/floriank/contentful.ex/tree/master.svg?style=svg)](https://circleci.com/gh/floriank/contentful.ex/tree/rewrite%2Fv2)
+[![CircleCI](https://circleci.com/gh/contentful-labs/contentful.ex/tree/master.svg?style=svg)](https://circleci.com/gh/contentful-labs/contentful.ex/tree/master)
 
 [Contentful](https://www.contentful.com) provides a content infrastructure for digital teams to power content in websites, apps, and devices. Unlike a CMS, Contentful was built to integrate with the modern software stack. It offers a central hub for structured content, powerful management and delivery APIs, and a customizable web app that enable developers and content creators to ship digital products faster.
 

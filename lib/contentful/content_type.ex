@@ -4,14 +4,14 @@ defmodule Contentful.ContentType do
 
   See [the official docs](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-types) for more intformation.
   """
-  alias Contentful.{ContentType, MetaData}
   alias Contentful.ContentType.Field
+  alias Contentful.{ContentType, SysData}
 
   defstruct [
     :name,
     :description,
     :display_field,
-    meta_data: %MetaData{},
+    sys: %SysData{},
     fields: []
   ]
 
@@ -24,7 +24,7 @@ defmodule Contentful.ContentType do
           display_field: String.t(),
           description: String.t(),
           fields: list(Field.t()),
-          meta_data: MetaData.t()
+          sys: SysData.t()
         }
 
   @doc """

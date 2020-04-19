@@ -1,5 +1,5 @@
 defmodule Contentful.Space do
-  defstruct [:name, meta_data: %Contentful.MetaData{}]
+  defstruct [:name, sys: %Contentful.SysData{}]
 
   @moduledoc """
   A Space represents a space on contentful, holding most of the objects you work with, e.g. `Contentful.Asset`, `Contentful.Entry` or `Contentful.Locale`
@@ -8,6 +8,6 @@ defmodule Contentful.Space do
   """
   @type t :: %Contentful.Space{
           name: String.t(),
-          meta_data: Contentful.MetaData.t()
+          sys: Contentful.SysData.t()
         }
 end

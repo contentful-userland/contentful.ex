@@ -1,7 +1,8 @@
 defmodule Contentful.Delivery.EntriesTest do
   use ExUnit.Case
-  alias Contentful.{Entry, MetaData, Space}
+
   alias Contentful.Delivery.Entries
+  alias Contentful.{Entry, Space, SysData}
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
@@ -22,7 +23,7 @@ defmodule Contentful.Delivery.EntriesTest do
   describe ".fetch_one" do
     test "will fetch one entry from the given space" do
       use_cassette "single entry" do
-        {:ok, %Entry{fields: _, meta_data: %MetaData{id: @entry_id}}} =
+        {:ok, %Entry{fields: _, sys: %SysData{id: @entry_id}}} =
           @entry_id |> Entries.fetch_one(@space_id, @env, @access_token)
       end
     end
@@ -31,15 +32,14 @@ defmodule Contentful.Delivery.EntriesTest do
   describe ".fetch_all" do
     test "will fetch all published entries for a given space" do
       use_cassette "multiple entries" do
-        {:ok, [%Entry{}, %Entry{}], total: 2} =
-          Entries.fetch_all([], %Space{meta_data: %{id: @space_id}})
+        {:ok, [%Entry{}, %Entry{}], total: 2} = Entries.fetch_all([], %Space{sys: %{id: @space_id}})
       end
     end
 
     test "will fetch all published entries for a space, respecting the limit parameter" do
       use_cassette "multiple entries, limit filter" do
         {:ok, [%Entry{fields: %{"name" => "Purple Thunder"}}], total: 2} =
-          Entries.fetch_all([limit: 1], %Space{meta_data: %{id: @space_id}})
+          Entries.fetch_all([limit: 1], %Space{sys: %{id: @space_id}})
       end
     end
 
@@ -48,7 +48,7 @@ defmodule Contentful.Delivery.EntriesTest do
         {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
           Entries.fetch_all(
             [skip: 1],
-            %Space{meta_data: %{id: @space_id}},
+            %Space{sys: %{id: @space_id}},
             @env
           )
       end
@@ -59,7 +59,7 @@ defmodule Contentful.Delivery.EntriesTest do
         {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
           Entries.fetch_all(
             [skip: 1, limit: 1],
-            %Space{meta_data: %{id: @space_id}},
+            %Space{sys: %{id: @space_id}},
             @env,
             @access_token
           )

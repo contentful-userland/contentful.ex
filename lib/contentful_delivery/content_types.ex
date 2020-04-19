@@ -3,14 +3,12 @@ defmodule Contentful.Delivery.ContentTypes do
   Provides functions around reading content types from a given `Contentful.Space`
   """
 
-  alias Contentful.{
-    ContentType,
-    Collection,
-    CollectionStream,
-    Delivery,
-    MetaData,
-    Space
-  }
+  alias Contentful.ContentType
+  alias Contentful.Collection
+  alias Contentful.CollectionStream
+  alias Contentful.Delivery
+  alias Contentful.Space
+  alias Contentful.SysData
 
   @behaviour Collection
   @behaviour CollectionStream
@@ -69,7 +67,7 @@ defmodule Contentful.Delivery.ContentTypes do
         api_key \\ Delivery.config(:access_token)
       )
 
-  def fetch_all(options, %Space{meta_data: %{id: id}}, env, api_key) do
+  def fetch_all(options, %Space{sys: %{id: id}}, env, api_key) do
     id
     |> build_multiple_request(options, env, api_key)
     |> Delivery.send_request()
@@ -77,7 +75,7 @@ defmodule Contentful.Delivery.ContentTypes do
   end
 
   def fetch_all(options, space_id, env, api_key) when is_binary(space_id) do
-    fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key)
+    fetch_all(options, %Space{sys: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -109,7 +107,7 @@ defmodule Contentful.Delivery.ContentTypes do
         api_key \\ Delivery.config(:access_token)
       )
 
-  def fetch_one(content_type_id, %Space{meta_data: %{id: id}}, env, api_key) do
+  def fetch_one(content_type_id, %Space{sys: %{id: id}}, env, api_key) do
     content_type_id
     |> build_single_request(id, env, api_key)
     |> Delivery.send_request()
@@ -118,7 +116,7 @@ defmodule Contentful.Delivery.ContentTypes do
 
   def fetch_one(content_type_id, space_id, env, api_key)
       when is_binary(space_id) do
-    fetch_one(content_type_id, %Space{meta_data: %{id: space_id}}, env, api_key)
+    fetch_one(content_type_id, %Space{sys: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -135,20 +133,20 @@ defmodule Contentful.Delivery.ContentTypes do
       # API calls calculated by the stream (in this case two calls)
       ["first_content_type", "second_content_type"] =
           ContentTypes.stream([limit: 1], space)
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Stream.map(fn %{ sys: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
       ["first_content_type"] =
           |> ContentTypes.stream([limit: 1], space, environment, api_token)
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Stream.map(fn %{ sys: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       # Use the :limit parameter to set the page size
       ["first_content_type", "second_content_type", "third_content_type", "fourth_content_type"] =
           ContentTypes.stream([limit: 4], space)
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Stream.map(fn %{ sys: %{ id: id }} -> id end)
           |> Enum.take(4)
 
   """
@@ -204,7 +202,7 @@ defmodule Contentful.Delivery.ContentTypes do
        description: description,
        display_field: display_field,
        fields: Enum.map(fields, &build_field/1),
-       meta_data: %MetaData{id: id, revision: rev}
+       sys: %SysData{id: id, revision: rev}
      }}
   end
 

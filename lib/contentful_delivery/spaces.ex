@@ -4,7 +4,7 @@ defmodule Contentful.Delivery.Spaces do
   through the Contentful Delivery API
   """
 
-  alias Contentful.{Delivery, MetaData, Space}
+  alias Contentful.{Delivery, Space, SysData}
 
   @doc """
   will attempt to retrieve one space by it's space id
@@ -13,7 +13,7 @@ defmodule Contentful.Delivery.Spaces do
 
       # space you have access to, token will be read from config/config.exs
       iex> {:ok, space} = Contentful.Delivery.Spaces.fetch_one("space_id")
-      {:ok, %Contentful.Space{name: "a space name", meta_data: %{id: "space_id"}}}
+      {:ok, %Contentful.Space{name: "a space name", sys: %{id: "space_id"}}}
 
       # space that does not exist
       iex> {:error, :not_found, original_message: _message}
@@ -33,7 +33,7 @@ defmodule Contentful.Delivery.Spaces do
         space_id: "myspace"
       ]
 
-      {:ok, %Space{meta_data: %{ id: "myspace "}}} = Contentful.Delivery.Spaces.fetch_one()
+      {:ok, %Space{sys: %{ id: "myspace "}}} = Contentful.Delivery.Spaces.fetch_one()
   """
   @spec fetch_one(String.t(), String.t()) ::
           {:ok, Space.t()}
@@ -60,6 +60,6 @@ defmodule Contentful.Delivery.Spaces do
          "name" => name,
          "sys" => %{"id" => id, "type" => "Space"}
        }) do
-    {:ok, %Space{name: name, meta_data: %MetaData{id: id}}}
+    {:ok, %Space{name: name, sys: %SysData{id: id}}}
   end
 end

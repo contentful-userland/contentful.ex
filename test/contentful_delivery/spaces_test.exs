@@ -1,8 +1,8 @@
 defmodule Contentful.Delivery.SpacesTest do
   use ExUnit.Case
 
-  alias Contentful.Space
   alias Contentful.Delivery.Spaces
+  alias Contentful.Space
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
@@ -21,7 +21,7 @@ defmodule Contentful.Delivery.SpacesTest do
   describe ".fetch_one" do
     test "will fetch one space" do
       use_cassette "single space" do
-        {:ok, %Space{name: "Products", meta_data: %{id: @space_id}}} =
+        {:ok, %Space{name: "Products", sys: %{id: @space_id}}} =
           Spaces.fetch_one(@space_id, @access_token)
       end
     end

@@ -1,9 +1,11 @@
 defmodule Contentful.Collection do
+  alias Contentful.Space
+
   @moduledoc """
   Describes a Contentful collection, which is usually an API response of sys.type "Array".
   """
   @callback fetch_all(
-              list(keyword()),
+              [limit: pos_integer(), skip: non_neg_integer()],
               Space.t() | String.t(),
               String.t() | nil,
               String.t() | nil

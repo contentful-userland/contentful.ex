@@ -42,7 +42,7 @@ defmodule Contentful.Delivery.Locales do
         api_key \\ Delivery.config(:access_token)
       )
 
-  def fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key) do
+  def fetch_all(%Space{sys: %{id: space_id}}, env, api_key) do
     space_id
     |> build_request(env, api_key)
     |> Delivery.send_request()
@@ -50,7 +50,7 @@ defmodule Contentful.Delivery.Locales do
   end
 
   def fetch_all(space_id, env, api_key) when is_binary(space_id) do
-    fetch_all(%Space{meta_data: %{id: space_id}}, env, api_key)
+    fetch_all(%Space{sys: %{id: space_id}}, env, api_key)
   end
 
   defp build_request(space, env, api_key) do

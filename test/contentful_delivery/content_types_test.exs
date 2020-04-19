@@ -1,7 +1,7 @@
 defmodule Contentful.Delivery.ContentTypesTest do
   use ExUnit.Case
 
-  alias Contentful.{ContentType, MetaData, Space}
+  alias Contentful.{ContentType, Space, SysData}
   alias Contentful.Delivery.ContentTypes
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
@@ -22,7 +22,7 @@ defmodule Contentful.Delivery.ContentTypesTest do
   describe ".fetch_all" do
     test "fetches a set of content types to a space" do
       use_cassette "multiple_content_types" do
-        space = %Space{meta_data: %MetaData{id: @space_id}}
+        space = %Space{sys: %SysData{id: @space_id}}
 
         {:ok, [%ContentType{description: "A product model"} | _], total: 1} =
           ContentTypes.fetch_all([], space, @env, @access_token)

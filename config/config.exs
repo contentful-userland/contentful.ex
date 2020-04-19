@@ -14,7 +14,7 @@ config :contentful, json_library: Jason
 # config :contentful, delivery: [
 #   access_token: "<YOUR_CDA_TOKEN>", # <- recommended to put into secrets
 #   environment: "master" # default for every function call
-#   space: "your-space" # recommended to set, can be passed to all calls as well.
+#   space_id: "your-space" # recommended to set, can be passed to all calls as well.
 # ]
 
 # It is also possible to import configuration files, relative to this

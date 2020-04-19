@@ -6,11 +6,11 @@ defmodule Contentful.CollectionStream do
   alias Contentful.Space
 
   @callback stream(
-              list(keyword()),
+              [limit: integer(), skip: integer()],
               Space.t() | String.t(),
               String.t(),
               String.t() | nil
-            ) :: Stream.t()
+            ) :: Enumerable.t()
 
   @doc """
   Allows for a callback function to be used as a resource and returns a Stream based on a resource.
@@ -18,15 +18,14 @@ defmodule Contentful.CollectionStream do
   Constructs the `start` function, the `next` and the `after` function to construct the stream and
   keeps the state around for emitting individual items from pages fetched.
   """
+
   @spec stream_all(
           Space.t() | String.t(),
           fun(),
-          list(keyword()),
+          [limit: integer(), skip: integer()],
           String.t(),
           String.t() | nil
         ) :: fun()
-  def stream_all(space, func, options \\ [], env \\ nil, api_key \\ nil)
-
   def stream_all(space, func, options, env, api_key) do
     Stream.resource(
       fn -> fetch_page(space, func, options, env, api_key) end,
@@ -66,12 +65,12 @@ defmodule Contentful.CollectionStream do
   end
 
   @spec fetch_page(
-          Space.t(),
+          Space.t() | String.t(),
           fun(),
-          list(keyword()),
+          [limit: integer(), skip: integer()],
           String.t() | nil,
           String.t() | nil
-        ) :: {list(), list(keyword())}
+        ) :: {list(), [limit: integer(), skip: integer()]} | {list(), nil}
   defp fetch_page(space, func, options, env, api_key) do
     case options |> func.(space, env, api_key) do
       {:ok, items, total: total} ->

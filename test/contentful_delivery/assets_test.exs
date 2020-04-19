@@ -20,7 +20,7 @@ defmodule Contentful.Delivery.AssetsTest do
   describe ".fetch_one" do
     test "fetches a single asset by it's id from a space" do
       use_cassette "single asset" do
-        {:ok, %Asset{meta_data: %{id: @asset_id}}} = @asset_id |> Assets.fetch_one(@space_id)
+        {:ok, %Asset{sys: %{id: @asset_id}}} = @asset_id |> Assets.fetch_one(@space_id)
       end
     end
   end

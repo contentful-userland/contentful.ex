@@ -2,14 +2,13 @@ defmodule Contentful.Delivery.Entries do
   @moduledoc """
   Collects functions around the reading of entries from a `Contentful.Space`
   """
-  alias Contentful.{
-    Collection,
-    CollectionStream,
-    Delivery,
-    Entry,
-    MetaData,
-    Space
-  }
+
+  alias Contentful.Collection
+  alias Contentful.CollectionStream
+  alias Contentful.Delivery
+  alias Contentful.Entry
+  alias Contentful.SysData
+  alias Contentful.Space
 
   @behaviour Collection
   @behaviour CollectionStream
@@ -22,18 +21,18 @@ defmodule Contentful.Delivery.Entries do
   ## Examples
 
       space = "my_space_id"
-      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}}
+      {:ok, %Entry{ sys: %SysData{ id: "my_entry_id"}}}
         = space |> Entries.fetch_one("my_entry_id")
 
       # for envs other than "master"
       environment =  "staging"
-      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}}
+      {:ok, %Entry{ sys: %SysData{ id: "my_entry_id"}}}
         = space |> Entries.fetch_one("my_entry_id", environment)
 
       # override access token
       environment =  "my_personal_env"
       my_access_token = "foobarBAZ"
-      {:ok, %Entry{ meta_data: %MetaData{ id: "my_entry_id"}}}
+      {:ok, %Entry{ sys: %SysData{ id: "my_entry_id"}}}
         = space |> Entries.fetch_one("my_entry_id", environment, my_access_token)
 
 
@@ -49,7 +48,6 @@ defmodule Contentful.Delivery.Entries do
           | {:error, atom(), original_message: String.t()}
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, :unknown}
-
   def fetch_one(
         entry_id,
         space_id \\ Delivery.config(:space_id),
@@ -57,7 +55,7 @@ defmodule Contentful.Delivery.Entries do
         api_key \\ Delivery.config(:access_token)
       )
 
-  def fetch_one(entry_id, %Space{meta_data: %{id: space_id}}, env, api_key) do
+  def fetch_one(entry_id, %Space{sys: %{id: space_id}}, env, api_key) do
     space_id
     |> build_single_request(entry_id, env, api_key)
     |> Delivery.send_request()
@@ -65,7 +63,7 @@ defmodule Contentful.Delivery.Entries do
   end
 
   def fetch_one(entry_id, space_id, env, api_key) do
-    fetch_one(entry_id, %Space{meta_data: %{id: space_id}}, env, api_key)
+    fetch_one(entry_id, %Space{sys: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -78,22 +76,22 @@ defmodule Contentful.Delivery.Entries do
 
   ## Examples
       {:ok, [
-        %Entry{ meta_data: %{ id: "foobar_0"}},
-        %Entry{ meta_data: %{ id: "foobar_1"}},
-        %Entry{ meta_data: %{ id: "foobar_2"}}
+        %Entry{ sys: %{ id: "foobar_0"}},
+        %Entry{ sys: %{ id: "foobar_1"}},
+        %Entry{ sys: %{ id: "foobar_2"}}
       ], total: 3} = space |> Entries.fetch_all
 
       {:ok, [
-        %Entry{ meta_data: %{ id: "foobar_1"}},
-        %Entry{ meta_data: %{ id: "foobar_2"}}
+        %Entry{ sys: %{ id: "foobar_1"}},
+        %Entry{ sys: %{ id: "foobar_2"}}
       ], total: 3} = space |> Entries.fetch_all(skip: 1)
 
       {:ok, [
-        %Entry{ meta_data: %{ id: "foobar_0"}}
+        %Entry{ sys: %{ id: "foobar_0"}}
       ], total: 3} = space |> Entries.fetch_all(limit: 1)
 
       {:ok, [
-        %Entry{ meta_data: %{ id: "foobar_2"}}
+        %Entry{ sys: %{ id: "foobar_2"}}
       ], total: 3} = space |> Entries.fetch_all(limit: 1, skip: 2)
   """
   @impl Collection
@@ -115,7 +113,7 @@ defmodule Contentful.Delivery.Entries do
         api_key \\ Delivery.config(:access_token)
       )
 
-  def fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key) do
+  def fetch_all(options, %Space{sys: %{id: space_id}}, env, api_key) do
     space_id
     |> build_multi_request(options, env, api_key)
     |> Delivery.send_request()
@@ -124,7 +122,7 @@ defmodule Contentful.Delivery.Entries do
 
   def fetch_all(options, space_id, env, api_key)
       when is_binary(space_id) do
-    fetch_all(options, %Space{meta_data: %{id: space_id}}, env, api_key)
+    fetch_all(options, %Space{sys: %{id: space_id}}, env, api_key)
   end
 
   @doc """
@@ -145,20 +143,20 @@ defmodule Contentful.Delivery.Entries do
       # API calls calculated by the stream (in this case two calls)
       ["first_entry_id", "second_entry_id"] =
           Entries.stream([limit: 1], space)
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Stream.map(fn %{ sys: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       environment = "staging"
       api_token = "foobar?foob4r"
       ["first_entry_id"] =
           Entries.stream([limit: 1], space, environment, api_token)
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Stream.map(fn %{ sys: %{ id: id }} -> id end)
           |> Enum.take(2)
 
       # Use the :limit parameter to set the page size
       ["first_entry_id", "second_entry_id", "third_entry_id", "fourth_entry_id"] =
           Entries.stream([limit: 4], space)
-          |> Stream.map(fn %{ meta_data: %{ id: id }} -> id end)
+          |> Stream.map(fn %{ sys: %{ id: id }} -> id end)
           |> Enum.take(4)
 
   """
@@ -207,7 +205,7 @@ defmodule Contentful.Delivery.Entries do
     {:ok,
      %Entry{
        fields: fields,
-       meta_data: %MetaData{id: id, revision: rev}
+       sys: %SysData{id: id, revision: rev}
      }}
   end
 end

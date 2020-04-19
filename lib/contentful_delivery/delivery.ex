@@ -12,7 +12,6 @@ defmodule Contentful.Delivery do
   @endpoint "cdn.contentful.com"
   @protocol "https"
   @separator "/"
-  @collection_filters [:limit, :skip, :order]
 
   @agent_header [
     "User-Agent": "Contentful Elixir SDK"
@@ -47,14 +46,13 @@ defmodule Contentful.Delivery do
   @doc """
   constructs the base url with the space id that got configured in config.exs
   """
-  @spec url(String.t() | nil) :: String.t()
   def url(space) when is_nil(space) do
     case space_from_config() do
       nil ->
         url()
 
       space ->
-        space |> IO.inspect() |> url
+        space |> url
     end
   end
 
@@ -134,14 +132,13 @@ defmodule Contentful.Delivery do
       "" = collection_query_params([])
 
   """
-  @spec collection_query_params(list()) :: String.t()
   def collection_query_params([]) do
     ""
   end
 
   @doc """
   parses the options for retrieving a collection. It will drop any option that is not in
-  @collection_filters ([:limit, :skip, :order])
+  @collection_filters ([:limit, :skip])
 
   ## Examples
 
@@ -149,11 +146,11 @@ defmodule Contentful.Delivery do
         = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)
 
   """
-  @spec collection_query_params(list(keyword())) :: String.t()
+  @spec collection_query_params(limit: pos_integer(), skip: non_neg_integer()) :: String.t()
   def collection_query_params(options) do
     params =
       options
-      |> Keyword.take(@collection_filters)
+      |> Keyword.take([:limit, :skip])
       |> URI.encode_query()
 
     "?#{params}"
@@ -164,7 +161,7 @@ defmodule Contentful.Delivery do
   """
   @spec parse_response({:ok, Response.t()}, fun()) ::
           {:ok, struct()}
-          | {:ok, list(struct()), total: integer()}
+          | {:ok, list(struct()), total: non_neg_integer()}
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, atom(), original_message: String.t()}
   def parse_response(
@@ -232,7 +229,7 @@ defmodule Contentful.Delivery do
     [authorization: "Bearer #{token}"]
   end
 
-  defp api_key_from_configuration() do
+  defp api_key_from_configuration do
     config(:api_key, "")
   end
 
@@ -263,7 +260,7 @@ defmodule Contentful.Delivery do
   loads the configuration for the delivery module from the contentful app configuration
   """
   @spec config() :: list(keyword())
-  def config() do
+  def config do
     Application.get_env(:contentful, :delivery, [])
   end
 end

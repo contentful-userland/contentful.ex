@@ -1,8 +1,8 @@
 defmodule Contentful.Delivery.LocalesTest do
   use ExUnit.Case
 
-  alias Contentful.Locale
   alias Contentful.Delivery.Locales
+  alias Contentful.Locale
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 

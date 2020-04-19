@@ -9,7 +9,7 @@ defmodule Contentful.Mixfile do
     Delivery,
     Entry,
     Locale,
-    MetaData,
+    SysData,
     Space
   }
 
@@ -53,7 +53,7 @@ defmodule Contentful.Mixfile do
             ContentType.Field,
             Entry,
             Locale,
-            MetaData,
+            SysData,
             Space
           ],
           "Delivery API": [
@@ -88,7 +88,7 @@ defmodule Contentful.Mixfile do
       {:dogma, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
-      {:credo, "~> 1.2", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 

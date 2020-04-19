@@ -20,7 +20,7 @@ defmodule Contentful do
   def deps do
     [
       # your other dependencies
-      {:contentful, "~> 0.1"}
+      {:contentful, "~> 0.2"}
     ]
   end
   ```
@@ -63,7 +63,7 @@ defmodule Contentful do
 
   """
   @spec json_library() :: module()
-  def json_library() do
+  def json_library do
     case Application.get_env(:contentful, :json_library) do
       nil -> Jason
       lib -> lib

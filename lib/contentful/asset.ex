@@ -5,13 +5,13 @@ defmodule Contentful.Asset do
   https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/assets
   """
 
-  alias Contentful.{Asset, MetaData}
+  alias Contentful.{Asset, SysData}
   alias Contentful.Asset.Fields
-  defstruct fields: %Fields{}, meta_data: %MetaData{}
+  defstruct fields: %Fields{}, sys: %SysData{}
 
   @type t :: %Contentful.Asset{
           fields: Fields.t(),
-          meta_data: MetaData.t()
+          sys: SysData.t()
         }
 
   @doc """
@@ -19,7 +19,7 @@ defmodule Contentful.Asset do
 
   ## Example
 
-      %Contentful.Asset{ meta_data: %{ id: id }} = Contentful.Asset.from_api_fields(fields, %{"id" => id})
+      %Contentful.Asset{ sys: %{ id: id }} = Contentful.Asset.from_api_fields(fields, %{"id" => id})
   """
   def from_api_fields(
         %{
@@ -35,7 +35,7 @@ defmodule Contentful.Asset do
         %{"id" => id, "revision" => rev}
       ) do
     %Asset{
-      meta_data: %MetaData{id: id, revision: rev},
+      sys: %SysData{id: id, revision: rev},
       fields: %Fields{
         title: title,
         description: desc,

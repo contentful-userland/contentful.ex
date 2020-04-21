@@ -3,6 +3,8 @@
 Elixir SDK for the [Contentful](https://www.contentful.com) Content APIs.
 
 [![CircleCI](https://circleci.com/gh/contentful-labs/contentful.ex/tree/master.svg?style=svg)](https://circleci.com/gh/contentful-labs/contentful.ex/tree/master)
+[![Hex.pm](https://img.shields.io/hexpm/v/contentful?style=flat)](https://hex.pm/packages/contentful)
+[![License](https://img.shields.io/github/license/contentful-labs/contentful.ex?style=flat)](./LICENSE.txt)
 
 [Contentful](https://www.contentful.com) provides a content infrastructure for digital teams to power content in websites, apps, and devices. Unlike a CMS, Contentful was built to integrate with the modern software stack. It offers a central hub for structured content, powerful management and delivery APIs, and a customizable web app that enable developers and content creators to ship digital products faster.
 
@@ -28,8 +30,6 @@ The Preview API can be used to access the latest versions and drafts of your con
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
 1. Add contentful to your list of dependencies in `mix.exs`:
 
 ```elixir
@@ -48,7 +48,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 ## Usage
 
-For the usage, see the [documentation published to hex]. 
+For the usage, see the [documentation published to hex](https://hexdocs.pm/contentful/Contentful.html).
 
 ## Contributing & Development
 

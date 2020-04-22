@@ -13,6 +13,12 @@ defmodule Contentful.Delivery.Entries do
   @behaviour Collection
   @behaviour CollectionStream
 
+  @endpoint "/entries"
+
+  def endpoint do
+    @endpoint
+  end
+
   @doc """
   Will fetch a single entry for a given Contentful.Space within an `environment`.
 
@@ -182,14 +188,14 @@ defmodule Contentful.Delivery.Entries do
   defp build_multi_request(space, options, env, api_key) do
     url = [
       space |> Delivery.url(env),
-      "/entries",
+      @endpoint,
       options |> Delivery.collection_query_params()
     ]
 
     {url, api_key |> Delivery.request_headers()}
   end
 
-  defp build_entries(%{"total" => total, "items" => items}) do
+  def build_entries(%{"total" => total, "items" => items}) do
     entries =
       items
       |> Enum.map(&build_entry/1)

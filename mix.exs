@@ -94,7 +94,7 @@ defmodule Contentful.Mixfile do
 
   defp description do
     """
-    Contentful Content Delivery API SDK
+    Contentful Elixir SDK
     """
   end
 
@@ -116,7 +116,7 @@ defmodule Contentful.Mixfile do
       links: %{
         "GitHub" => "https://github.com/contentful-labs/contentful.ex",
         "Contentful" => "https://contentful.com",
-        "Other SDKs" => "https://www.contentful.com/developers/docs/platforms/"
+        "Other Contentful SDKs" => "https://www.contentful.com/developers/docs/platforms/"
       }
     ]
   end

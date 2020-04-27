@@ -2,81 +2,40 @@ defmodule Contentful.Delivery.Locales do
   @moduledoc """
   Handles the fetching of locales within a given `Contentful.Space`
   """
-  alias Contentful.{Delivery, Locale, Space}
+  alias Contentful.{Locale, Queryable}
 
-  @doc """
-  Will attempt to fetch all locales for a given space
+  @behaviour Queryable
 
-  Does currently *not* accept collection parameters, as the API does not support them
+  @endpoint "/locales"
 
-  ## Examples
-
-      space = "my_space_id"
-      space |> Locales.fetch_all()
-      {:ok,
-       [
-         %Contentful.Locale{
-           code: "en-US",
-           default: true,
-           fallback_code: nil,
-           name: "English (United States)"
-         },
-         %Contentful.Locale{
-           code: "de",
-           default: false,
-           fallback_code: "en-US",
-           name: "German"
-         }
-       ]}
-
-  """
-  @spec fetch_all(
-          String.t(),
-          Space.t() | String.t(),
-          String.t() | nil
-        ) ::
-          list(Locale.t())
-  def fetch_all(
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
-      )
-
-  def fetch_all(%Space{sys: %{id: space_id}}, env, api_key) do
-    space_id
-    |> build_request(env, api_key)
-    |> Delivery.send_request()
-    |> Delivery.parse_response(&build_locales/1)
+  @impl Queryable
+  def endpoint do
+    @endpoint
   end
 
-  def fetch_all(space_id, env, api_key) when is_binary(space_id) do
-    fetch_all(%Space{sys: %{id: space_id}}, env, api_key)
+  @impl Queryable
+  def resolve_collection_response(%{"items" => items, "total" => total}) do
+    locales =
+      items
+      |> Enum.map(&resolve_entity_response/1)
+      |> Enum.map(fn {:ok, locale} -> locale end)
+
+    {:ok, locales, total: total}
   end
 
-  defp build_request(space, env, api_key) do
-    url = [
-      space |> Delivery.url(env),
-      "/locales"
-    ]
-
-    {url, api_key |> Delivery.request_headers()}
-  end
-
-  defp build_locales(%{"items" => items}) do
+  @impl Queryable
+  def resolve_entity_response(%{
+        "name" => name,
+        "code" => code,
+        "fallbackCode" => fallback_code,
+        "default" => default
+      }) do
     {:ok,
-     items
-     |> Enum.map(fn %{
-                      "name" => name,
-                      "code" => code,
-                      "fallbackCode" => fallback_code,
-                      "default" => default
-                    } ->
-       %Locale{
-         name: name,
-         code: code,
-         fallback_code: fallback_code,
-         default: default
-       }
-     end)}
+     %Locale{
+       name: name,
+       code: code,
+       fallback_code: fallback_code,
+       default: default
+     }}
   end
 end

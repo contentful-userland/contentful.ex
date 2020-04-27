@@ -6,7 +6,7 @@ defmodule Contentful.Delivery.EntriesTest do
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
-  import Contetnful.Query
+  import Contentful.Query
 
   @space_id "bmehzfuz4raf"
   @entry_id "5UeyMKZrmqMYyMMJvCP3Ls"

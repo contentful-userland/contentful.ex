@@ -1,22 +1,8 @@
 defmodule Contentful.Stream do
-  alias Contentful.Delivery
-  alias Contentful.Delivery.Spaces
-
   import Contentful.Query, only: [fetch_all: 4]
 
   def stream(
-        queryable,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
-      )
-
-  def stream(Spaces, space, env, api_key) do
-    {:error, [message: "Streaming a spaces collection is not supported"], total: 0}
-  end
-
-  def stream(
-        {queryable, parameters} = context,
+        {_queryable, _params} = context,
         space,
         env,
         api_key
@@ -41,7 +27,7 @@ defmodule Contentful.Stream do
   end
 
   defp process_page({
-         [head | tail] = val,
+         [head | tail],
          {_context, _total, _meta} = parameters
        }) do
     {[head], {tail, parameters}}
@@ -50,7 +36,7 @@ defmodule Contentful.Stream do
   defp process_page(
          {[],
           {
-            {queryable, parameters} = context,
+            {queryable, parameters},
             total,
             [space: space, env: env, api_key: api_key] = meta
           }}
@@ -71,7 +57,7 @@ defmodule Contentful.Stream do
     end
   end
 
-  defp process_page(acc) do
-    process_page({[], acc})
+  defp process_page(_) do
+    {:halt, nil}
   end
 end

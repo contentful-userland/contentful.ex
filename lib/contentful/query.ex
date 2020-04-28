@@ -50,6 +50,11 @@ defmodule Contentful.Query do
         api_key \\ Delivery.config(:access_token)
       )
 
+  def fetch_all({Spaces, _}, _, _, _) do
+    {:error, [message: "Fetching a spaces collection is not supported, use fetch_one/1 instead"],
+     total: 0}
+  end
+
   def fetch_all(
         {queryable, parameters},
         space,
@@ -111,10 +116,17 @@ defmodule Contentful.Query do
   end
 
   def stream(
-        {_queryable, _parameters},
-        _space \\ Delivery.config(:space_id),
-        _env \\ Delivery.config(:environment),
-        _api_key \\ Delivery.config(:access_token)
-      ),
-      do: nil
+        queryable,
+        space \\ Delivery.config(:space_id),
+        env \\ Delivery.config(:environment),
+        api_key \\ Delivery.config(:access_token)
+      )
+
+  def stream(Spaces, space, env, api_key) do
+    {:error, [message: "Streaming a spaces collection is not supported"], total: 0}
+  end
+
+  def stream(args, space, env, api_key) do
+    Contentful.Stream.stream(args, space, env, api_key)
+  end
 end

@@ -2,7 +2,7 @@ defmodule Contentful.ContentType do
   @moduledoc """
   Describes functions around ContentTypes in a `Contentful.Space`
 
-  See [the official docs](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-types) for more intformation.
+  See [the official docs](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-types) for more information.
   """
   alias Contentful.ContentType.Field
   alias Contentful.{ContentType, SysData}

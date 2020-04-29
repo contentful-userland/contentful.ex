@@ -114,7 +114,7 @@ defmodule Contentful.Query do
 
       # also works with passing `Contentful.ContentType`:
 
-      my_content_type = %Contentful.ContentType{sys: %SysData{id: "foobar"}}
+      my_content_type = %Contentful.ContentType{sys: %Contentful.SysData{id: "foobar"}}
       Entries |> content_type(my_content_type) |> fetch_all
   """
   @spec content_type({Entries, list()}, String.t() | ContentType.t()) :: {Entries, list()}

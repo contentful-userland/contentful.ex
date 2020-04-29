@@ -34,14 +34,15 @@ defmodule Contentful.Delivery.EntriesTest do
   describe ".fetch_all" do
     test "will fetch all published entries for a given space" do
       use_cassette "multiple entries" do
-        {:ok, [%Entry{}, %Entry{}], total: 2} = Entries |> fetch_all(%Space{sys: %{id: @space_id}})
+        {:ok, [%Entry{}, %Entry{}], total: 2} =
+          Entries |> fetch_all(%Space{sys: %SysData{id: @space_id}})
       end
     end
 
     test "will fetch all published entries for a space, respecting the limit parameter" do
       use_cassette "multiple entries, limit filter" do
         {:ok, [%Entry{fields: %{"name" => "Purple Thunder"}}], total: 2} =
-          Entries |> limit(1) |> fetch_all(%Space{sys: %{id: @space_id}})
+          Entries |> limit(1) |> fetch_all(%Space{sys: %SysData{id: @space_id}})
       end
     end
 
@@ -51,7 +52,7 @@ defmodule Contentful.Delivery.EntriesTest do
           Entries
           |> skip(1)
           |> fetch_all(
-            %Space{sys: %{id: @space_id}},
+            %Space{sys: %SysData{id: @space_id}},
             @env
           )
       end

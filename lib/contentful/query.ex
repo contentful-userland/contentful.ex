@@ -55,6 +55,10 @@ defmodule Contentful.Query do
      total: 0}
   end
 
+  def fetch_all(context, %Space{sys: %SysData{id: space}}, env, api_key) do
+    fetch_all(context, space, env, api_key)
+  end
+
   def fetch_all(
         {queryable, parameters},
         space,
@@ -122,7 +126,7 @@ defmodule Contentful.Query do
         api_key \\ Delivery.config(:access_token)
       )
 
-  def stream(Spaces, space, env, api_key) do
+  def stream(Spaces, _space, _env, _api_key) do
     {:error, [message: "Streaming a spaces collection is not supported"], total: 0}
   end
 

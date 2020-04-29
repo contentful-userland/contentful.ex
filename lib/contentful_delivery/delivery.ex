@@ -46,6 +46,7 @@ defmodule Contentful.Delivery do
   @doc """
   constructs the base url with the space id that got configured in config.exs
   """
+  @spec url(nil) :: String.t()
   def url(space) when is_nil(space) do
     case space_from_config() do
       nil ->
@@ -62,7 +63,7 @@ defmodule Contentful.Delivery do
 
       "https://cdn.contentful.com/spaces/foo" = url("foo")
   """
-  @spec url(String.t() | nil) :: String.t()
+  @spec url(String.t()) :: String.t()
   def url(space) do
     [url(), "spaces", space] |> Enum.join(@separator)
   end

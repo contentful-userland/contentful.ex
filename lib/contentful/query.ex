@@ -1,7 +1,7 @@
 defmodule Contentful.Query do
+  alias Contentful.ContentType
   alias Contentful.Delivery
   alias Contentful.Delivery.Spaces
-  alias Contentful.ContentType
   alias Contentful.Space
   alias Contentful.SysData
 

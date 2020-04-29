@@ -3,9 +3,7 @@ defmodule Contentful.Delivery.Entries do
   Collects functions around the reading of entries from a `Contentful.Space`
   """
 
-  alias Contentful.Entry
-  alias Contentful.SysData
-  alias Contentful.Queryable
+  alias Contentful.{Entry, Queryable, SysData}
 
   @behaviour Queryable
 

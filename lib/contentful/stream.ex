@@ -1,6 +1,13 @@
 defmodule Contentful.Stream do
+  @moduledoc """
+  This module extracts the stream functionality from the `Contentful.Query` providing the underlying
+  functions for the streaming functionality of collectable entities from the Contentful API.
+  """
   import Contentful.Query, only: [fetch_all: 4]
 
+  @doc """
+  Entrypoint for constructing a stream, see `Contentful.Query.stream/4`.
+  """
   def stream(
         {_queryable, _params} = context,
         space,
@@ -41,7 +48,7 @@ defmodule Contentful.Stream do
             [space: space, env: env, api_key: api_key] = meta
           }}
        ) do
-    limit = parameters |> Keyword.get(:limit, 100)
+    limit = parameters |> Keyword.get(:limit, 1000)
 
     if limit < total do
       skip = parameters |> Keyword.get(:skip, 0)

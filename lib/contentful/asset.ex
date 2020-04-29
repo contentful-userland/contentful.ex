@@ -1,6 +1,6 @@
 defmodule Contentful.Asset do
   @moduledoc """
-  Represents an asset available to a `Contentful.Space`.
+  Represents an asset available within a `Contentful.Space`.
 
   https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/assets
   """

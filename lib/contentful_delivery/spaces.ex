@@ -4,9 +4,11 @@ defmodule Contentful.Delivery.Spaces do
   through the Contentful Delivery API
   """
 
-  alias Contentful.{Space, Queryable, SysData}
+  alias Contentful.{Queryable, Space, SysData}
 
   @endpoint "/spaces"
+
+  @behaviour Queryable
 
   @impl Queryable
   def endpoint do

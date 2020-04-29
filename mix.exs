@@ -49,6 +49,18 @@ defmodule Contentful.Mixfile do
           Contentful.Delivery
         ],
         groups_for_modules: [
+          APIs: [Delivery],
+          "Query DSL": [
+            Contentful.Query,
+            Contentful.Stream
+          ],
+          Contexts: [
+            Assets,
+            ContentTypes,
+            Entries,
+            Locales,
+            Spaces
+          ],
           "Common Structures": [
             Asset,
             Asset.Fields,
@@ -61,13 +73,8 @@ defmodule Contentful.Mixfile do
             SysData,
             Space
           ],
-          "Delivery API": [
-            Assets,
-            ContentTypes,
-            Delivery,
-            Entries,
-            Locales,
-            Spaces
+          Behaviours: [
+            Contentful.Queryable
           ]
         ]
       ]

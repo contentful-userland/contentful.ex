@@ -45,6 +45,10 @@ defmodule Contentful.Query do
   def include(queryable, number \\ 1)
 
   def include({Entries, parameters}, number) do
+    if number > 10 do
+      raise(ArgumentError, "Include depth cannot be higher than 10!")
+    end
+
     {Entries, parameters |> Keyword.put(:include, number)}
   end
 

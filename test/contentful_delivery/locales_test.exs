@@ -21,7 +21,7 @@ defmodule Contentful.Delivery.LocalesTest do
     :ok
   end
 
-  describe ".fetch_all" do
+  describe "fetch_all/4" do
     test "will fetch all locales for a given space" do
       use_cassette "locales" do
         {:ok,

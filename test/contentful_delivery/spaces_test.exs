@@ -20,7 +20,7 @@ defmodule Contentful.Delivery.SpacesTest do
     :ok
   end
 
-  describe ".fetch_one" do
+  describe "fetch_one/3" do
     test "will fetch one space" do
       use_cassette "single space" do
         {:ok, %Space{name: "Products", sys: %{id: @space_id}}} =

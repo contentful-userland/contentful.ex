@@ -1,4 +1,6 @@
 defmodule Contentful.Query do
+  require Logger
+
   @moduledoc """
   This module provides the chainable query syntax for building queries against the
   APIs of Contentful.
@@ -40,6 +42,8 @@ defmodule Contentful.Query do
 
   """
   @spec include({Entries, list()}, integer()) :: {Entries, list()}
+  def include(queryable, number \\ 1)
+
   def include({Entries, parameters}, number) do
     {Entries, parameters |> Keyword.put(:include, number)}
   end
@@ -230,8 +234,23 @@ defmodule Contentful.Query do
         {_queryable, nil} ->
           raise ArgumentError, "id is missing!"
 
-        {_queryable, id} ->
+        {{module, _parameters}, id} ->
+          # drops the parameters, as single query responses don't allow parameters
+          [space |> Delivery.url(env), module.endpoint(), "/#{id}"]
+
+        _ ->
           [space |> Delivery.url(env), queryable.endpoint(), "/#{id}"]
+      end
+
+    # since you can pass compose into fetch one, we strip extra params here
+    queryable =
+      case queryable do
+        {module, parameters} ->
+          Logger.warn("Stripping parameters: #{inspect(parameters)}")
+          module
+
+        _ ->
+          queryable
       end
 
     {url, api_key |> Delivery.request_headers()}

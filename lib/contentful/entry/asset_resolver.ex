@@ -10,7 +10,7 @@ defmodule Contentful.Entry.AssetResolver do
   """
   @spec find_linked_asset_ids(Entry.t()) :: list(String.t())
   def find_linked_asset_ids(%Entry{fields: fields}) do
-    fields |> Enum.reduce([], &find_in_data/2)
+    fields |> Enum.reduce([], &find_in_data/2) |> Enum.uniq()
   end
 
   defp find_in_data(

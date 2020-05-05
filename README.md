@@ -61,7 +61,7 @@ $ mix docs
 $ cd doc && python -m SimpleHTTPServer # or any other quick way to serve static content locally
 ```
 
-then open `http://localhost:8000`.
+then open [`http://localhost:8000`](http://localhost:8000).
 
 ## Contributing & Development
 

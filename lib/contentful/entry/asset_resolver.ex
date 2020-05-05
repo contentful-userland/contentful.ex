@@ -6,7 +6,8 @@ defmodule Contentful.Entry.AssetResolver do
   alias Contentful.Entry
 
   @doc """
-  extracts asset ids nested in the fields of a single entry
+  extracts asset ids nested in the fields of a single entry, essentially collecting asset_ids
+  from the tree structure of the entry fields accomodating for serval field types.
   """
   @spec find_linked_asset_ids(Entry.t()) :: list(String.t())
   def find_linked_asset_ids(%Entry{fields: fields}) do

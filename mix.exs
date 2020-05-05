@@ -76,7 +76,8 @@ defmodule Contentful.Mixfile do
           Behaviours: [
             Contentful.Queryable
           ]
-        ]
+        ],
+        logo: "assets/cf_logo.png"
       ]
     ]
   end

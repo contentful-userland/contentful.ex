@@ -74,6 +74,11 @@ defmodule Contentful.Delivery.Entries do
     {:ok, entries |> Enum.map(fn entry -> entry |> resolve_assets(assets) end), total: total}
   end
 
+  @doc """
+  maps a standard API response for queries compliant with the `Contentful.Queryable` behaviour.
+
+
+  """
   @impl Queryable
   def resolve_collection_response(%{"total" => total, "items" => items}) do
     entries =
@@ -85,6 +90,10 @@ defmodule Contentful.Delivery.Entries do
   end
 
   @impl Queryable
+  @doc """
+
+  maps a standard API response for a single entry returned, compliant with the `Contentful.Queryable` behaviour.
+  """
   def resolve_entity_response(%{
         "fields" => fields,
         "sys" => %{"id" => id, "revision" => rev}

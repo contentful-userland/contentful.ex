@@ -14,7 +14,16 @@ defmodule Contentful.Query do
   |> fetch_all
   ```
 
-  whereas `Entity` is one of the modules that exhibit `Queryable` behaviour.
+  wherein `Entity` is one of the modules that exhibit `Contentful.Queryable` behaviour, such as
+  `Contentful.Delivery.Entries`, `Contentful.Delivery.Assets` and `Contentful.Delivery.ContentTypes`.
+
+  As an example, querying all entries of a given `Contentful.Space` (represented by its `space_id`) can
+  be done as follows:
+
+  ```
+  Contentful.Delivery.Entries
+  |> fetch_all(space_id)
+  ```
 
   """
   alias Contentful.ContentType

@@ -22,7 +22,7 @@ defmodule Contentful.Query do
 
   ```
   Contentful.Delivery.Entries
-  |> fetch_all(space_id)
+  |> Contentful.Query.fetch_all(space_id)
   ```
 
   """

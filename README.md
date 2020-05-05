@@ -50,6 +50,19 @@ The Preview API can be used to access the latest versions and drafts of your con
 
 For the usage, see the [documentation published to hex](https://hexdocs.pm/contentful/Contentful.html).
 
+### Local documentation
+
+In case you want to compile the docs locally, run:
+
+```bash
+$ mix docs
+
+# to view, we recommend:
+$ cd doc && python -m SimpleHTTPServer # or any other quick way to serve static content locally
+```
+
+then open `http://localhost:8000`.
+
 ## Contributing & Development
 
 1. Fork it

@@ -35,7 +35,7 @@ The Preview API can be used to access the latest versions and drafts of your con
 
 ```elixir
   def deps do
-    [{:contentful, "~> 0.2.0"}]
+    [{:contentful, "~> 0.3.0"}]
   end
 ```
 

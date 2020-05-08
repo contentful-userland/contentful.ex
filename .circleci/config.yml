@@ -1,5 +1,8 @@
 version: 2
 jobs:
   build:
+    machine:
+      docker:
+      - image: busybox:latest
     steps:
-      - echo 0
+      - run: echo 0

@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: OTP ${{matrix.otp}} | Elixir ${{matrix.elixir}}}}
+    name: OTP ${{matrix.otp}} | Elixir ${{matrix.elixir}}
     runs-on: ubuntu-latest
 
     strategy:

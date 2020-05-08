@@ -16,6 +16,8 @@
       "binary": false,
       "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 2,\n  \"skip\": 0,\n  \"limit\": 1,\n  \"items\": [\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"bmehzfuz4raf\"\n          }\n        },\n        \"id\": \"577fpmbIfYD71VCjCpYA84\",\n        \"type\": \"Asset\",\n        \"createdAt\": \"2020-03-16T10:30:45.706Z\",\n        \"updatedAt\": \"2020-03-16T10:30:45.706Z\",\n        \"environment\": {\n          \"sys\": {\n            \"id\": \"master\",\n            \"type\": \"Link\",\n            \"linkType\": \"Environment\"\n          }\n        },\n        \"revision\": 1,\n        \"locale\": \"en-US\"\n      },\n      \"fields\": {\n        \"title\": \"bafoo\",\n        \"description\": \"a pdf\",\n        \"file\": {\n          \"url\": \"//assets.ctfassets.net/bmehzfuz4raf/577fpmbIfYD71VCjCpYA84/6456d4157900af3b35537f5f15dd97c2/Travis_Picking_-_The_LEGENDARY_picking_pattern.pdf\",\n          \"details\": {\n            \"size\": 90783\n          },\n          \"fileName\": \"Travis Picking - The LEGENDARY picking pattern.pdf\",\n          \"contentType\": \"application/pdf\"\n        }\n      }\n    }\n  ]\n}\n",
       "headers": {
+        "Connection": "keep-alive",
+        "Content-Length": "1118",
         "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
         "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
         "Access-Control-Allow-Origin": "*",
@@ -31,17 +33,15 @@
         "Server": "Contentful",
         "X-Content-Type-Options": "nosniff",
         "X-Contentful-Region": "us-east-1",
-        "Content-Length": "1118",
         "Accept-Ranges": "bytes",
-        "Date": "Mon, 30 Mar 2020 09:44:15 GMT",
+        "Date": "Tue, 28 Apr 2020 15:55:59 GMT",
         "Via": "1.1 varnish",
-        "Age": "519525",
-        "Connection": "keep-alive",
-        "X-Served-By": "cache-hhn4083-HHN",
+        "Age": "4383",
+        "X-Served-By": "cache-hhn4054-HHN",
         "X-Cache": "HIT",
         "X-Cache-Hits": "1",
         "Vary": "Accept-Encoding",
-        "x-contentful-request-id": "ee9889a0-4e2c-4eea-a957-5f113d92e199"
+        "x-contentful-request-id": "ebc68e6e-4357-4dfd-a414-01ea805f7a67"
       },
       "status_code": 200,
       "type": "ok"

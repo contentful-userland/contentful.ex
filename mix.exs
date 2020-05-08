@@ -27,11 +27,16 @@ defmodule Contentful.Mixfile do
       description: description(),
       package: package(),
       deps: deps(),
+      test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         vcr: :test,
         "vcr.delete": :test,
         "vcr.check": :test,
-        "vcr.show": :test
+        "vcr.show": :test,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ],
 
       # Docs
@@ -44,6 +49,18 @@ defmodule Contentful.Mixfile do
           Contentful.Delivery
         ],
         groups_for_modules: [
+          APIs: [Delivery],
+          "Query DSL": [
+            Contentful.Query,
+            Contentful.Stream
+          ],
+          Contexts: [
+            Assets,
+            ContentTypes,
+            Entries,
+            Locales,
+            Spaces
+          ],
           "Common Structures": [
             Asset,
             Asset.Fields,
@@ -56,15 +73,11 @@ defmodule Contentful.Mixfile do
             SysData,
             Space
           ],
-          "Delivery API": [
-            Assets,
-            ContentTypes,
-            Delivery,
-            Entries,
-            Locales,
-            Spaces
+          Behaviours: [
+            Contentful.Queryable
           ]
-        ]
+        ],
+        logo: "assets/cf_logo.png"
       ]
     ]
   end
@@ -88,7 +101,8 @@ defmodule Contentful.Mixfile do
       {:dogma, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 

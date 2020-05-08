@@ -50,6 +50,19 @@ The Preview API can be used to access the latest versions and drafts of your con
 
 For the usage, see the [documentation published to hex](https://hexdocs.pm/contentful/Contentful.html).
 
+### Local documentation
+
+In case you want to compile the docs locally, run:
+
+```bash
+$ mix docs
+
+# to view, we recommend:
+$ cd doc && python -m SimpleHTTPServer # or any other quick way to serve static content locally
+```
+
+then open [`http://localhost:8000`](http://localhost:8000).
+
 ## Contributing & Development
 
 1. Fork it
@@ -64,19 +77,19 @@ This library makes use of the Contentful APIs. It helps to [have an account](htt
 
 ```bash
 $ cat config/secrets.dev.exs
-config :contentful_delivery,
-  access_token: "<YOUR CDA token for development>"
-
-config :contentful_delivery,
-  environment: "master"
+config :contentful, delivery: [
+  access_token: "<my_cda_access_token>",
+  environment: "master",
+  space_id: "<my_space_id>"
+]
 
 # for testing
 $ cat config/secrets.test.exs
-config :contentful_delivery,
-  access_token: "<YOUR CDA token  for running tests>"
-
-config :contentful_delivery,
-  environment: "master"
+config :contentful, delivery: [
+  access_token: "<my_cda_access_token>",
+  environment: "testing",
+  space_id: "<my_space_id>"
+]
 ```
 
 We freeze requests by using `exVCR`, in case you want to rebuild these files, make sure that test assertions match.

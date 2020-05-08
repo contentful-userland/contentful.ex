@@ -6,6 +6,8 @@ defmodule Contentful.Delivery.LocalesTest do
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
+  import Contentful.Query
+
   @space_id "bmehzfuz4raf"
   @env "master"
   @access_token nil
@@ -19,14 +21,14 @@ defmodule Contentful.Delivery.LocalesTest do
     :ok
   end
 
-  describe ".fetch_all" do
+  describe "fetch_all/4" do
     test "will fetch all locales for a given space" do
       use_cassette "locales" do
         {:ok,
          [
            %Locale{code: "en-US", default: true},
            %Locale{code: "de", default: false}
-         ]} = @space_id |> Locales.fetch_all(@env, @access_token)
+         ], total: 2} = Locales |> fetch_all(@space_id, @env, @access_token)
       end
     end
   end

@@ -1,8 +1,126 @@
 defmodule Contentful.Delivery do
   @moduledoc """
-  The `Contentful.Delivery` module offers functions to interact with the [Contentful Delivery API](https://www.contentful.com/developers/docs/references/content-delivery-api/) (CDA).
+  The Delivery API is the main access point for fetching data for your customers.
+  The API is _read only_.
 
-  The API is _read only_. If you wish to manipulate data, have a look at the Management API.
+  If you wish to manipulate data, please have a look at the `Contentful.Management`.
+
+  ## Basic interaction
+
+  The `space_id`, the `environment` and your `access_token` can all be configured in
+  `config/config.exs`:
+
+  ```
+  # config/config.exs
+  config :contentful, delivery: [
+    space_id: "<my_space_id>",
+    environment: "<my_environment>",
+    access_token: "<my_access_token>"
+  ]
+  ```
+
+  The space can then be fetched as a `Contentful.Space` via a simple query:
+
+  ```
+  import Contentful.Query
+  alias Contentful.Delivery.Spaces
+
+  {:ok, space} = Spaces |> fetch_one
+  ```
+
+  Retrieving items is then just a matter of importing `Contentful.Query`:
+
+  ```
+  import Contentful.Query
+  alias Contentful.Delivery.Entries
+
+  {:ok, entries, total: _total_count_of_entries} = Entries |> fetch_all
+  ```
+
+  You can create query chains to form more complex queries:
+
+  ```
+  import Contentful.Query
+  alias Contentful.Delivery.Entries
+
+  {:ok, entries, total: _total_count_of_entries} =
+    Entries
+    |> skip(2)
+    |> limit(10)
+    |> include(2)
+    |> fetch_all
+  ```
+
+  Fetching indidvidual entities is straight forward:
+
+  ```
+  import Contentful.Query
+  alias Contentful.Delivery.Assets
+
+  my_asset_id = "my_asset_id"
+
+  {:ok, assets, total: _total_count_of_assets} = Assets |> fetch_one(my_asset_id)
+  ```
+
+  All query resolvers also support chaning the `space_id`, `environment` and `access_token` at call
+  time:
+
+  ```
+  import Contentful.Query
+  alias Contentful.Delivery.Assets
+
+  my_asset_id = "my_asset_id"
+  {:ok, asset} =
+    Assets
+    |> fetch_one(my_asset_id)
+  ```
+
+  Note: If you want to pass the configuration at call time, you can pass these later as function
+  parameters to the resolver call:
+
+  ```
+  import Contentful.Query
+  alias Contentful.Delivery.Assets
+
+  my_asset_id = "my_asset_id"
+  my_space_id = "bmehzfuz4raf"
+  my_environment = "staging"
+  my_access_token = "not_a_real_token"
+
+  {:ok, asset} =
+    Assets
+    |> fetch_one(my_asset_id, my_space_id, my_environment, my_access_token)
+
+  # also works for fetch_all:
+  {:ok, assets, _} =
+    Assets
+    |> fetch_all(my_space_id, my_environment, my_access_token)
+
+  # and for stream:
+  [ asset | _ ] =
+    Assets
+    |> stream(my_space_id, my_environment, my_access_token)
+    |> Enum.to_list
+
+  ```
+
+  ## Spaces as an exception
+
+  Unfortunately, `Contentful.Delivery.Spaces` do not support complete collection behaviour:
+
+  ```
+  # doesn't exist in the Delivery API:
+  {:error, _, _} = Contentful.Delivery.Spaces |> fetch_all
+
+  # however, you can still retrieve a single `Contentful.Space`:
+  {:ok, space} = Contentful.Delivery.Spaces |> fetch_one # the configured space
+  {:ok, my_space} = Contentful.Delivery.Spaces |> fetch_one("my_space_id") # a passed space
+
+  ```
+
+  ## Further reading
+
+  * [Contentful Delivery API docs](https://www.contentful.com/developers/docs/references/content-delivery-api/) (CDA).
   """
 
   import HTTPoison, only: [get: 2]
@@ -46,6 +164,7 @@ defmodule Contentful.Delivery do
   @doc """
   constructs the base url with the space id that got configured in config.exs
   """
+  @spec url(nil) :: String.t()
   def url(space) when is_nil(space) do
     case space_from_config() do
       nil ->
@@ -62,7 +181,7 @@ defmodule Contentful.Delivery do
 
       "https://cdn.contentful.com/spaces/foo" = url("foo")
   """
-  @spec url(String.t() | nil) :: String.t()
+  @spec url(String.t()) :: String.t()
   def url(space) do
     [url(), "spaces", space] |> Enum.join(@separator)
   end
@@ -117,7 +236,7 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  Sends a request against the CDA. It's really just a wrapper around HTTPoison.get/2
+  Sends a request against the CDA. It's really just a wrapper around `HTTPoison.get/2`
   """
   @spec send_request(tuple()) :: {:ok, Response.t()}
   def send_request({url, headers}) do
@@ -146,11 +265,16 @@ defmodule Contentful.Delivery do
         = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)
 
   """
-  @spec collection_query_params(limit: pos_integer(), skip: non_neg_integer()) :: String.t()
+  @spec collection_query_params(
+          limit: pos_integer(),
+          skip: non_neg_integer(),
+          content_type: String.t(),
+          include: non_neg_integer()
+        ) :: String.t()
   def collection_query_params(options) do
     params =
       options
-      |> Keyword.take([:limit, :skip])
+      |> Keyword.take([:limit, :skip, :content_type, :include])
       |> URI.encode_query()
 
     "?#{params}"

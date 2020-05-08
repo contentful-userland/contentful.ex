@@ -5,9 +5,10 @@ defmodule Contentful do
   for the shared structs.
 
   The available Contentful APIs are:
-    * [Content Delivery API (CDA)](https://www.contentful.com/developers/docs/references/content-delivery-api/) - for accessing production ready content
-    * [Content Preview API (CPA)](https://www.contentful.com/developers/docs/references/content-preview-api/) - for accessing drafts prepublication
-    * [Content Management API (CMA)](https://www.contentful.com/developers/docs/references/content-management-api/) - for managing your content
+
+    * `Contentful.Delivery` - wraps the [Content Delivery API (CDA)](https://www.contentful.com/developers/docs/references/content-delivery-api/) - for accessing production ready content
+    * `Contentful.Preview` - wraps the [Content Preview API (CPA)](https://www.contentful.com/developers/docs/references/content-preview-api/) - for accessing drafts prepublication
+    * `Contentful.Management` - wraps the [Content Management API (CMA)](https://www.contentful.com/developers/docs/references/content-management-api/) - for managing your content
 
 
   ## Setup
@@ -19,7 +20,7 @@ defmodule Contentful do
 
   def deps do
     [
-      # your other dependencies
+      # your other dependencies, then add:
       {:contentful, "~> 0.2"}
     ]
   end
@@ -35,8 +36,9 @@ defmodule Contentful do
   # per API definition:
 
   config :contentful, delivery: [
-    access_token: "<YOUR CDA token>",
-    environment: "my-environment" # default is `master`
+    space_id: "<my_space_id>",
+    access_token: "<my_cda_token>",
+    environment: "<my_environment>" # defaults to `master`
   ]
 
   config :contentful, management: [
@@ -47,7 +49,8 @@ defmodule Contentful do
     coming: :soon
   ]
   ```
-  Please note that the default `json_library` that this SDK is tested with is `Jason`, yet `Poison` should be compatible.
+  Please note that the default `json_library` that this SDK is tested with is `Jason`, yet `Poison`
+  should be compatible.
   """
 
   @doc """

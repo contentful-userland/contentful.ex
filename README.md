@@ -3,7 +3,7 @@
 Elixir SDK for the [Contentful](https://www.contentful.com) Content APIs.
 
 [![Elixir CI](https://github.com/contentful-labs/contentful.ex/workflows/Elixir%20CI/badge.svg)](https://github.com/contentful-labs/contentful.ex/actions?query=workflow%3A%22Elixir+CI%22)
-[![Coveralls](https://img.shields.io/coveralls/github/contentful-labs/contentful.ex)](https://coveralls.io/github/contentful-labs/contentful.ex)
+[![Coverage Status](https://coveralls.io/repos/github/contentful-labs/contentful.ex/badge.svg?branch=master)](https://coveralls.io/github/contentful-labs/contentful.ex?branch=master)
 [![Hex.pm](https://img.shields.io/hexpm/v/contentful?style=flat)](https://hex.pm/packages/contentful)
 [![License](https://img.shields.io/github/license/contentful-labs/contentful.ex?style=flat)](./LICENSE.txt)
 

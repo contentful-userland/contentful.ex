@@ -105,7 +105,7 @@ defmodule Contentful.Mixfile do
       {:excoveralls, "~> 0.10", only: :test},
 
       # docs
-      {:inch_ex, only: :docs}
+      {:inch_ex, "2.1.0-rc.1", only: :docs}
     ]
   end
 

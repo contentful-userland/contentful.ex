@@ -50,3 +50,34 @@ jobs:
       run: mix coveralls.github
     - name: Check documentation coverage
       run: MIX_ENV=docs mix inch
+
+  quality:
+        steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        restore-keys: |
+          ${{ runner.os }}-mix-
+    - uses: actions/cache@v1
+      with:
+        path: _build/ci
+        key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+    - uses: actions/setup-elixir@v1
+      with:
+        otp-version: 22.3
+        elixir-version: 1.10.3
+
+    - name: Install hex
+      run: mix local.hex --force
+    - name: Install rebar
+      run: mix local.rebar --force
+    - name: Install Dependencies
+      run: mix do deps.get, compile
+    - name: Report coverage
+      run: mix coveralls.github
+    - name: Check documentation coverage
+      run: MIX_ENV=docs mix inch

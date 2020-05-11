@@ -18,7 +18,6 @@ jobs:
         otp: [22.3, 21.3]
         elixir: [1.10.3, 1.9.4, 1.8.2, 1.7.4]
 
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
@@ -52,7 +51,8 @@ jobs:
       run: MIX_ENV=docs mix inch
 
   quality:
-        steps:
+    name: Code quality checks
+    steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
       with:

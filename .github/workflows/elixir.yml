@@ -75,6 +75,8 @@ jobs:
       run: mix local.rebar --force
     - name: Install Dependencies
       run: mix do deps.get, compile
+    - name: Run code analysis
+      run: mix credo --strict
     - name: Report coverage
       run: mix coveralls.github
     - name: Check documentation coverage

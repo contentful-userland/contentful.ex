@@ -52,6 +52,8 @@ jobs:
 
   quality:
     name: Code quality checks
+    runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1

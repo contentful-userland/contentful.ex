@@ -2,6 +2,8 @@
 
 ## Master
 
+## 0.3.0
+
 ### Features
 
 * Introduced a DSL that can be composed into queries 

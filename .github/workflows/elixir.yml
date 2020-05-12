@@ -16,8 +16,7 @@ jobs:
     strategy:
       matrix:
         otp: [22.3, 21.3]
-        elixir: [1.10.3, 1.9.4, 1.8.2, 1.7.4, 1.6.6]
-
+        elixir: [1.10.3, 1.9.4, 1.8.2, 1.7.4]
 
     steps:
     - uses: actions/checkout@v2
@@ -46,5 +45,37 @@ jobs:
       run: mix deps.get
     - name: Run Tests
       run: mix test
+
+  quality:
+    name: Code quality checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        restore-keys: |
+          ${{ runner.os }}-mix-
+    - uses: actions/cache@v1
+      with:
+        path: _build/ci
+        key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+    - uses: actions/setup-elixir@v1
+      with:
+        otp-version: 22.3
+        elixir-version: 1.10.3
+
+    - name: Install hex
+      run: mix local.hex --force
+    - name: Install rebar
+      run: mix local.rebar --force
+    - name: Install Dependencies
+      run: mix do deps.get, compile
     - name: Report coverage
       run: mix coveralls.github
+    - name: Check documentation coverage
+      run: MIX_ENV=docs mix inch

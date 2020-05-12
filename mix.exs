@@ -21,7 +21,7 @@ defmodule Contentful.Mixfile do
     [
       app: :contentful,
       version: @version,
-      elixir: "~> 1.6",
+      elixir: "~> 1.7",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -102,7 +102,10 @@ defmodule Contentful.Mixfile do
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+
+      # docs
+      {:inch_ex, "2.1.0-rc.1", only: :docs}
     ]
   end
 

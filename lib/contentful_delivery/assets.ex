@@ -21,18 +21,21 @@ defmodule Contentful.Delivery.Assets do
 
   @impl Queryable
   def resolve_entity_response(%{
-        "fields" => %{
-          "description" => desc,
-          "file" => %{
-            "contentType" => content_type,
-            "details" => details,
-            "fileName" => file_name,
-            "url" => url
-          },
-          "title" => title
-        },
+        "fields" =>
+          %{
+            "file" => %{
+              "contentType" => content_type,
+              "details" => details,
+              "fileName" => file_name,
+              "url" => url
+            }
+          } = fields,
         "sys" => %{"id" => id, "revision" => rev}
       }) do
+    # title and description optional fields for assets
+    title = fields |> Map.get("title", nil)
+    desc = fields |> Map.get("description", nil)
+
     asset = %Asset{
       sys: %SysData{id: id, revision: rev},
       fields: %Asset.Fields{

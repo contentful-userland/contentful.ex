@@ -15,7 +15,7 @@ defmodule Contentful.Delivery do
   config :contentful, delivery: [
     space_id: "<my_space_id>",
     environment: "<my_environment>",
-    access_token: "<my_access_token>"
+    access_token: "<my_access_token_cda>"
   ]
   ```
 
@@ -128,6 +128,7 @@ defmodule Contentful.Delivery do
   alias HTTPoison.Response
 
   @endpoint "cdn.contentful.com"
+  @preview_endpoint "preview.contentful.com"
   @protocol "https"
   @separator "/"
 
@@ -158,7 +159,7 @@ defmodule Contentful.Delivery do
   """
   @spec url() :: String.t()
   def url do
-    "#{@protocol}://#{@endpoint}"
+    "#{@protocol}://#{host_from_config()}"
   end
 
   @doc """
@@ -354,15 +355,23 @@ defmodule Contentful.Delivery do
   end
 
   defp api_key_from_configuration do
-    config(:api_key, "")
+    config(:api_key) |> fallback("")
   end
 
   defp environment_from_config do
-    config(:environment, "master")
+    config(:environment) |> fallback("master")
   end
 
   defp space_from_config do
-    config(:space, nil)
+    config(:space)
+  end
+
+  defp host_from_config do
+    case config(:endpoint) do
+      nil -> @endpoint
+      :preview -> @preview_endpoint
+      value -> value
+    end
   end
 
   @doc """
@@ -375,9 +384,9 @@ defmodule Contentful.Delivery do
 
       "foobar" = Contentful.Delivery.config(:my_config)
   """
-  @spec config(atom(), any() | nil) :: any()
-  def config(setting, default \\ nil) do
-    config() |> Keyword.get(setting, default)
+  @spec config(atom()) :: any()
+  def config(setting) do
+    config() |> Keyword.get(setting)
   end
 
   @doc """
@@ -386,5 +395,13 @@ defmodule Contentful.Delivery do
   @spec config() :: list(keyword())
   def config do
     Application.get_env(:contentful, :delivery, [])
+  end
+
+  defp fallback(nil, value) do
+    value
+  end
+
+  defp fallback(value, _) do
+    value
   end
 end

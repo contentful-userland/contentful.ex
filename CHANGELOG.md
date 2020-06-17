@@ -7,6 +7,7 @@
 * [#37](https://github.com/contentful-labs/contentful.ex/issues/37) Fixed an error preventing corrent entity resolution for assets (thanks @OldhamMade)
 * [#44](https://github.com/contentful-labs/contentful.ex/issues/44) Adds missing common properties to content types, assets entries (thanks @OldhamMade)
 * [#36](https://github.com/contentful-labs/contentful.ex/issues/36) Added dependabot for keeping dependencies up to date
+* [#9](https://github.com/contentful-labs/contentful.ex/issues/9) Added the ability to specify an endpoint other than the Delivery API
 * Improved some README sections about how to qeruy certain entities
 
 ## 0.3.0

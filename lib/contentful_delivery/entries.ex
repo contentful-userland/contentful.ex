@@ -100,7 +100,7 @@ defmodule Contentful.Delivery.Entries do
           "id" => id,
           "revision" => rev,
           "updatedAt" => updated_at,
-          "created_at" => created_at,
+          "createdAt" => created_at,
           "locale" => locale
         }
       }) do

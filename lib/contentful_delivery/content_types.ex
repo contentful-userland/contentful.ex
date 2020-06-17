@@ -39,11 +39,12 @@ defmodule Contentful.Delivery.ContentTypes do
       }) do
     {:ok,
      %ContentType{
+       id: id,
        name: name,
        description: description,
        display_field: display_field,
        fields: Enum.map(fields, &build_field/1),
-       sys: %SysData{id: id, revision: rev, updated_at: updated_at, created_at: created_at}
+       sys: %SysData{revision: rev, updated_at: updated_at, created_at: created_at}
      }}
   end
 

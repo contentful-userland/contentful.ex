@@ -47,7 +47,7 @@ defmodule Contentful.Delivery.Entries do
 
   """
 
-  alias Contentful.{Asset, Entry, Queryable, SysData}
+  alias Contentful.{Asset, ContentType, Entry, Queryable, SysData}
   alias Contentful.Delivery.Assets
   alias Contentful.Entry.AssetResolver
 
@@ -101,7 +101,8 @@ defmodule Contentful.Delivery.Entries do
           "revision" => rev,
           "updatedAt" => updated_at,
           "createdAt" => created_at,
-          "locale" => locale
+          "locale" => locale,
+          "contentType" => %{"sys" => content_type_id}
         }
       }) do
     {:ok,
@@ -112,7 +113,8 @@ defmodule Contentful.Delivery.Entries do
          revision: rev,
          locale: locale,
          updated_at: updated_at,
-         created_at: created_at
+         created_at: created_at,
+         content_type: %ContentType{id: content_type_id}
        }
      }}
   end

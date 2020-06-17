@@ -2,7 +2,7 @@ defmodule Contentful.Delivery.EntriesTest do
   use ExUnit.Case
 
   alias Contentful.Delivery.Entries
-  alias Contentful.{ContentType, Entry, Space, SysData}
+  alias Contentful.{Entry, Space, SysData}
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
@@ -39,7 +39,7 @@ defmodule Contentful.Delivery.EntriesTest do
                updated_at: _,
                created_at: _,
                locale: _,
-               content_type: %ContentType{id: content_type_id}
+               content_type: content_type_id
              } = sys
          }} = Entries |> fetch_one(@entry_id, @space_id, @env, @access_token)
 

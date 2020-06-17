@@ -29,6 +29,17 @@ defmodule Contentful.Delivery.EntriesTest do
           Entries |> fetch_one(@entry_id, @space_id, @env, @access_token)
       end
     end
+
+    test "provides meta information" do
+      use_cassette "single entry" do
+        {:ok, %Entry{sys: %SysData{updated_at: _, created_at: _, locale: _} = sys}} =
+          Entries |> fetch_one(@entry_id, @space_id, @env, @access_token)
+
+        assert sys.updated_at
+        assert sys.created_at
+        assert sys.locale
+      end
+    end
   end
 
   describe ".fetch_all" do

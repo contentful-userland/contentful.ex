@@ -96,12 +96,24 @@ defmodule Contentful.Delivery.Entries do
   """
   def resolve_entity_response(%{
         "fields" => fields,
-        "sys" => %{"id" => id, "revision" => rev}
+        "sys" => %{
+          "id" => id,
+          "revision" => rev,
+          "updatedAt" => updated_at,
+          "created_at" => created_at,
+          "locale" => locale
+        }
       }) do
     {:ok,
      %Entry{
        fields: fields,
-       sys: %SysData{id: id, revision: rev}
+       sys: %SysData{
+         id: id,
+         revision: rev,
+         locale: locale,
+         updated_at: updated_at,
+         created_at: created_at
+       }
      }}
   end
 

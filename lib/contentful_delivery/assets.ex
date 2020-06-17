@@ -30,14 +30,26 @@ defmodule Contentful.Delivery.Assets do
               "url" => url
             }
           } = fields,
-        "sys" => %{"id" => id, "revision" => rev}
+        "sys" => %{
+          "id" => id,
+          "revision" => rev,
+          "createdAt" => created_at,
+          "updatedAt" => updated_at,
+          "locale" => locale
+        }
       }) do
     # title and description optional fields for assets
     title = fields |> Map.get("title", nil)
     desc = fields |> Map.get("description", nil)
 
     asset = %Asset{
-      sys: %SysData{id: id, revision: rev},
+      sys: %SysData{
+        id: id,
+        revision: rev,
+        created_at: created_at,
+        updated_at: updated_at,
+        locale: locale
+      },
       fields: %Asset.Fields{
         title: title,
         description: desc,

@@ -29,7 +29,12 @@ defmodule Contentful.Delivery.ContentTypes do
         "name" => name,
         "description" => description,
         "displayField" => display_field,
-        "sys" => %{"id" => id, "revision" => rev},
+        "sys" => %{
+          "id" => id,
+          "revision" => rev,
+          "updatedAt" => updated_at,
+          "createdAt" => created_at
+        },
         "fields" => fields
       }) do
     {:ok,
@@ -38,7 +43,7 @@ defmodule Contentful.Delivery.ContentTypes do
        description: description,
        display_field: display_field,
        fields: Enum.map(fields, &build_field/1),
-       sys: %SysData{id: id, revision: rev}
+       sys: %SysData{id: id, revision: rev, updated_at: updated_at, created_at: created_at}
      }}
   end
 

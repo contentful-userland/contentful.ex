@@ -13,7 +13,7 @@ defmodule Contentful.SysData do
           id: String.t(),
           revision: integer() | nil,
           version: integer() | nil,
-          created_at: String.t() | nil,
+          created_at: String.t(),
           updated_at: String.t() | nil,
           # NOTE: locale string only exists in entries and assets
           locale: String | nil,

@@ -1,6 +1,6 @@
 defmodule Contentful.Delivery.AssetsTest do
   use ExUnit.Case
-  alias Contentful.Asset
+  alias Contentful.{Asset, SysData}
   alias Contentful.Delivery.Assets
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
@@ -23,6 +23,17 @@ defmodule Contentful.Delivery.AssetsTest do
     test "fetches a single asset by it's id from a space" do
       use_cassette "single asset" do
         {:ok, %Asset{sys: %{id: @asset_id}}} = Assets |> fetch_one(@asset_id, @space_id)
+      end
+    end
+
+    test "contains the meta information in sys" do
+      use_cassette "single asset" do
+        {:ok, %Asset{sys: %SysData{id: @asset_id, updated_at: _, created_at: _, locale: _} = sys}} =
+          Assets |> fetch_one(@asset_id, @space_id)
+
+        assert sys.created_at
+        assert sys.updated_at
+        assert sys.locale
       end
     end
   end

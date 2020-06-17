@@ -44,10 +44,25 @@ defmodule Contentful.Delivery.Entries do
 
       Entries |> include |> stream |> Stream.flat_map(fn entry -> entry.assets end) |> Enum.take(2)
 
+  ## Accessing common resource attributes
+
+  Entries embed `Contentful.SysData` with extra information about the entry:
+
+    import Contentful.Query
+    alias Contentful.{ContentType, Entry, SysData}
+    alias Contentful.Delivery.Entries
+
+    {:ok, entry} = Entries |> fetch_one("my_entry_id")
+
+    "my_entry_id" = entry.id
+    "<a timestamp for updated_at>" = entry.sys.updated_at
+    "<a timestamp for created_at>" = entry.sys.created_at
+    "<a locale string>" = entry.sys.locale
+    %ContentType{id: "the_associated_content_type_id"} =  entry.sys.content_type
 
   """
 
-  alias Contentful.{Asset, Entry, Queryable, SysData}
+  alias Contentful.{Asset, ContentType, Entry, Queryable, SysData}
   alias Contentful.Delivery.Assets
   alias Contentful.Entry.AssetResolver
 
@@ -96,12 +111,26 @@ defmodule Contentful.Delivery.Entries do
   """
   def resolve_entity_response(%{
         "fields" => fields,
-        "sys" => %{"id" => id, "revision" => rev}
+        "sys" => %{
+          "id" => id,
+          "revision" => rev,
+          "updatedAt" => updated_at,
+          "createdAt" => created_at,
+          "locale" => locale,
+          "contentType" => %{"sys" => content_type_id}
+        }
       }) do
     {:ok,
      %Entry{
        fields: fields,
-       sys: %SysData{id: id, revision: rev}
+       sys: %SysData{
+         id: id,
+         revision: rev,
+         locale: locale,
+         updated_at: updated_at,
+         created_at: created_at,
+         content_type: %ContentType{id: content_type_id}
+       }
      }}
   end
 

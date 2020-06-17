@@ -8,6 +8,7 @@ defmodule Contentful.ContentType do
   alias Contentful.{ContentType, SysData}
 
   defstruct [
+    :id,
     :name,
     :description,
     :display_field,
@@ -20,6 +21,7 @@ defmodule Contentful.ContentType do
   """
 
   @type t :: %ContentType{
+          id: String.t(),
           name: String.t(),
           display_field: String.t(),
           description: String.t(),

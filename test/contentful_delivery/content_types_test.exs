@@ -60,5 +60,15 @@ defmodule Contentful.Delivery.ContentTypesTest do
           ContentTypes |> fetch_one("product", @space_id, @env, @access_token)
       end
     end
+
+    test "provides meta information" do
+      use_cassette "single_content_type" do
+        {:ok, %ContentType{id: "product", sys: %SysData{updated_at: _, created_at: _} = sys}} =
+          ContentTypes |> fetch_one("product", @space_id, @env, @access_token)
+
+        assert sys.updated_at
+        assert sys.created_at
+      end
+    end
   end
 end

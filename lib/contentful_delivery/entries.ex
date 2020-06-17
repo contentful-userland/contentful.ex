@@ -44,6 +44,23 @@ defmodule Contentful.Delivery.Entries do
 
       Entries |> include |> stream |> Stream.flat_map(fn entry -> entry.assets end) |> Enum.take(2)
 
+  ## Accessing common resource attributes
+
+  Entries embed `Contentful.SysData` with extra information about the entry:
+
+    import Contentful.Query
+    alias Contentful.{ContentType, Entry, SysData}
+    alias Contentful.Delivery.Entries
+
+    {:ok, entry} = Entries |> fetch_one("my_entry_id")
+
+    "my_entry_id" = entry.id
+    "<a timestamp for updated_at>" = entry.sys.updated_at
+    "<a timestamp for created_at>" = entry.sys.created_at
+    "<a locale string>" = entry.sys.locale
+    %ContentType{id: "the_associated_content_type_id"} =  entry.sys.content_type
+
+
 
   """
 

@@ -1,6 +1,41 @@
 defmodule Contentful.Delivery.ContentTypes do
   @moduledoc """
   Provides functions around reading content types from a given `Contentful.Space`
+
+  See https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-types/content-type
+
+  ## Simple calls
+
+  Fetching a single content type is straight forward:
+
+    import Contentful.Query
+    alias Contentful.ContentType
+    alias Contentful.Delivery.ContentTypes
+
+    {:ok, %ContentType{id: "my_content_type_id"}} = ContentTypes |> fetch_one("my_content_type_id")
+
+  Fetching multiple content types is also possible:
+
+    import Contentful.Query
+    alias Contentful.ContentType
+    alias Contentful.Delivery.ContentTypes
+
+    {:ok, [%ContentType{id: "my_content_type_id"} | _ ]} = ContentTypes |> fetch_all
+
+  ## Accessing common resource attributes
+
+  A `Contentful.ContentType` embeds `Contentful.SysData` with extra information about the entry:
+
+    import Contentful.Query
+    alias Contentful.ContentType
+    alias Contentful.Delivery.ContentTypes
+
+    {:ok, content_type} = ContentTypes |> fetch_one("my_content_type_id")
+
+    "my_content_type_id" = content_type.id
+    "<a timestamp for updated_at>" = content_type.sys.updated_at
+    "<a timestamp for created_at>" = content_type.sys.created_at
+
   """
 
   alias Contentful.{ContentType, Queryable, SysData}

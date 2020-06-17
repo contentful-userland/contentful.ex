@@ -60,8 +60,6 @@ defmodule Contentful.Delivery.Entries do
     "<a locale string>" = entry.sys.locale
     %ContentType{id: "the_associated_content_type_id"} =  entry.sys.content_type
 
-
-
   """
 
   alias Contentful.{Asset, ContentType, Entry, Queryable, SysData}

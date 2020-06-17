@@ -2,6 +2,13 @@
 
 ## Master
 
+## 0.3.1
+
+* [#37](https://github.com/contentful-labs/contentful.ex/issues/37) Fixed an error preventing corrent entity resolution for assets (thanks @OldhamMade)
+* [#44](https://github.com/contentful-labs/contentful.ex/issues/44) Adds missing common properties to content types, assets entries (thanks @OldhamMade)
+* [#36](https://github.com/contentful-labs/contentful.ex/issues/36) Added dependabot for keeping dependencies up to date
+* Improved some README sections about how to qeruy certain entities
+
 ## 0.3.0
 
 ### Features

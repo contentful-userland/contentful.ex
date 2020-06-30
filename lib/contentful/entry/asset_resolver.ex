@@ -33,6 +33,15 @@ defmodule Contentful.Entry.AssetResolver do
     acc
   end
 
+  # match taglists which have the form ["Hello", "world"]
+  defp find_in_data(
+         {_field_name, [head | _tail]},
+         acc
+       )
+       when is_bitstring(head) do
+    acc
+  end
+
   defp find_in_data(
          {_field_name, list},
          acc

@@ -117,5 +117,16 @@ defmodule Contentful.Entry.AssetResolverTest do
       ["5ECf6ltDUOnX441PtBR8Wk", "577fpmbIfYD71VCjCpYA84"] =
         entry |> AssetResolver.find_linked_asset_ids()
     end
+
+    test "does not choke up on contentful taglist (list of bitstrings)" do
+      entry = %Entry{
+        assets: [],
+        fields: %{
+          "my-tags" => ["hello", "world"]
+        }
+      }
+
+      [] = entry |> AssetResolver.find_linked_asset_ids()
+    end
   end
 end

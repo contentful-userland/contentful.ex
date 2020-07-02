@@ -2,6 +2,10 @@
 
 ## Master
 
+## 0.3.2
+
+* [#47](https://github.com/contentful-labs/contentful.ex/pull/47) Handle bitstring case when resolving assets (thanks @aspala)
+
 ## 0.3.1
 
 * [#37](https://github.com/contentful-labs/contentful.ex/issues/37) Fixed an error preventing corrent entity resolution for assets (thanks @OldhamMade)

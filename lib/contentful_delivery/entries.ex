@@ -117,7 +117,7 @@ defmodule Contentful.Delivery.Entries do
           "updatedAt" => updated_at,
           "createdAt" => created_at,
           "locale" => locale,
-          "contentType" => %{"sys" => content_type_id}
+          "contentType" => %{"sys" => %{"id" => content_type_id}}
         }
       }) do
     {:ok,

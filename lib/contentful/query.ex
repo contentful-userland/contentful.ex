@@ -277,7 +277,13 @@ defmodule Contentful.Query do
     content_type_present? = parameters |> Keyword.take([:content_type]) |> length() > 0
 
     unless content_type_present? do
-      raise %{message: "selecting for entries requires a content_type"}
+      raise %ArgumentError{
+        message: """
+        Filtering for entries requires a content_type, example:
+
+            Entries |> content_type("cats") |> by(name: "Gretchen")
+        """
+      }
     end
 
     {Entries,

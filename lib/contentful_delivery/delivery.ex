@@ -413,7 +413,7 @@ defmodule Contentful.Delivery do
     value
   end
 
-  @allowed_modifiers [:in, :nin, :ne, :match, :exist]
+  @allowed_modifiers [:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]
 
   defp deconstruct_filters(filters) do
     filters
@@ -436,8 +436,11 @@ defmodule Contentful.Delivery do
 
         _ ->
           raise %ArgumentError{
-            message:
-              "Invalid modifier for field '#{field}', only #{@allowed_modifiers |> Enum.join(", ")}"
+            message: """
+            Invalid modifier for field '#{field}'!
+
+                Allowed modifiers are: #{@allowed_modifiers |> Enum.join(", ")}
+            """
           }
       end
     end)

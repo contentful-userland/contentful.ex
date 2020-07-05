@@ -26,13 +26,17 @@ defmodule Contentful.Query do
   ```
 
   """
+  alias Contentful.Configuration
   alias Contentful.ContentType
   alias Contentful.Delivery
   alias Contentful.Delivery.Assets
   alias Contentful.Delivery.Entries
   alias Contentful.Delivery.Spaces
+  alias Contentful.Request
   alias Contentful.Space
   alias Contentful.SysData
+
+  @allowed_filter_modifiers [:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]
 
   @doc """
   adds the `include` parameter to a query.
@@ -166,9 +170,9 @@ defmodule Contentful.Query do
           | {:error, atom(), original_message: String.t()}
   def fetch_all(
         queryable,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
+        space \\ Configuration.get(:space_id),
+        env \\ Configuration.get(:environment),
+        api_key \\ Configuration.get(:access_token)
       )
 
   def fetch_all({Spaces, _}, _, _, _) do
@@ -189,10 +193,10 @@ defmodule Contentful.Query do
     url = [
       space |> Delivery.url(env),
       queryable.endpoint(),
-      parameters |> Delivery.collection_query_params()
+      parameters |> Request.collection_query_params()
     ]
 
-    {url, api_key |> Delivery.request_headers()}
+    {url, api_key |> Request.headers()}
     |> Delivery.send_request()
     |> Delivery.parse_response(&queryable.resolve_collection_response/1)
   end
@@ -221,9 +225,9 @@ defmodule Contentful.Query do
   def fetch_one(
         queryable,
         id \\ nil,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
+        space \\ Configuration.get(:space_id),
+        env \\ Configuration.get(:environment),
+        api_key \\ Configuration.get(:access_token)
       )
 
   def fetch_one(queryable, id, %Space{sys: %SysData{id: space_id}}, env, api_key) do
@@ -267,7 +271,7 @@ defmodule Contentful.Query do
           queryable
       end
 
-    {url, api_key |> Delivery.request_headers()}
+    {url, api_key |> Request.headers()}
     |> Delivery.send_request()
     |> Delivery.parse_response(&queryable.resolve_entity_response/1)
   end
@@ -345,7 +349,6 @@ defmodule Contentful.Query do
      parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
   end
 
-  @spec by(tuple(), list()) :: tuple()
   def by({Assets, parameters}, new_select_params) do
     select_params = parameters |> Keyword.take([:select_params])
 
@@ -353,12 +356,10 @@ defmodule Contentful.Query do
      parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
   end
 
-  @spec by(module(), list()) :: tuple()
   def by(Entries, select_params) do
     by({Entries, []}, select_params)
   end
 
-  @spec by(module(), list()) :: tuple()
   def by(Assets, select_params) do
     by({Assets, []}, select_params)
   end
@@ -393,9 +394,9 @@ defmodule Contentful.Query do
           Enumerable.t()
   def stream(
         queryable,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
+        space \\ Configuration.get(:space_id),
+        env \\ Configuration.get(:environment),
+        api_key \\ Configuration.get(:access_token)
       )
 
   def stream(Spaces, _space, _env, _api_key) do
@@ -404,5 +405,9 @@ defmodule Contentful.Query do
 
   def stream(args, space, env, api_key) do
     Contentful.Stream.stream(args, space, env, api_key)
+  end
+
+  def allowed_filter_modifiers do
+    @allowed_filter_modifiers
   end
 end

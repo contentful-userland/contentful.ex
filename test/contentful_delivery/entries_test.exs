@@ -2,7 +2,7 @@ defmodule Contentful.Delivery.EntriesTest do
   use ExUnit.Case
 
   alias Contentful.Delivery.Entries
-  alias Contentful.{Entry, Space, SysData}
+  alias Contentful.{ContentType, Entry, Space, SysData}
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
@@ -93,6 +93,22 @@ defmodule Contentful.Delivery.EntriesTest do
       end
     end
 
-    test "will fetch "
+    test "will fetch all published entries by spaces, filtered by content_type" do
+      use_cassette "multiple entries, filtered by content_type" do
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{id: "7qCGg4LadgJUcx5cr35Ou9", content_type: %ContentType{id: "category"}}
+           },
+           %Entry{
+             sys: %SysData{id: "4RPjazUzQMqemyNlcD3b9i", content_type: %ContentType{id: "category"}}
+           }
+         ],
+         total: 2} =
+          Entries
+          |> filter(content_type: "category")
+          |> fetch_all(@space_id, @env, @access_token)
+      end
+    end
   end
 end

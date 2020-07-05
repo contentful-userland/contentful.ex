@@ -271,6 +271,15 @@ defmodule Contentful.Query do
     |> Delivery.parse_response(&queryable.resolve_entity_response/1)
   end
 
+  def filter({queryable, parameters}, new_filters) do
+    filters = parameters |> Keyword.take([:filters])
+    {queryable, parameters |> Keyword.put(:filters, filters |> Keyword.merge(new_filters))}
+  end
+
+  def filter(queryable, filters) do
+    filter({queryable, []}, filters)
+  end
+
   @doc """
   will __resolve__ a query chain by constructing a `Stream.resource` around a possible API response
   allowing for lazy evaluation of queries. Cann be helpful with translating collection calls of

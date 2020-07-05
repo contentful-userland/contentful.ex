@@ -269,13 +269,16 @@ defmodule Contentful.Delivery do
   @spec collection_query_params(
           limit: pos_integer(),
           skip: non_neg_integer(),
-          content_type: String.t(),
-          include: non_neg_integer()
+          include: non_neg_integer(),
+          filters: map()
         ) :: String.t()
   def collection_query_params(options) do
+    filters = options |> Keyword.get(:filters) |> fallback([])
+
     params =
       options
-      |> Keyword.take([:limit, :skip, :content_type, :include])
+      |> Keyword.take([:limit, :skip, :include])
+      |> Keyword.merge(filters)
       |> URI.encode_query()
 
     "?#{params}"

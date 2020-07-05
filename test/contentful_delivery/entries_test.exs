@@ -79,7 +79,7 @@ defmodule Contentful.Delivery.EntriesTest do
       end
     end
 
-    test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
+    test "will fetch all published entries for a space, respecting both the skip and the limit param" do
       use_cassette "multiple entries, all filters" do
         {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
           Entries
@@ -92,5 +92,7 @@ defmodule Contentful.Delivery.EntriesTest do
           )
       end
     end
+
+    test "will fetch "
   end
 end

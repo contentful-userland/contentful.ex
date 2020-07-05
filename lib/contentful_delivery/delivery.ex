@@ -435,10 +435,9 @@ defmodule Contentful.Delivery do
           {:"#{field}[#{modifier}]", modifier_value}
 
         _ ->
-          raise %{
-            message: "Invalid modifier for field!",
-            field: field,
-            allowed_modifiers: @allowed_modifiers
+          raise %ArgumentError{
+            message:
+              "Invalid modifier for field '#{field}', only #{@allowed_modifiers |> Enum.join(", ")}"
           }
       end
     end)

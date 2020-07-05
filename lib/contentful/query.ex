@@ -28,6 +28,7 @@ defmodule Contentful.Query do
   """
   alias Contentful.ContentType
   alias Contentful.Delivery
+  alias Contentful.Delivery.Assets
   alias Contentful.Delivery.Entries
   alias Contentful.Delivery.Spaces
   alias Contentful.Space
@@ -352,10 +353,12 @@ defmodule Contentful.Query do
      parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
   end
 
+  @spec by(module(), list()) :: tuple()
   def by(Entries, select_params) do
     by({Entries, []}, select_params)
   end
 
+  @spec by(module(), list()) :: tuple()
   def by(Assets, select_params) do
     by({Assets, []}, select_params)
   end

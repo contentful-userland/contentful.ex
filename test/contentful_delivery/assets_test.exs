@@ -8,7 +8,9 @@ defmodule Contentful.Delivery.AssetsTest do
   import Contentful.Query
 
   @space_id "bmehzfuz4raf"
+  @env "master"
   @asset_id "577fpmbIfYD71VCjCpYA84"
+  @access_token nil
 
   setup_all do
     HTTPoison.start()
@@ -49,24 +51,42 @@ defmodule Contentful.Delivery.AssetsTest do
       end
     end
 
-    test "will fetch all published entries for a space, respecting the limit parameter" do
+    test "will fetch all published assets for a space, respecting the limit parameter" do
       use_cassette "multiple assets, limit filter" do
         {:ok, [%Asset{fields: %{title: "bafoo"}}], total: 2} =
           Assets |> limit(1) |> fetch_all(@space_id)
       end
     end
 
-    test "will fetch all published entries for a space, respecting the skip param" do
+    test "will fetch all published assets for a space, respecting the skip param" do
       use_cassette "multiple assets, skip filter" do
         {:ok, [%Asset{fields: %{title: "Foobar"}}], total: 2} =
           Assets |> skip(1) |> fetch_all(@space_id)
       end
     end
 
-    test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
+    test "will fetch fetch all published assets for a space, respecting both the skip and the limit param" do
       use_cassette "multiple assets, all filters" do
         {:ok, [%Asset{fields: %{title: "Foobar"}}], total: 2} =
           Assets |> limit(1) |> skip(1) |> fetch_all(@space_id)
+      end
+    end
+
+    test "will fetch all published assets, filtered by a name" do
+      use_cassette "multiple assets, filtered by name" do
+        {:ok, [%Asset{fields: %{title: "bafoo"}}], total: 1} =
+          Assets
+          |> by(title: "bafoo")
+          |> fetch_all(@space_id, @env, @access_token)
+      end
+    end
+
+    test "will fetch all published assets, filtered by a name, negated" do
+      use_cassette "multiple assets, filtered by name, negated" do
+        {:ok, [%Asset{fields: %{title: nil}}], total: 1} =
+          Assets
+          |> by(title: [ne: "bafoo"])
+          |> fetch_all(@space_id, @env, @access_token)
       end
     end
   end

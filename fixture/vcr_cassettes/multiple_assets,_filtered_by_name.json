@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf/environments/master/assets?fields.title=bafoo"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 1,\n  \"skip\": 0,\n  \"limit\": 100,\n  \"items\": [\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"bmehzfuz4raf\"\n          }\n        },\n        \"id\": \"577fpmbIfYD71VCjCpYA84\",\n        \"type\": \"Asset\",\n        \"createdAt\": \"2020-03-16T10:30:45.706Z\",\n        \"updatedAt\": \"2020-03-16T10:30:45.706Z\",\n        \"environment\": {\n          \"sys\": {\n            \"id\": \"master\",\n            \"type\": \"Link\",\n            \"linkType\": \"Environment\"\n          }\n        },\n        \"revision\": 1,\n        \"locale\": \"en-US\"\n      },\n      \"fields\": {\n        \"title\": \"bafoo\",\n        \"description\": \"a pdf\",\n        \"file\": {\n          \"url\": \"//assets.ctfassets.net/bmehzfuz4raf/577fpmbIfYD71VCjCpYA84/6456d4157900af3b35537f5f15dd97c2/Travis_Picking_-_The_LEGENDARY_picking_pattern.pdf\",\n          \"details\": {\n            \"size\": 90783\n          },\n          \"fileName\": \"Travis Picking - The LEGENDARY picking pattern.pdf\",\n          \"contentType\": \"application/pdf\"\n        }\n      }\n    }\n  ]\n}\n",
+      "headers": {
+        "Connection": "keep-alive",
+        "Content-Length": "1120",
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "CF-Environment-Id": "master",
+        "CF-Environment-Uuid": "69b0fe47-9d71-4e0c-a7e0-4e12cb573930",
+        "CF-Organization-Id": "0bEbsBel9WL3OIaiqx0MnO",
+        "CF-Space-Id": "bmehzfuz4raf",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "W/\"14856425138171294666\"",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Accept-Ranges": "bytes",
+        "Date": "Sun, 05 Jul 2020 14:17:51 GMT",
+        "Via": "1.1 varnish",
+        "Age": "0",
+        "X-Served-By": "cache-fra19140-FRA",
+        "X-Cache": "MISS",
+        "X-Cache-Hits": "0",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "f2ae57c3-a489-4c9a-a31a-6dbaa55c3d06"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

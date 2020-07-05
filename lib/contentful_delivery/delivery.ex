@@ -286,9 +286,6 @@ defmodule Contentful.Delivery do
       |> Keyword.merge(filters)
       |> URI.encode_query()
 
-    # |> Enum.map(fn {k, v} -> "#{k}=#{v}" end)
-    # |> Enum.join("&")
-
     "?#{params}"
   end
 
@@ -426,8 +423,8 @@ defmodule Contentful.Delivery do
           :id ->
             {:"sys.id", value}
 
-          fieldName ->
-            {:"fields.#{fieldName}", value}
+          field_name ->
+            {:"fields.#{field_name}", value}
         end
 
       case mapped_value do

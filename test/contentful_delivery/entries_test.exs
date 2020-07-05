@@ -106,7 +106,39 @@ defmodule Contentful.Delivery.EntriesTest do
          ],
          total: 2} =
           Entries
-          |> filter(content_type: "category")
+          |> content_type("category")
+          |> fetch_all(@space_id, @env, @access_token)
+      end
+    end
+
+    test "will support select as a way of selecting sys.id" do
+      use_cassette "single entry with select filters" do
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{id: "7qCGg4LadgJUcx5cr35Ou9", content_type: %ContentType{id: "category"}}
+           }
+         ],
+         total: 1} =
+          Entries
+          |> content_type("category")
+          |> by(id: "7qCGg4LadgJUcx5cr35Ou9")
+          |> fetch_all(@space_id, @env, @access_token)
+      end
+    end
+
+    test "will support negated filtering by field" do
+      use_cassette "some entries not having an id" do
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{id: "4RPjazUzQMqemyNlcD3b9i", content_type: %ContentType{id: "category"}}
+           }
+         ],
+         total: 1} =
+          Entries
+          |> content_type("category")
+          |> by(id: [ne: "7qCGg4LadgJUcx5cr35Ou9"])
           |> fetch_all(@space_id, @env, @access_token)
       end
     end

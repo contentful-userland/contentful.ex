@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf/environments/master/entries?content_type=category&sys.id%5Bne%5D=7qCGg4LadgJUcx5cr35Ou9"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"sys\": {\n    \"type\": \"Array\"\n  },\n  \"total\": 1,\n  \"skip\": 0,\n  \"limit\": 100,\n  \"items\": [\n    {\n      \"sys\": {\n        \"space\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Space\",\n            \"id\": \"bmehzfuz4raf\"\n          }\n        },\n        \"id\": \"4RPjazUzQMqemyNlcD3b9i\",\n        \"type\": \"Entry\",\n        \"createdAt\": \"2020-03-17T15:22:17.537Z\",\n        \"updatedAt\": \"2020-04-30T08:18:45.388Z\",\n        \"environment\": {\n          \"sys\": {\n            \"id\": \"master\",\n            \"type\": \"Link\",\n            \"linkType\": \"Environment\"\n          }\n        },\n        \"revision\": 2,\n        \"contentType\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"ContentType\",\n            \"id\": \"category\"\n          }\n        },\n        \"locale\": \"en-US\"\n      },\n      \"fields\": {\n        \"name\": \"A standard category\",\n        \"image\": {\n          \"sys\": {\n            \"type\": \"Link\",\n            \"linkType\": \"Asset\",\n            \"id\": \"5ECf6ltDUOnX441PtBR8Wk\"\n          }\n        }\n      }\n    }\n  ],\n  \"includes\": {\n    \"Asset\": [\n      {\n        \"sys\": {\n          \"space\": {\n            \"sys\": {\n              \"type\": \"Link\",\n              \"linkType\": \"Space\",\n              \"id\": \"bmehzfuz4raf\"\n            }\n          },\n          \"id\": \"5ECf6ltDUOnX441PtBR8Wk\",\n          \"type\": \"Asset\",\n          \"createdAt\": \"2020-03-16T10:06:11.604Z\",\n          \"updatedAt\": \"2020-06-10T12:59:00.879Z\",\n          \"environment\": {\n            \"sys\": {\n              \"id\": \"master\",\n              \"type\": \"Link\",\n              \"linkType\": \"Environment\"\n            }\n          },\n          \"revision\": 3,\n          \"locale\": \"en-US\"\n        },\n        \"fields\": {\n          \"file\": {\n            \"url\": \"//images.ctfassets.net/bmehzfuz4raf/5ECf6ltDUOnX441PtBR8Wk/fa3dc5cde2b4d4c5736566c956f20163/Screenshot_from_2020-03-11_22-56-44.png\",\n            \"details\": {\n              \"size\": 247990,\n              \"image\": {\n                \"width\": 1920,\n                \"height\": 1053\n              }\n            },\n            \"fileName\": \"Screenshot from 2020-03-11 22-56-44.png\",\n            \"contentType\": \"image/png\"\n          }\n        }\n      }\n    ]\n  }\n}\n",
+      "headers": {
+        "Connection": "keep-alive",
+        "Content-Length": "2205",
+        "Access-Control-Allow-Headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Etag",
+        "Access-Control-Max-Age": "86400",
+        "CF-Environment-Id": "master",
+        "CF-Environment-Uuid": "69b0fe47-9d71-4e0c-a7e0-4e12cb573930",
+        "CF-Organization-Id": "0bEbsBel9WL3OIaiqx0MnO",
+        "CF-Space-Id": "bmehzfuz4raf",
+        "Content-Type": "application/vnd.contentful.delivery.v1+json",
+        "Contentful-Api": "cda_cached",
+        "ETag": "W/\"144981087548954756\"",
+        "Server": "Contentful",
+        "X-Content-Type-Options": "nosniff",
+        "X-Contentful-Region": "us-east-1",
+        "Accept-Ranges": "bytes",
+        "Date": "Sun, 05 Jul 2020 11:44:23 GMT",
+        "Via": "1.1 varnish",
+        "Age": "0",
+        "X-Served-By": "cache-fra19143-FRA",
+        "X-Cache": "MISS",
+        "X-Cache-Hits": "0",
+        "Vary": "Accept-Encoding",
+        "x-contentful-request-id": "4872994b-841a-4870-b38e-f97140ec1281"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

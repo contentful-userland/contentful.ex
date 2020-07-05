@@ -270,16 +270,24 @@ defmodule Contentful.Delivery do
           limit: pos_integer(),
           skip: non_neg_integer(),
           include: non_neg_integer(),
-          filters: map()
+          content_type: String.t(),
+          select_params: map()
         ) :: String.t()
   def collection_query_params(options) do
-    filters = options |> Keyword.get(:filters) |> fallback([])
+    filters =
+      options
+      |> Keyword.get(:select_params)
+      |> fallback([])
+      |> deconstruct_filters()
 
     params =
       options
-      |> Keyword.take([:limit, :skip, :include])
+      |> Keyword.take([:limit, :skip, :include, :content_type, :select])
       |> Keyword.merge(filters)
       |> URI.encode_query()
+
+    # |> Enum.map(fn {k, v} -> "#{k}=#{v}" end)
+    # |> Enum.join("&")
 
     "?#{params}"
   end
@@ -406,5 +414,36 @@ defmodule Contentful.Delivery do
 
   defp fallback(value, _) do
     value
+  end
+
+  @allowed_modifiers [:in, :nin, :ne, :match, :exist]
+
+  defp deconstruct_filters(filters) do
+    filters
+    |> Enum.map(fn {field, value} = _filter ->
+      mapped_value =
+        case field do
+          :id ->
+            {:"sys.id", value}
+
+          fieldName ->
+            {:"fields.#{fieldName}", value}
+        end
+
+      case mapped_value do
+        {field, value} when is_binary(value) ->
+          {field, value}
+
+        {field, [{modifier, modifier_value}]} when modifier in @allowed_modifiers ->
+          {:"#{field}[#{modifier}]", modifier_value}
+
+        _ ->
+          raise %{
+            message: "Invalid modifier for field!",
+            field: field,
+            allowed_modifiers: @allowed_modifiers
+          }
+      end
+    end)
   end
 end

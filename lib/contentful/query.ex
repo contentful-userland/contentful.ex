@@ -271,13 +271,36 @@ defmodule Contentful.Query do
     |> Delivery.parse_response(&queryable.resolve_entity_response/1)
   end
 
-  def filter({queryable, parameters}, new_filters) do
-    filters = parameters |> Keyword.take([:filters])
-    {queryable, parameters |> Keyword.put(:filters, filters |> Keyword.merge(new_filters))}
+  def by({Entries, parameters}, new_select_params) do
+    select_params = parameters |> Keyword.take([:select_params])
+
+    content_type_present? = parameters |> Keyword.take([:content_type]) |> length() > 0
+
+    unless content_type_present? do
+      raise %{message: "selecting for entries requires a content_type"}
+    end
+
+    {Entries,
+     parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
   end
 
-  def filter(queryable, filters) do
-    filter({queryable, []}, filters)
+  def by({Assets, parameters}, new_select_params) do
+    select_params = parameters |> Keyword.take([:select_params])
+
+    {Assets,
+     parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
+  end
+
+  def by(Entries, select_params) do
+    by({Entries, []}, select_params)
+  end
+
+  def by(Assets, select_params) do
+    by({Assets, []}, select_params)
+  end
+
+  def by(queryable, _select_params) do
+    queryable
   end
 
   @doc """

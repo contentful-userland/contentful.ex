@@ -36,7 +36,7 @@ defmodule Contentful.Query do
   alias Contentful.Space
   alias Contentful.SysData
 
-  @allowed_filter_modifiers [:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]
+  @allowed_filter_modifiers [:all, :in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exists]
 
   @doc """
   adds the `include` parameter to a query.

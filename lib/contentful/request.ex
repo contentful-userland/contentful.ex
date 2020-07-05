@@ -17,13 +17,19 @@ defmodule Contentful.Request do
   end
 
   @doc """
-  parses the options for retrieving a collection. It will drop any option that is not in
-  @collection_filters ([:limit, :skip])
+  parses the options for retrieving a collection, usually triggered by a `Contentful.Query.fetch_all/4`.
+  It will drop any option that is not in an allowed set of parameter options.
 
   ## Examples
 
       "?limit=50&skip=25&order=foobar"
         = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)
+
+  Also provides support for mapping out some of the API specific syntax in field handling.
+
+  ## Examples
+
+      "?sys.id[ne]=foobar" = collection_query_params(select_params: [id: [ne: "foobar"]])
 
   """
   @spec collection_query_params(
@@ -96,19 +102,26 @@ defmodule Contentful.Request do
         {field, value} when is_binary(value) ->
           {field, value}
 
+        {field, [{modifier, modifier_value}]} when is_list(modifier_value) ->
+          create_modified_field(field, modifier, Enum.join(modifier_value, ","))
+
         {field, [{modifier, modifier_value}]} ->
-          unless Query.allowed_filter_modifiers() |> Enum.member?(modifier) do
-            raise %ArgumentError{
-              message: """
-              Invalid modifier for field '#{field}'!
-
-                  Allowed modifiers are: #{Query.allowed_filter_modifiers() |> Enum.join(", ")}
-              """
-            }
-          end
-
-          {:"#{field}[#{modifier}]", modifier_value}
+          create_modified_field(field, modifier, modifier_value)
       end
     end)
+  end
+
+  defp create_modified_field(field, modifier, field_value) do
+    unless Query.allowed_filter_modifiers() |> Enum.member?(modifier) do
+      raise %ArgumentError{
+        message: """
+        Invalid modifier for field '#{field}'!
+
+            Allowed modifiers are: #{Query.allowed_filter_modifiers() |> Enum.join(", ")}
+        """
+      }
+    end
+
+    {:"#{field}[#{modifier}]", field_value}
   end
 end

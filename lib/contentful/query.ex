@@ -271,6 +271,60 @@ defmodule Contentful.Query do
     |> Delivery.parse_response(&queryable.resolve_entity_response/1)
   end
 
+  @doc """
+  Adds a filter condition to the query.
+
+  This will work for Entries *requiring* a call to `content_type` before:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Entries
+
+      {:ok, entries, total: 1}
+      = Entries
+        |> content_type("dogs")
+        |> by(name: "Hasso", breed: "dalmatian")
+        |> fetch_all
+
+  This will also allow for more complex queries using modifiers:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Entries
+
+      {:ok, entries, total: 100}
+      = Entries
+        |> content_type("dogs")
+        |> by(name: [ne: "Hasso"], breed: "dalmatian")
+        |> fetch_all
+
+  Allowed modifiers are `[:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]`.
+
+  Working with `Contentful.Delivery.Assets` requires no `content_type` call:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Assets
+
+      {:ok, assets, total: 1} = Assets |> by(id: "foobar") |> fetch_all
+
+  Calling `by/2` allows for adding multiple conditions to the query:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Assets
+
+      {:ok, assets, total: 200}
+      = Assets
+        |> by(tags: [nin: "maps"])
+        |> fetch_all
+
+  """
+  @spec by(tuple(), list()) :: tuple()
   def by({Entries, parameters}, new_select_params) do
     select_params = parameters |> Keyword.take([:select_params])
 
@@ -290,6 +344,7 @@ defmodule Contentful.Query do
      parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
   end
 
+  @spec by(tuple(), list()) :: tuple()
   def by({Assets, parameters}, new_select_params) do
     select_params = parameters |> Keyword.take([:select_params])
 
@@ -328,7 +383,7 @@ defmodule Contentful.Query do
       # 10 times total.
       Assets |> limit(100) |> Enum.take(1000)
 
-      # will not work with Spaces, though, as they
+      # will not work with Spaces, though, as they is no collection endpoint
 
   """
   @spec stream(tuple(), String.t(), String.t(), String.t()) ::

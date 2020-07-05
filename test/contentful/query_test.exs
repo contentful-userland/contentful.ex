@@ -50,4 +50,14 @@ defmodule Contentful.QueryTest do
         |> Query.by(id: "foobar", name: [ne: "Mercedes"])
     end
   end
+
+  describe "search_full_text/2" do
+    test "adds a query to the parameters" do
+      {Entries, [query: "foobar"]} = Entries |> Query.search_full_text("foobar")
+    end
+
+    test "gets ignored for everything other than Entries" do
+      Assets = Assets |> Query.search_full_text("barfoo")
+    end
+  end
 end

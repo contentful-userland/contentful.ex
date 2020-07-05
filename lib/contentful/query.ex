@@ -369,6 +369,35 @@ defmodule Contentful.Query do
   end
 
   @doc """
+  allows for full text search over all entries fields. The original nomenclature fromthe API docs is `query`.
+
+  This has been renamed for clarity here.
+
+  ## Example
+
+      import Contentful.Query
+      {Entries, [query: "Nyancat"]} = Entries |> search_full_text("Nyancat")
+
+      # or, with full `fetch_all`
+      {:ok, nyan_cats, total: 616} =
+        Entries
+        |> search_full_text("Nyancat")
+        |> fetch_all
+  """
+  @spec search_full_text(tuple(), term()) :: tuple()
+  def search_full_text({Entries, parameters}, term) do
+    {Entries, parameters |> Keyword.put(:query, term)}
+  end
+
+  def search_full_text(Entries, term) do
+    search_full_text({Entries, []}, term)
+  end
+
+  def search_full_text(queryable, _term) do
+    queryable
+  end
+
+  @doc """
   will __resolve__ a query chain by constructing a `Stream.resource` around a possible API response
   allowing for lazy evaluation of queries. Cann be helpful with translating collection calls of
   unknown size.

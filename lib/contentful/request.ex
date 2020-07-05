@@ -1,4 +1,7 @@
 defmodule Contentful.Request do
+  @moduledoc """
+  Encapsulates functions invloved in making a request towards the Contentful APIs.
+  """
   alias Contentful.Configuration
   alias Contentful.Query
 
@@ -37,6 +40,7 @@ defmodule Contentful.Request do
           skip: non_neg_integer(),
           include: non_neg_integer(),
           content_type: String.t(),
+          query: String.t(),
           select_params: map()
         ) :: String.t()
   def collection_query_params(options) do
@@ -48,7 +52,7 @@ defmodule Contentful.Request do
 
     params =
       options
-      |> Keyword.take([:limit, :skip, :include, :content_type, :select])
+      |> Keyword.take([:limit, :skip, :include, :content_type, :query])
       |> Keyword.merge(filters)
       |> URI.encode_query()
 

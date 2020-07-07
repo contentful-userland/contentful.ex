@@ -67,7 +67,7 @@ jobs:
     - uses: actions/setup-elixir@v1
       with:
         otp-version: 22.3
-        elixir-version: 1.10.3
+        elixir-version: 1.10.4
 
     - name: Install hex
       run: mix local.hex --force

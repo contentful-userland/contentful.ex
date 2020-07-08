@@ -78,7 +78,7 @@ defmodule Contentful.Request do
     |> Keyword.merge(@accept_header)
   end
 
-  defp authorization_header(token) when is_nil(token) do
+  defp authorization_header(nil) do
     api_key_from_configuration() |> authorization_header()
   end
 

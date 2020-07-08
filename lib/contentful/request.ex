@@ -87,7 +87,7 @@ defmodule Contentful.Request do
   end
 
   defp api_key_from_configuration do
-    Configuration.get(:api_key) |> fallback("")
+    Configuration.get(:api_key) |> fallback("___MISSING_API_KEY___")
   end
 
   defp deconstruct_filters(filters) do

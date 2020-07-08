@@ -10,6 +10,7 @@ defmodule Contentful.RequestTest do
       assert [
                authorization: "Bearer api_access_token",
                "User-Agent": "Contentful Elixir SDK",
+               "X-Contentful-User-Agent": "Contentful Elixir SDK",
                accept: "application/json"
              ] == "api_access_token" |> Request.headers()
     end

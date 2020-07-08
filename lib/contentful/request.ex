@@ -7,8 +7,11 @@ defmodule Contentful.Request do
 
   import Contentful.Misc, only: [fallback: 2]
 
+  @agent_name "Contentful Elixir SDK"
+
   @agent_header [
-    "User-Agent": "Contentful Elixir SDK"
+    "User-Agent": @agent_name,
+    "X-Contentful-User-Agent": @agent_name
   ]
 
   @accept_header [

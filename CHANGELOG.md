@@ -2,6 +2,9 @@
 
 ## Master
 
+* [#49](https://github.com/contentful-labs/contentful.ex/pull/49) Adds extended query syntax for building more complex queries, as suggested by @ryansch in [#38](https://github.com/contentful-labs/contentful.ex/issues/38)
+* adds testgin against Elixir 1.10.4
+
 ## 0.3.2
 
 * [#47](https://github.com/contentful-labs/contentful.ex/pull/47) Handle bitstring case when resolving assets (thanks @aspala)

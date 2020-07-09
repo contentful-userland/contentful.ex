@@ -35,14 +35,4 @@ defmodule Contentful.DeliveryTest do
                Delivery.url("foobar", "baz")
     end
   end
-
-  describe ".request_headers" do
-    test "will construct the necessary headers for making a request with an api token" do
-      assert [
-               authorization: "Bearer api_access_token",
-               "User-Agent": "Contentful Elixir SDK",
-               accept: "application/json"
-             ] == "api_access_token" |> Delivery.request_headers()
-    end
-  end
 end

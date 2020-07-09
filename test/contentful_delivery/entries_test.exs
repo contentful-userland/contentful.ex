@@ -2,7 +2,7 @@ defmodule Contentful.Delivery.EntriesTest do
   use ExUnit.Case
 
   alias Contentful.Delivery.Entries
-  alias Contentful.{Entry, Space, SysData}
+  alias Contentful.{ContentType, Entry, Space, SysData}
 
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
@@ -79,7 +79,7 @@ defmodule Contentful.Delivery.EntriesTest do
       end
     end
 
-    test "will fetch fetch all published entries for a space, respecting both the skip and the limit param" do
+    test "will fetch all published entries for a space, respecting both the skip and the limit param" do
       use_cassette "multiple entries, all filters" do
         {:ok, [%Entry{fields: %{"name" => "Blue steel"}}], total: 2} =
           Entries
@@ -90,6 +90,56 @@ defmodule Contentful.Delivery.EntriesTest do
             @env,
             @access_token
           )
+      end
+    end
+
+    test "will fetch all published entries by spaces, filtered by content_type" do
+      use_cassette "multiple entries, filtered by content_type" do
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{id: "7qCGg4LadgJUcx5cr35Ou9", content_type: %ContentType{id: "category"}}
+           },
+           %Entry{
+             sys: %SysData{id: "4RPjazUzQMqemyNlcD3b9i", content_type: %ContentType{id: "category"}}
+           }
+         ],
+         total: 2} =
+          Entries
+          |> content_type("category")
+          |> fetch_all(@space_id, @env, @access_token)
+      end
+    end
+
+    test "will support select as a way of selecting sys.id" do
+      use_cassette "single entry with select filters" do
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{id: "7qCGg4LadgJUcx5cr35Ou9", content_type: %ContentType{id: "category"}}
+           }
+         ],
+         total: 1} =
+          Entries
+          |> content_type("category")
+          |> by(id: "7qCGg4LadgJUcx5cr35Ou9")
+          |> fetch_all(@space_id, @env, @access_token)
+      end
+    end
+
+    test "will support negated filtering by field" do
+      use_cassette "some entries not having an id" do
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{id: "4RPjazUzQMqemyNlcD3b9i", content_type: %ContentType{id: "category"}}
+           }
+         ],
+         total: 1} =
+          Entries
+          |> content_type("category")
+          |> by(id: [ne: "7qCGg4LadgJUcx5cr35Ou9"])
+          |> fetch_all(@space_id, @env, @access_token)
       end
     end
   end

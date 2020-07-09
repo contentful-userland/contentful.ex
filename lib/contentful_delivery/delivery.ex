@@ -123,22 +123,16 @@ defmodule Contentful.Delivery do
   * [Contentful Delivery API docs](https://www.contentful.com/developers/docs/references/content-delivery-api/) (CDA).
   """
 
+  import Contentful.Misc, only: [fallback: 2]
   import HTTPoison, only: [get: 2]
 
+  alias Contentful.Configuration
   alias HTTPoison.Response
 
   @endpoint "cdn.contentful.com"
   @preview_endpoint "preview.contentful.com"
   @protocol "https"
   @separator "/"
-
-  @agent_header [
-    "User-Agent": "Contentful Elixir SDK"
-  ]
-
-  @accept_header [
-    accept: "application/json"
-  ]
 
   @doc """
   Gets the json library for the Contentful Delivery API based
@@ -218,67 +212,11 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  Builds the request headers for a request against the CDA, taking api access tokens into account
-
-  ## Examples
-      my_access_token = "foobarfoob4z"
-      [
-         "Authorization": "Bearer foobarfoob4z",
-         "User-Agent": "Contentful Elixir SDK",
-         "Accept": "application/json"
-       ] = my_access_token |> request_headers()
-  """
-  @spec request_headers(String.t()) :: keyword()
-  def request_headers(api_key) do
-    api_key
-    |> authorization_header()
-    |> Keyword.merge(@agent_header)
-    |> Keyword.merge(@accept_header)
-  end
-
-  @doc """
   Sends a request against the CDA. It's really just a wrapper around `HTTPoison.get/2`
   """
-  @spec send_request(tuple()) :: {:ok, Response.t()}
+  @spec send_request({binary(), any()}) :: {:error, HTTPoison.Error.t()} | {:ok, Response.t()}
   def send_request({url, headers}) do
     get(url, headers)
-  end
-
-  @doc """
-  Prevents parsing of empty options.
-
-  ## Examples
-
-      "" = collection_query_params([])
-
-  """
-  def collection_query_params([]) do
-    ""
-  end
-
-  @doc """
-  parses the options for retrieving a collection. It will drop any option that is not in
-  @collection_filters ([:limit, :skip])
-
-  ## Examples
-
-      "?limit=50&skip=25&order=foobar"
-        = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)
-
-  """
-  @spec collection_query_params(
-          limit: pos_integer(),
-          skip: non_neg_integer(),
-          content_type: String.t(),
-          include: non_neg_integer()
-        ) :: String.t()
-  def collection_query_params(options) do
-    params =
-      options
-      |> Keyword.take([:limit, :skip, :content_type, :include])
-      |> URI.encode_query()
-
-    "?#{params}"
   end
 
   @doc """
@@ -346,62 +284,19 @@ defmodule Contentful.Delivery do
     {:error, :unknown}
   end
 
-  defp authorization_header(token) when is_nil(token) do
-    api_key_from_configuration() |> authorization_header()
-  end
-
-  defp authorization_header(token) do
-    [authorization: "Bearer #{token}"]
-  end
-
-  defp api_key_from_configuration do
-    config(:api_key) |> fallback("")
-  end
-
   defp environment_from_config do
-    config(:environment) |> fallback("master")
+    Configuration.get(:environment) |> fallback("master")
   end
 
   defp space_from_config do
-    config(:space)
+    Configuration.get(:space)
   end
 
   defp host_from_config do
-    case config(:endpoint) do
+    case Configuration.get(:endpoint) do
       nil -> @endpoint
       :preview -> @preview_endpoint
       value -> value
     end
-  end
-
-  @doc """
-  Can be used to retrieve configuration for the `Contentful.Delivery` module
-
-  ## Examples
-      config :contentful, delivery: [
-        my_config: "foobar"
-      ]
-
-      "foobar" = Contentful.Delivery.config(:my_config)
-  """
-  @spec config(atom()) :: any()
-  def config(setting) do
-    config() |> Keyword.get(setting)
-  end
-
-  @doc """
-  loads the configuration for the delivery module from the contentful app configuration
-  """
-  @spec config() :: list(keyword())
-  def config do
-    Application.get_env(:contentful, :delivery, [])
-  end
-
-  defp fallback(nil, value) do
-    value
-  end
-
-  defp fallback(value, _) do
-    value
   end
 end

@@ -26,12 +26,17 @@ defmodule Contentful.Query do
   ```
 
   """
+  alias Contentful.Configuration
   alias Contentful.ContentType
   alias Contentful.Delivery
+  alias Contentful.Delivery.Assets
   alias Contentful.Delivery.Entries
   alias Contentful.Delivery.Spaces
+  alias Contentful.Request
   alias Contentful.Space
   alias Contentful.SysData
+
+  @allowed_filter_modifiers [:all, :in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exists]
 
   @doc """
   adds the `include` parameter to a query.
@@ -165,9 +170,9 @@ defmodule Contentful.Query do
           | {:error, atom(), original_message: String.t()}
   def fetch_all(
         queryable,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
+        space \\ Configuration.get(:space_id),
+        env \\ Configuration.get(:environment),
+        api_key \\ Configuration.get(:access_token)
       )
 
   def fetch_all({Spaces, _}, _, _, _) do
@@ -185,13 +190,19 @@ defmodule Contentful.Query do
         env,
         api_key
       ) do
-    url = [
-      space |> Delivery.url(env),
-      queryable.endpoint(),
-      parameters |> Delivery.collection_query_params()
-    ]
+    params = parameters |> Request.collection_query_params()
 
-    {url, api_key |> Delivery.request_headers()}
+    url =
+      [
+        space |> Delivery.url(env),
+        queryable.endpoint()
+      ]
+      |> Enum.join()
+      |> URI.parse()
+      |> add_query_params(params)
+      |> to_string()
+
+    {url, api_key |> Request.headers()}
     |> Delivery.send_request()
     |> Delivery.parse_response(&queryable.resolve_collection_response/1)
   end
@@ -220,9 +231,9 @@ defmodule Contentful.Query do
   def fetch_one(
         queryable,
         id \\ nil,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
+        space \\ Configuration.get(:space_id),
+        env \\ Configuration.get(:environment),
+        api_key \\ Configuration.get(:access_token)
       )
 
   def fetch_one(queryable, id, %Space{sys: %SysData{id: space_id}}, env, api_key) do
@@ -266,9 +277,132 @@ defmodule Contentful.Query do
           queryable
       end
 
-    {url, api_key |> Delivery.request_headers()}
+    {url, api_key |> Request.headers()}
     |> Delivery.send_request()
     |> Delivery.parse_response(&queryable.resolve_entity_response/1)
+  end
+
+  @doc """
+  Adds a filter condition to the query.
+
+  This will work for Entries *requiring* a call to `content_type` before:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Entries
+
+      {:ok, entries, total: 1}
+      = Entries
+        |> content_type("dogs")
+        |> by(name: "Hasso", breed: "dalmatian")
+        |> fetch_all
+
+  This will also allow for more complex queries using modifiers:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Entries
+
+      {:ok, entries, total: 100}
+      = Entries
+        |> content_type("dogs")
+        |> by(name: [ne: "Hasso"], breed: "dalmatian")
+        |> fetch_all
+
+  Allowed modifiers are `[:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]`. See the
+  [official docs](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/search-parameters/equality-operator)
+  for adding search parameters this way.
+
+  Working with `Contentful.Delivery.Assets` requires no `content_type` call:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Assets
+
+      {:ok, assets, total: 1} = Assets |> by(id: "foobar") |> fetch_all
+
+  Calling `by/2` allows for adding multiple conditions to the query:
+
+  ## Example
+
+      import Contentful.Query
+      alias Contentful.Delivery.Assets
+
+      {:ok, assets, total: 200}
+      = Assets
+        |> by(tags: [nin: "maps"])
+        |> fetch_all
+
+  """
+  @spec by(tuple(), list()) :: tuple()
+  def by({Entries, parameters}, new_select_params) do
+    select_params = parameters |> Keyword.take([:select_params])
+
+    content_type_present? = parameters |> Keyword.take([:content_type]) |> length() > 0
+
+    unless content_type_present? do
+      raise %ArgumentError{
+        message: """
+        Filtering for entries requires a content_type, example:
+
+            Entries |> content_type("cats") |> by(name: "Gretchen")
+        """
+      }
+    end
+
+    {Entries,
+     parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
+  end
+
+  def by({Assets, parameters}, new_select_params) do
+    select_params = parameters |> Keyword.take([:select_params])
+
+    {Assets,
+     parameters |> Keyword.put(:select_params, select_params |> Keyword.merge(new_select_params))}
+  end
+
+  def by(Entries, select_params) do
+    by({Entries, []}, select_params)
+  end
+
+  def by(Assets, select_params) do
+    by({Assets, []}, select_params)
+  end
+
+  def by(queryable, _select_params) do
+    queryable
+  end
+
+  @doc """
+  allows for full text search over all entries fields. The original nomenclature fromthe API docs is `query`.
+
+  This has been renamed for clarity here.
+
+  ## Example
+
+      import Contentful.Query
+      {Entries, [query: "Nyancat"]} = Entries |> search_full_text("Nyancat")
+
+      # or, with full `fetch_all`
+      {:ok, nyan_cats, total: 616} =
+        Entries
+        |> search_full_text("Nyancat")
+        |> fetch_all
+  """
+  @spec search_full_text(tuple(), term()) :: tuple()
+  def search_full_text({Entries, parameters}, term) do
+    {Entries, parameters |> Keyword.put(:query, term)}
+  end
+
+  def search_full_text(Entries, term) do
+    search_full_text({Entries, []}, term)
+  end
+
+  def search_full_text(queryable, _term) do
+    queryable
   end
 
   @doc """
@@ -290,16 +424,16 @@ defmodule Contentful.Query do
       # 10 times total.
       Assets |> limit(100) |> Enum.take(1000)
 
-      # will not work with Spaces, though, as they
+      # will not work with Spaces, though, as they is no collection endpoint
 
   """
   @spec stream(tuple(), String.t(), String.t(), String.t()) ::
           Enumerable.t()
   def stream(
         queryable,
-        space \\ Delivery.config(:space_id),
-        env \\ Delivery.config(:environment),
-        api_key \\ Delivery.config(:access_token)
+        space \\ Configuration.get(:space_id),
+        env \\ Configuration.get(:environment),
+        api_key \\ Configuration.get(:access_token)
       )
 
   def stream(Spaces, _space, _env, _api_key) do
@@ -308,5 +442,17 @@ defmodule Contentful.Query do
 
   def stream(args, space, env, api_key) do
     Contentful.Stream.stream(args, space, env, api_key)
+  end
+
+  def allowed_filter_modifiers do
+    @allowed_filter_modifiers
+  end
+
+  defp add_query_params(uri, []) do
+    uri
+  end
+
+  defp add_query_params(%URI{} = uri, params) do
+    uri |> Map.put(:query, URI.encode_query(params))
   end
 end

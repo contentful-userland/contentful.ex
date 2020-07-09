@@ -18,9 +18,7 @@ defmodule Contentful.Request do
     accept: "application/json"
   ]
 
-  def collection_query_params([]) do
-    ""
-  end
+  def collection_query_params([]), do: []
 
   @doc """
   parses the options for retrieving a collection, usually triggered by a `Contentful.Query.fetch_all/4`.
@@ -28,14 +26,13 @@ defmodule Contentful.Request do
 
   ## Examples
 
-      "?limit=50&skip=25&order=foobar"
+      [limit: 50, skip: 25, order: "foobar"]
         = collection_query_params(limit: 50, baz: "foo", skip: 25, order: "foobar", bar: 42)
 
   Also provides support for mapping out some of the API specific syntax in field handling.
 
   ## Examples
-
-      "?sys.id[ne]=foobar" = collection_query_params(select_params: [id: [ne: "foobar"]])
+      [{:"sys.id[ne]", "foobar"}] = collection_query_params(select_params: [id: [ne: "foobar"]])
 
   """
   @spec collection_query_params(
@@ -45,7 +42,7 @@ defmodule Contentful.Request do
           content_type: String.t(),
           query: String.t(),
           select_params: map()
-        ) :: String.t()
+        ) :: list()
   def collection_query_params(options) do
     filters =
       options
@@ -53,13 +50,9 @@ defmodule Contentful.Request do
       |> fallback([])
       |> deconstruct_filters()
 
-    params =
-      options
-      |> Keyword.take([:limit, :skip, :include, :content_type, :query])
-      |> Keyword.merge(filters)
-      |> URI.encode_query()
-
-    "?#{params}"
+    options
+    |> Keyword.take([:limit, :skip, :include, :content_type, :query])
+    |> Keyword.merge(filters)
   end
 
   @doc """

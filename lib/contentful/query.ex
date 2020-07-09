@@ -190,11 +190,17 @@ defmodule Contentful.Query do
         env,
         api_key
       ) do
-    url = [
-      space |> Delivery.url(env),
-      queryable.endpoint(),
-      parameters |> Request.collection_query_params()
-    ]
+    params = parameters |> Request.collection_query_params()
+
+    url =
+      [
+        space |> Delivery.url(env),
+        queryable.endpoint()
+      ]
+      |> Enum.join()
+      |> URI.parse()
+      |> add_query_params(params)
+      |> to_string()
 
     {url, api_key |> Request.headers()}
     |> Delivery.send_request()
@@ -438,5 +444,13 @@ defmodule Contentful.Query do
 
   def allowed_filter_modifiers do
     @allowed_filter_modifiers
+  end
+
+  defp add_query_params(uri, []) do
+    uri
+  end
+
+  defp add_query_params(%URI{} = uri, params) do
+    uri |> Map.put(:query, URI.encode_query(params))
   end
 end

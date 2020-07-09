@@ -214,7 +214,7 @@ defmodule Contentful.Delivery do
   @doc """
   Sends a request against the CDA. It's really just a wrapper around `HTTPoison.get/2`
   """
-  @spec send_request(tuple()) :: {:ok, Response.t()}
+  @spec send_request({binary(), any()}) :: {:error, HTTPoison.Error.t()} | {:ok, Response.t()}
   def send_request({url, headers}) do
     get(url, headers)
   end

@@ -18,7 +18,7 @@ defmodule Contentful.RequestTest do
 
   describe "collection_query_params/1" do
     test "omits arbitrary keywords" do
-      "?limit=1&skip=2" = Request.collection_query_params(limit: 1, skip: 2)
+      [limit: 1, skip: 2] = Request.collection_query_params(limit: 1, skip: 2)
     end
 
     test "raises an error for unknown modifiers" do
@@ -28,16 +28,16 @@ defmodule Contentful.RequestTest do
     end
 
     test "translates id into sys.id" do
-      "?sys.id=foo" = Request.collection_query_params(select_params: [id: "foo"])
+      [{:"sys.id", "foo"}] = Request.collection_query_params(select_params: [id: "foo"])
     end
 
     test "supports modifiers" do
-      "?fields.name%5Bne%5D=bar" =
+      [{:"fields.name[ne]", "bar"}] =
         Request.collection_query_params(select_params: [name: [ne: "bar"]])
     end
 
     test "supports translation of array properties" do
-      "?fields.tags%5Bnin%5D=foo%2Cbar%2Cbarfoo" =
+      [{:"fields.tags[nin]", "foo,bar,barfoo"}] =
         Request.collection_query_params(select_params: [tags: [nin: ["foo", "bar", "barfoo"]]])
     end
   end

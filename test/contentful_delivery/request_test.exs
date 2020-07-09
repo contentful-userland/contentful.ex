@@ -28,16 +28,16 @@ defmodule Contentful.RequestTest do
     end
 
     test "translates id into sys.id" do
-      [{:"sys.id", "foo"}] = Request.collection_query_params(select_params: [id: "foo"])
+      ["sys.id": "foo"] = Request.collection_query_params(select_params: [id: "foo"])
     end
 
     test "supports modifiers" do
-      [{:"fields.name[ne]", "bar"}] =
+      ["fields.name[ne]": "bar"] =
         Request.collection_query_params(select_params: [name: [ne: "bar"]])
     end
 
     test "supports translation of array properties" do
-      [{:"fields.tags[nin]", "foo,bar,barfoo"}] =
+      ["fields.tags[nin]": "foo,bar,barfoo"] =
         Request.collection_query_params(select_params: [tags: [nin: ["foo", "bar", "barfoo"]]])
     end
   end

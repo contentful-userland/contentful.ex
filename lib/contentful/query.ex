@@ -311,7 +311,9 @@ defmodule Contentful.Query do
         |> by(name: [ne: "Hasso"], breed: "dalmatian")
         |> fetch_all
 
-  Allowed modifiers are `[:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]`.
+  Allowed modifiers are `[:in, :nin, :ne, :lte, :gte, :lt, :gt, :match, :exist]`. See the
+  [official docs](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/search-parameters/equality-operator)
+  for adding search parameters this way.
 
   Working with `Contentful.Delivery.Assets` requires no `content_type` call:
 

@@ -449,6 +449,11 @@ defmodule Contentful.Query do
     Contentful.Stream.stream(args, space, env, api_key)
   end
 
+  @doc """
+  Returns the fitler modifiers supported byt the Query syntax
+  """
+  @spec allowed_filter_modifiers() :: list()
+  @since "0.4.0"
   def allowed_filter_modifiers do
     @allowed_filter_modifiers
   end

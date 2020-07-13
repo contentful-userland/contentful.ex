@@ -15,7 +15,7 @@ defmodule Contentful.Mixfile do
 
   alias Contentful.Delivery.{Assets, ContentTypes, Entries, Locales, Spaces}
 
-  @version "0.3.2"
+  @version "0.4.0"
 
   def project do
     [

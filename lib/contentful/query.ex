@@ -450,7 +450,7 @@ defmodule Contentful.Query do
   end
 
   @doc """
-  Returns the fitler modifiers supported byt the Query syntax
+  Returns the filter modifiers supported byt the Query syntax
   """
   @spec allowed_filter_modifiers() :: list()
   @since "0.4.0"

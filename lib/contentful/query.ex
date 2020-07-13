@@ -228,6 +228,9 @@ defmodule Contentful.Query do
           {:ok, struct()}
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, atom(), original_message: String.t()}
+  @deprecated """
+  Use Contentful.Query.by/2 and Contentful.Query.fetch_all/4 with an id instead
+  """
   def fetch_one(
         queryable,
         id \\ nil,
@@ -338,6 +341,7 @@ defmodule Contentful.Query do
 
   """
   @spec by(tuple(), list()) :: tuple()
+  @doc since: "0.4.0"
   def by({Entries, parameters}, new_select_params) do
     select_params = parameters |> Keyword.take([:select_params])
 
@@ -393,6 +397,7 @@ defmodule Contentful.Query do
         |> fetch_all
   """
   @spec search_full_text(tuple(), term()) :: tuple()
+  @doc since: "0.4.0"
   def search_full_text({Entries, parameters}, term) do
     {Entries, parameters |> Keyword.put(:query, term)}
   end

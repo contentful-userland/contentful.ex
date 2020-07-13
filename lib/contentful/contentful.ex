@@ -21,7 +21,7 @@ defmodule Contentful do
   def deps do
     [
       # your other dependencies, then add:
-      {:contentful, "~> 0.3"}
+      {:contentful, "~> 0.4"}
     ]
   end
   ```

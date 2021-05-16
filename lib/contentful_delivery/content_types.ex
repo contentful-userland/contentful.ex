@@ -8,33 +8,33 @@ defmodule Contentful.Delivery.ContentTypes do
 
   Fetching a single content type is straight forward:
 
-    import Contentful.Query
-    alias Contentful.ContentType
-    alias Contentful.Delivery.ContentTypes
+      import Contentful.Query
+      alias Contentful.ContentType
+      alias Contentful.Delivery.ContentTypes
 
-    {:ok, %ContentType{id: "my_content_type_id"}} = ContentTypes |> fetch_one("my_content_type_id")
+      {:ok, %ContentType{id: "my_content_type_id"}} = ContentTypes |> fetch_one("my_content_type_id")
 
   Fetching multiple content types is also possible:
 
-    import Contentful.Query
-    alias Contentful.ContentType
-    alias Contentful.Delivery.ContentTypes
+      import Contentful.Query
+      alias Contentful.ContentType
+      alias Contentful.Delivery.ContentTypes
 
-    {:ok, [%ContentType{id: "my_content_type_id"} | _ ]} = ContentTypes |> fetch_all
+      {:ok, [%ContentType{id: "my_content_type_id"} | _ ]} = ContentTypes |> fetch_all
 
   ## Accessing common resource attributes
 
   A `Contentful.ContentType` embeds `Contentful.SysData` with extra information about the entry:
 
-    import Contentful.Query
-    alias Contentful.ContentType
-    alias Contentful.Delivery.ContentTypes
+      import Contentful.Query
+      alias Contentful.ContentType
+      alias Contentful.Delivery.ContentTypes
 
-    {:ok, content_type} = ContentTypes |> fetch_one("my_content_type_id")
+      {:ok, content_type} = ContentTypes |> fetch_one("my_content_type_id")
 
-    "my_content_type_id" = content_type.id
-    "<a timestamp for updated_at>" = content_type.sys.updated_at
-    "<a timestamp for created_at>" = content_type.sys.created_at
+      "my_content_type_id" = content_type.id
+      "<a timestamp for updated_at>" = content_type.sys.updated_at
+      "<a timestamp for created_at>" = content_type.sys.created_at
 
   """
 

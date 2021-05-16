@@ -2,10 +2,14 @@
 
 ## Unreleased
 
+## 0.4.1
+
+* [#75](https://github.com/contentful-labs/contentful.ex/issue/75) fixes an issue concerning malformed docs, thanks @OldhamMade
+
 ## 0.4.0
 
 * [#49](https://github.com/contentful-labs/contentful.ex/pull/49) Adds extended query syntax for building more complex queries, as suggested by @ryansch in [#38](https://github.com/contentful-labs/contentful.ex/issues/38)
-* adds testgin against Elixir 1.10.4
+* adds testing against Elixir 1.10.4
 
 ## 0.3.2
 
@@ -13,7 +17,7 @@
 
 ## 0.3.1
 
-* [#37](https://github.com/contentful-labs/contentful.ex/issues/37) Fixed an error preventing corrent entity resolution for assets (thanks @OldhamMade)
+* [#37](https://github.com/contentful-labs/contentful.ex/issues/37) Fixed an error preventing correct entity resolution for assets (thanks @OldhamMade)
 * [#44](https://github.com/contentful-labs/contentful.ex/issues/44) Adds missing common properties to content types, assets entries (thanks @OldhamMade)
 * [#36](https://github.com/contentful-labs/contentful.ex/issues/36) Added dependabot for keeping dependencies up to date
 * [#9](https://github.com/contentful-labs/contentful.ex/issues/9) Added the ability to specify an endpoint other than the Delivery API

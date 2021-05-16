@@ -65,7 +65,7 @@ jobs:
           ${{ runner.os }}-build-
     - uses: erlef/setup-beam@v1.7.0
       with:
-        otp-version: 23.3.4
+        otp-version: 23
         elixir-version: '1.11'
 
     - name: Install hex

@@ -54,11 +54,8 @@ jobs:
         path: |
           deps
           _build
-        key: ${{ runner.os }}-checks-${{matrix.otp}}-${{matrix.elixir}}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        key: ${{ runner.os }}-checks-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
         restore-keys: |
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-checks-${{matrix.otp}}-${{matrix.elixir}}-
-          ${{ runner.os }}-checks-${{matrix.otp}}-
           ${{ runner.os }}-checks-
     - uses: erlef/setup-beam@v1.7.1
       with:

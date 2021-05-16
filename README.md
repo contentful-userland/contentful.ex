@@ -3,7 +3,7 @@
 Elixir SDK for the [Contentful](https://www.contentful.com) Content APIs.
 
 [![Elixir CI](https://github.com/contentful-labs/contentful.ex/workflows/Elixir%20CI/badge.svg)](https://github.com/contentful-labs/contentful.ex/actions?query=workflow%3A%22Elixir+CI%22)
-[![Coverage Status](https://coveralls.io/repos/github/contentful-labs/contentful.ex/badge.svg?branch=master)](https://coveralls.io/github/contentful-labs/contentful.ex?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/contentful-labs/contentful.ex/badge.svg?branch=main)](https://coveralls.io/github/contentful-labs/contentful.ex?branch=main)
 [![Hex.pm](https://img.shields.io/hexpm/v/contentful?style=flat)](https://hex.pm/packages/contentful)
 [![License](https://img.shields.io/github/license/contentful-labs/contentful.ex?style=flat)](./LICENSE.txt)
 
@@ -94,5 +94,3 @@ config :contentful, delivery: [
 ```
 
 We freeze requests by using `exVCR`, in case you want to rebuild these files, make sure that test assertions match.
-
-

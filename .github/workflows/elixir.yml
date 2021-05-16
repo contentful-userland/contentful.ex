@@ -15,8 +15,8 @@ jobs:
 
     strategy:
       matrix:
-        otp: [24, 23, 22]
-        elixir: ['1.11', '1.10', '1.9', '1.8']
+        otp: [23, 22]
+        elixir: ['1.11', '1.10', '1.9']
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1

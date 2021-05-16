@@ -78,5 +78,7 @@ jobs:
       run: mix credo --strict
     - name: Report coverage
       run: mix coveralls.github
+      # even if we cannot send the report, the build is still okay
+      continue-on-error: true
     - name: Check documentation coverage
       run: MIX_ENV=docs mix inch

@@ -1,0 +1,21 @@
+# https://github.com/ahmadnassri/action-dependabot-auto-merge
+name: Dependabot Auto Merge
+
+on:
+  # more info:
+  # https://securitylab.github.com/research/github-actions-preventing-pwn-requests
+  pull_request_target:
+
+jobs:
+  approval:
+    runs-on: ubuntu-20.04
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2.6
+        with:
+          target: patch
+          # Note: This needs to be a PAT with (public) repo rights,
+          #       PAT-owning user needs to have write access to this repo
+          #       (dependabot needs to recognize the comment as coming from an allowed reviewer)
+          github-token: ${{ secrets.BOT_TOKEN }}

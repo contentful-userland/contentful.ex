@@ -15,13 +15,13 @@ defmodule Contentful.Mixfile do
 
   alias Contentful.Delivery.{Assets, ContentTypes, Entries, Locales, Spaces}
 
-  @version "0.4.1"
+  @version "0.5.0"
 
   def project do
     [
       app: :contentful,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),

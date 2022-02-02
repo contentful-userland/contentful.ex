@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.5.0
+
+* [#97](https://github.com/contentful-userland/contentful.ex/pull/97) switches underlying http adapter to `tesla` for higher flexibility. Thank you @OldhamMade
+* tests against Elixir 1.13 and updates required elixir version to 1.11
+
 ## 0.4.1
 
 * [#75](https://github.com/contentful-labs/contentful.ex/issue/75) fixes an issue concerning malformed docs, thanks @OldhamMade

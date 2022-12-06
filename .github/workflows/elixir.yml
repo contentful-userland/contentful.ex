@@ -60,7 +60,7 @@ jobs:
     - uses: erlef/setup-beam@v1.15
       with:
         otp-version: 25
-        elixir-version: '1.15'
+        elixir-version: '1.14'
 
     - name: Install hex
       run: mix local.hex --force

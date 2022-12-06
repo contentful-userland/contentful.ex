@@ -15,8 +15,8 @@ jobs:
 
     strategy:
       matrix:
-        otp: [24, 23]
-        elixir: ['1.13', '1.12', '1.11', '1.10']
+        otp: [25, 24]
+        elixir: ['1.14', '1.13']
     steps:
     - uses: actions/checkout@v3
     - uses: actions/cache@v3
@@ -59,8 +59,8 @@ jobs:
           ${{ runner.os }}-checks-
     - uses: erlef/setup-beam@v1.15
       with:
-        otp-version: 23
-        elixir-version: '1.11'
+        otp-version: 25
+        elixir-version: '1.15'
 
     - name: Install hex
       run: mix local.hex --force

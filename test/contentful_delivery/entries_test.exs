@@ -138,5 +138,38 @@ defmodule Contentful.Delivery.EntriesTest do
           |> fetch_all(@space_id, @env, @access_token)
       end
     end
+
+    test "will resolve links and embed them directly in the Entry" do
+      use_cassette "some entries have links" do
+        entry_id = "2PtC9h1YqIA6kaUaIsWEQ0"
+
+        {:ok,
+         [
+           %Entry{
+             sys: %SysData{
+               id: ^entry_id
+             },
+             fields: %{
+               "author" => %Entry{
+                 fields: %{
+                   "name" => "John Doe",
+                   "title" => "Web Developer",
+                   "email" => "john@doe.com"
+                 }
+               }
+             }
+           }
+         ],
+         total: 1} =
+          Entries
+          |> content_type("blogPost")
+          |> by(id: entry_id)
+          |> fetch_all(
+            @space_id,
+            @env,
+            @access_token
+          )
+      end
+    end
   end
 end

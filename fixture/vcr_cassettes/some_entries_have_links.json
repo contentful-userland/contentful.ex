@@ -1,0 +1,57 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "authorization": "***",
+        "User-Agent": "Contentful Elixir SDK",
+        "X-Contentful-User-Agent": "Contentful Elixir SDK",
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": {
+        "httpc_options": [],
+        "http_options": {
+          "autoredirect": "false"
+        }
+      },
+      "request_body": "",
+      "url": "https://cdn.contentful.com/spaces/bmehzfuz4raf/environments/master/entries?content_type=blogPost&sys.id=2PtC9h1YqIA6kaUaIsWEQ0"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"sys\":{\"type\":\"Array\"},\"total\":1,\"skip\":0,\"limit\":100,\"items\":[{\"metadata\":{\"tags\":[]},\"sys\":{\"space\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Space\",\"id\":\"bmehzfuz4raf\"}},\"id\":\"2PtC9h1YqIA6kaUaIsWEQ0\",\"type\":\"Entry\",\"createdAt\":\"2019-03-22T08:33:45.069Z\",\"updatedAt\":\"2020-04-18T18:44:10.843Z\",\"environment\":{\"sys\":{\"id\":\"master\",\"type\":\"Link\",\"linkType\":\"Environment\"}},\"revision\":2,\"contentType\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"ContentType\",\"id\":\"blogPost\"}},\"locale\":\"en-US\"},\"fields\":{\"title\":\"Static sites are great\",\"slug\":\"static-sites-are-great\",\"heroImage\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Asset\",\"id\":\"4NzwDSDlGECGIiokKomsyI\"}},\"description\":\"Worry less about security, caching, and talking to the server. Static sites are the new thing.\",\"body\":\"## The case for the static site generator\\n\\nMore and more developers are jumping on the \\\"go static train\\\", and rightfully so. Static pages are fast, lightweight, they scale well. They are more secure, and simple to maintain and they allow you to focus all your time and effort on the user interface. Often times, this dedication really shows.\\n\\nIt just so happens that static site generators are mostly loved by developers, but not by the average Joe. They do not offer WYSIWYG, previewing on demo sites may take an update cycle, they are often based on markdown text files, and they require some knowledge of modern day repositories.\\n\\nMoreover, when teams are collaborating, it can get complicated quickly. Has this article already been proof-read or reviewed? Is this input valid? Are user permissions available, e.g. for administering adding and removing team members? Can this article be published at a future date? How can a large repository of content be categorized, organized, and searched? All these requirements have previously been more or less solved within the admin area of your CMS. But of course with all the baggage that made you leave the appserver-app-database-in-one-big-blob stack in the first place.\\n\\n## Content APIs to the rescue\\n\\nAn alternative is decoupling the content management aspect from the system. And then replacing the maintenance prone server with a cloud based web service offering. Effectively, instead of your CMS of old, you move to a [Content Management as a Service (CMaaS)](https://www.contentful.com/r/knowledgebase/content-as-a-service/ \\\"Content Management as a Service (CMaaS)\\\") world, with a content API to deliver all your content. That way, you get the all the [benefits of content management features](http://www.digett.com/blog/01/16/2014/pairing-static-websites-cms \\\"benefits of content management features\\\") while still being able to embrace the static site generator mantra.\\n\\nIt so happens that Contentful is offering just that kind of content API. A service that\\n\\n* from the ground up has been designed to be fast, scalable, secure, and offer high uptime, so that you donât have to worry about maintenance ever again.\\n* offers a powerful editor and lots of flexibility in creating templates for your documents that your editors can reuse and combine, so that no developers resources are required in everyday writing and updating tasks.\\n* separates content from presentation, so you can reuse your content repository for any device platform your heart desires. That way, you can COPE (\\\"create once, publish everywhere\\\").\\n* offers webhooks that you can use to rebuild your static site in a fully automated fashion every time your content is modified.\\n\\nExtracted from the article [CMS-functionality for static site generators](https://www.contentful.com/r/knowledgebase/contentful-api-cms-static-site-generators/ \\\"CMS-functionality for static site generators\\\"). Read more about the [static site generators supported by Contentful](https://www.contentful.com/developers/docs/tools/staticsitegenerators/ \\\"static site generators supported by Contentful\\\").\",\"author\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Entry\",\"id\":\"15jwOBqpxqSAOy2eOO4S0m\"}},\"publishDate\":\"2017-05-16T00:00+02:00\",\"tags\":[\"javascript\",\"static-sites\"]}}],\"includes\":{\"Entry\":[{\"metadata\":{\"tags\":[]},\"sys\":{\"space\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Space\",\"id\":\"bmehzfuz4raf\"}},\"id\":\"15jwOBqpxqSAOy2eOO4S0m\",\"type\":\"Entry\",\"createdAt\":\"2019-03-22T08:33:44.329Z\",\"updatedAt\":\"2020-04-18T18:44:10.435Z\",\"environment\":{\"sys\":{\"id\":\"master\",\"type\":\"Link\",\"linkType\":\"Environment\"}},\"revision\":2,\"contentType\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"ContentType\",\"id\":\"person\"}},\"locale\":\"en-US\"},\"fields\":{\"name\":\"John Doe\",\"title\":\"Web Developer\",\"company\":\"ACME\",\"shortBio\":\"Research and recommendations for modern stack websites.\",\"email\":\"john@doe.com\",\"phone\":\"0176 / 1234567\",\"facebook\":\"johndoe\",\"twitter\":\"johndoe\",\"github\":\"johndoe\",\"image\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Asset\",\"id\":\"7orLdboQQowIUs22KAW4U\"}}}}],\"Asset\":[{\"metadata\":{\"tags\":[]},\"sys\":{\"space\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Space\",\"id\":\"bmehzfuz4raf\"}},\"id\":\"4NzwDSDlGECGIiokKomsyI\",\"type\":\"Asset\",\"createdAt\":\"2019-03-22T08:33:39.477Z\",\"updatedAt\":\"2020-04-18T18:44:05.885Z\",\"environment\":{\"sys\":{\"id\":\"master\",\"type\":\"Link\",\"linkType\":\"Environment\"}},\"revision\":2,\"locale\":\"en-US\"},\"fields\":{\"title\":\"City\",\"description\":\"City pictured from the sky\",\"file\":{\"url\":\"//images.ctfassets.net/bmehzfuz4raf/4NzwDSDlGECGIiokKomsyI/90b101c671a5969764757aaefb0c3466/denys-nevozhai-100695.jpg\",\"details\":{\"size\":15736986,\"image\":{\"width\":3992,\"height\":2992}},\"fileName\":\"denys-nevozhai-100695.jpg\",\"contentType\":\"image/jpeg\"}}},{\"metadata\":{\"tags\":[]},\"sys\":{\"space\":{\"sys\":{\"type\":\"Link\",\"linkType\":\"Space\",\"id\":\"bmehzfuz4raf\"}},\"id\":\"7orLdboQQowIUs22KAW4U\",\"type\":\"Asset\",\"createdAt\":\"2019-03-22T08:33:38.110Z\",\"updatedAt\":\"2020-04-18T18:44:04.820Z\",\"environment\":{\"sys\":{\"id\":\"master\",\"type\":\"Link\",\"linkType\":\"Environment\"}},\"revision\":2,\"locale\":\"en-US\"},\"fields\":{\"title\":\"Sparkler\",\"description\":\"John with Sparkler\",\"file\":{\"url\":\"//images.ctfassets.net/bmehzfuz4raf/7orLdboQQowIUs22KAW4U/ae1e04accdfcf6c3def7a449d12bff4c/matt-palmer-254999.jpg\",\"details\":{\"size\":2293094,\"image\":{\"width\":3000,\"height\":2000}},\"fileName\":\"matt-palmer-254999.jpg\",\"contentType\":\"image/jpeg\"}}}]}}\n",
+      "headers": {
+        "connection": "keep-alive",
+        "date": "Tue, 30 Apr 2024 08:46:13 GMT",
+        "via": "1.1 varnish, 1.1 varnish",
+        "accept-ranges": "bytes",
+        "age": "207",
+        "etag": "\"6650198899795356495\"",
+        "server": "Contentful",
+        "content-length": "6149",
+        "content-type": "application/vnd.contentful.delivery.v1+json",
+        "cf-space-id": "bmehzfuz4raf",
+        "cf-environment-id": "master",
+        "cf-environment-uuid": "fe6aa454-82d9-4c41-83f9-5f7194ff7797",
+        "cf-organization-id": "42rCduzn2g6MhnFOjK2VMh",
+        "x-contentful-route": "/spaces/:space/environments/:environment/entries",
+        "x-content-type-options": "nosniff",
+        "contentful-api": "cda",
+        "x-contentful-region": "us-east-1",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature,X-Contentful-Resource-Resolution",
+        "access-control-expose-headers": "Etag",
+        "access-control-max-age": "86400",
+        "access-control-allow-methods": "GET,HEAD,OPTIONS",
+        "x-served-by": "cache-ewr18121-EWR, cache-lcy-eglc8600094-LCY",
+        "x-cache-hits": "0, 0",
+        "x-timer": "S1714466774.847754,VS0,VE1",
+        "x-cache": "HIT",
+        "x-contentful-request-id": "c0a1e440-26e0-468c-a225-cfb8c6c5230a"
+      },
+      "status_code": ["HTTP/1.1", 200, "OK"],
+      "type": "ok"
+    }
+  }
+]

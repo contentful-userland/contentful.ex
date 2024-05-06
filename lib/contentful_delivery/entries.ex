@@ -26,23 +26,19 @@ defmodule Contentful.Delivery.Entries do
       {:ok, entries, total: _total_count_of_entries} =
         Entries |> fetch_all(space_id, environment, access_token)
 
-  ## More advanced query with included assets
+  ## More advanced query with included links
 
-  Entries can have assets included, which limits the amount of times a client has to request data from the server:
+  Entries can have links included, which limits the amount of times a client has to request data from the server:
 
       import Contentful.Query
       alias Contentful.{Asset, Entry}
       alias Contentful.Delivery.Entries
 
       # The default include depth is 1 (max 10)
-      {:ok, [ %Entry{assets: assets} = entry | _ ], total: _total_count_of_entries} =
+      {:ok, [ %Entry{} = entry | _ ], total: _total_count_of_entries} =
         Entries |> include |> fetch_all
 
-      assets |> Enum.map(fn %Asset{fields: fields} -> {fields.title, fields.file} end)
-
-      # you can also just get the assets belonging to an entry lazily:
-
-      Entries |> include |> stream |> Stream.flat_map(fn entry -> entry.assets end) |> Enum.take(2)
+      # any links within entry.fields will have been replaced with actual entities (e.g. an %Asset{] or %Entry{} struct)
 
   ## Accessing common resource attributes
 
@@ -62,9 +58,8 @@ defmodule Contentful.Delivery.Entries do
 
   """
 
-  alias Contentful.{Asset, ContentType, Entry, Queryable, SysData}
-  alias Contentful.Delivery.Assets
-  alias Contentful.Entry.AssetResolver
+  alias Contentful.{ContentType, Entry, Queryable, SysData}
+  alias Contentful.Entry.LinkResolver
 
   @behaviour Queryable
 
@@ -76,17 +71,19 @@ defmodule Contentful.Delivery.Entries do
   end
 
   @doc """
-  specifies the collection resolver for the case when assets are included within the entries response
+  specifies the collection resolver for the case when links are included within the entries response
   """
   def resolve_collection_response(%{
         "total" => total,
         "items" => items,
-        "includes" => %{"Asset" => assets}
-      }) do
+        "includes" => includes
+      })
+      when includes != %{} do
     {:ok, entries, total: total} =
       resolve_collection_response(%{"total" => total, "items" => items})
 
-    {:ok, entries |> Enum.map(fn entry -> entry |> resolve_assets(assets) end), total: total}
+    {:ok, entries |> Enum.map(fn entry -> entry |> LinkResolver.replace_in_situ(includes) end),
+     total: total}
   end
 
   @doc """
@@ -132,18 +129,5 @@ defmodule Contentful.Delivery.Entries do
          content_type: %ContentType{id: content_type_id}
        }
      }}
-  end
-
-  @spec resolve_assets(Entry.t(), list(Asset.t())) :: Entry.t()
-  defp resolve_assets(%Entry{} = entry, assets) do
-    asset_ids = entry |> AssetResolver.find_linked_asset_ids()
-
-    assets_for_entry =
-      assets
-      |> Enum.map(&Assets.resolve_entity_response/1)
-      |> Enum.map(fn {:ok, asset} -> asset end)
-      |> Enum.filter(fn %Asset{sys: %SysData{id: id}} -> asset_ids |> Enum.member?(id) end)
-
-    entry |> Map.put(:assets, assets_for_entry)
   end
 end

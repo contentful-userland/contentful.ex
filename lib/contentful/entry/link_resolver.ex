@@ -4,8 +4,8 @@ defmodule Contentful.Entry.LinkResolver do
   """
 
   alias Contentful.Delivery.ContentTypes
+  alias Contentful.Delivery.{Assets, ContentTypes, Entries, Locales, Spaces}
   alias Contentful.Entry
-  alias Contentful.Delivery.{Assets, Entries, Spaces, ContentTypes, Locales}
 
   @doc """
   In Contentful, you can create content that references other content. These are called "links".
@@ -18,19 +18,12 @@ defmodule Contentful.Entry.LinkResolver do
 
   Inspired by https://github.com/contentful/contentful.js/blob/master/ADVANCED.md#link-resolution
   """
-  @spec replace_in_situ(Entry.t(), map()) :: Entry.t()
-  def replace_in_situ(%Entry{fields: fields} = entry, %{} = includes) do
+  @spec replace_links_with_entities(Entry.t(), map()) :: Entry.t()
+  def replace_links_with_entities(%Entry{fields: fields} = entry, %{} = includes) do
     updated_fields =
       fields
       |> Enum.reduce(%{}, fn {name, value}, fields_with_links_resolved ->
-        new_value =
-          case resolved_field = resolve_links_in_field(value, includes) do
-            %Entry{} ->
-              replace_in_situ(resolved_field, includes)
-
-            _ ->
-              resolved_field
-          end
+        new_value = resolve_links_in_field_with_nesting(value, includes)
 
         Map.put(fields_with_links_resolved, name, new_value)
       end)
@@ -38,7 +31,17 @@ defmodule Contentful.Entry.LinkResolver do
     struct(entry, fields: updated_fields)
   end
 
-  def replace_in_situ(entity, _includes), do: entity
+  def replace_links_with_entities(entity, _includes), do: entity
+
+  defp resolve_links_in_field_with_nesting(field_value, includes) do
+    case resolved = resolve_links_in_field(field_value, includes) do
+      %Entry{} ->
+        replace_links_with_entities(resolved, includes)
+
+      _ ->
+        resolved
+    end
+  end
 
   defp resolve_links_in_field(
          %{"sys" => %{"id" => id, "linkType" => link_type, "type" => "Link"}} = field_value,
@@ -53,9 +56,11 @@ defmodule Contentful.Entry.LinkResolver do
   end
 
   # matches structs like %Asset{}, which can't be iterated through using the Enum module
+  # and mean links in this field have already been fully resolved anyway
   defp resolve_links_in_field(%_{} = field_value, _includes), do: field_value
 
   # matches any other map that isn't a struct, maps can be iterated through using Enum
+  # map fields may still have nested links
   defp resolve_links_in_field(
          %{} = field_value,
          %{} = includes
@@ -64,24 +69,7 @@ defmodule Contentful.Entry.LinkResolver do
     field_value
     |> Enum.reduce(%{}, fn {nested_field_name, nested_field_value},
                            field_with_nested_links_resolved ->
-      updated_nested_field_value =
-        case resolved = resolve_links_in_field(nested_field_value, includes) do
-          %Entry{} ->
-            replace_in_situ(resolved, includes)
-
-          %_{} ->
-            resolved
-
-          %{} ->
-            resolve_links_in_field(resolved, includes)
-
-          [] ->
-            resolve_links_in_field(resolved, includes)
-
-          _ ->
-            resolved
-        end
-
+      updated_nested_field_value = resolve_links_in_field_with_nesting(nested_field_value, includes)
       Map.put(field_with_nested_links_resolved, nested_field_name, updated_nested_field_value)
     end)
   end
@@ -90,13 +78,7 @@ defmodule Contentful.Entry.LinkResolver do
        when is_list(field_value) and length(field_value) > 0 do
     field_value
     |> Enum.map(fn field ->
-      case resolved = resolve_links_in_field(field, includes) do
-        %Entry{} ->
-          replace_in_situ(resolved, includes)
-
-        _ ->
-          resolved
-      end
+      resolve_links_in_field_with_nesting(field, includes)
     end)
   end
 

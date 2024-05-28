@@ -2,10 +2,10 @@ defmodule Contentful.Entry.LinkResolverTest do
   use ExUnit.Case
 
   alias Contentful.Asset
+  alias Contentful.{ContentType, Entry, SysData}
   alias Contentful.Entry.LinkResolver
-  alias Contentful.{Entry, SysData, ContentType}
 
-  describe "replace_in_situ/2" do
+  describe "replace_links_with_entities/2" do
     test "Entry with no links returns unchanged Entry" do
       includes = %{
         "Entry" => [
@@ -31,7 +31,7 @@ defmodule Contentful.Entry.LinkResolverTest do
         ]
       }
 
-      %Entry{} = %Entry{} |> LinkResolver.replace_in_situ(includes)
+      %Entry{} = %Entry{} |> LinkResolver.replace_links_with_entities(includes)
     end
 
     test "empty includes returns unchanged Entry" do
@@ -55,7 +55,7 @@ defmodule Contentful.Entry.LinkResolverTest do
         }
       }
 
-      ^entry = entry |> LinkResolver.replace_in_situ(%{})
+      ^entry = entry |> LinkResolver.replace_links_with_entities(%{})
     end
 
     test "links found in 'includes' are resolved in entry, others not found are left unchanged" do
@@ -146,7 +146,7 @@ defmodule Contentful.Entry.LinkResolverTest do
             }
           }
         }
-      } = entry |> LinkResolver.replace_in_situ(includes)
+      } = entry |> LinkResolver.replace_links_with_entities(includes)
     end
 
     test "resolves links nested in complex fields" do
@@ -399,7 +399,7 @@ defmodule Contentful.Entry.LinkResolverTest do
             "nodeType" => "document"
           }
         }
-      } = entry |> LinkResolver.replace_in_situ(includes)
+      } = entry |> LinkResolver.replace_links_with_entities(includes)
     end
 
     test "ignores unknown LinkTypes we don't know how to parse even if matching entity exists in includes" do
@@ -447,7 +447,7 @@ defmodule Contentful.Entry.LinkResolverTest do
         ]
       }
 
-      ^entry = entry |> LinkResolver.replace_in_situ(includes)
+      ^entry = entry |> LinkResolver.replace_links_with_entities(includes)
     end
 
     test "resolves nested links within lists of Entries" do
@@ -591,7 +591,7 @@ defmodule Contentful.Entry.LinkResolverTest do
           created_at: "2019-03-22T08:33:45.069Z",
           content_type: %ContentType{id: "page"}
         }
-      } = LinkResolver.replace_in_situ(entry, includes)
+      } = LinkResolver.replace_links_with_entities(entry, includes)
     end
   end
 end

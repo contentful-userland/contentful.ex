@@ -82,7 +82,9 @@ defmodule Contentful.Delivery.Entries do
     {:ok, entries, total: total} =
       resolve_collection_response(%{"total" => total, "items" => items})
 
-    {:ok, entries |> Enum.map(fn entry -> entry |> LinkResolver.replace_in_situ(includes) end),
+    {:ok,
+     entries
+     |> Enum.map(fn entry -> entry |> LinkResolver.replace_links_with_entities(includes) end),
      total: total}
   end
 

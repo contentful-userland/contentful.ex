@@ -66,11 +66,13 @@ then open [`http://localhost:8000`](http://localhost:8000).
 
 ## Contributing & Development
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+1. Fork the repository
+2. Create your feature branch on your fork (`git checkout -b my-new-feature`)
+3. Make your changes
+4. Run tests (`mix test`) and static analysis (`mix credo --strict`)
+5. Commit your changes (`git commit -am 'Add some feature'`)
+6. Push to your branch (`git push origin my-new-feature`)
+7. Create a Pull Request on this original repository
 
 ### Notes on setup
 

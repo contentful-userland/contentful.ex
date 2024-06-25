@@ -6,13 +6,12 @@ defmodule Contentful.Entry do
   See the [official documentation for more information](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/entries).
   """
 
-  alias Contentful.{Asset, SysData}
+  alias Contentful.SysData
 
-  defstruct [:sys, fields: [], assets: []]
+  defstruct [:sys, fields: []]
 
   @type t :: %Contentful.Entry{
           fields: list(),
-          sys: SysData.t(),
-          assets: list(Asset.t())
+          sys: SysData.t()
         }
 end

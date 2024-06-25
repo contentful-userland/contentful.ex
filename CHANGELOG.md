@@ -4,7 +4,7 @@
 
 ## 0.6.0
 
-- [#181](https://github.com/contentful-userland/contentful.ex/pull/181) Resolve all link fields found within "items" in an API response, and replace the links with actual entities, if available from the "includes" section of API response. Inspired by https://github.com/contentful/contentful.js/blob/master/ADVANCED.md#link-resolution
+- **BREAKING** [#181](https://github.com/contentful-userland/contentful.ex/pull/181) Resolve all link fields found within "items" in an API response, and replace the links with actual entities, if available from the "includes" section of API response. Inspired by https://github.com/contentful/contentful.js/blob/master/ADVANCED.md#link-resolution
 
 Note: BREAKING CHANGE, 'assets' field on Entry struct is no longer populated. All Assets for an Entry are now embedded directly within 'fields' instead
 

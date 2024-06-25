@@ -4,3 +4,4 @@
 * Nicolas Charlery (@bokay)
 * @bed42
 * Florian Kraft (florian.kraft@contentful.com  - @floriank)
+* @WillRochaThomas

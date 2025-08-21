@@ -125,6 +125,8 @@ defmodule Contentful.Delivery do
 
   import Contentful.Misc, only: [fallback: 2]
 
+  require Logger
+
   alias Contentful.Configuration
 
   @endpoint "cdn.contentful.com"
@@ -288,10 +290,15 @@ defmodule Contentful.Delivery do
   @spec build_error(Tesla.Env.t()) ::
           {:error, :rate_limit_exceeded, wait_for: integer()}
   def build_error(%Tesla.Env{
-        status: 429,
-        headers: [{"x-contentful-rate-limit-exceeded", seconds}, _]
+        status: 429
       }) do
-    {:error, :rate_limit_exceeded, wait_for: seconds}
+    {:error, :rate_limit_exceeded, wait_for: 3}
+  end
+
+  def build_error(error_response) do
+    Logger.error("Error response: #{inspect(error_response)}")
+
+    {:error, :unknown}
   end
 
   @doc """

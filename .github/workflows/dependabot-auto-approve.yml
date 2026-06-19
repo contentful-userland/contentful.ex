@@ -6,6 +6,9 @@ on:
   # https://securitylab.github.com/research/github-actions-preventing-pwn-requests
   pull_request_target:
 
+permissions:
+  contents: read
+
 jobs:
   approval:
     runs-on: ubuntu-20.04

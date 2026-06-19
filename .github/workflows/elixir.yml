@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
     name: OTP ${{matrix.otp}} | Elixir ${{matrix.elixir}}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -48,7 +48,7 @@ jobs:
 
   quality:
     name: Code quality checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3

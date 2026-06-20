@@ -7,11 +7,13 @@ defmodule Contentful.Entry do
   """
 
   alias Contentful.SysData
+  alias Contentful.Metadata
 
-  defstruct [:sys, fields: []]
+  defstruct [:sys, fields: [], metadata: %Metadata{}]
 
   @type t :: %Contentful.Entry{
           fields: list(),
-          sys: SysData.t()
+          sys: SysData.t(),
+          metadata: Metadata.t()
         }
 end

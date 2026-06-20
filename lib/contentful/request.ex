@@ -51,7 +51,7 @@ defmodule Contentful.Request do
       |> deconstruct_filters()
 
     options
-    |> Keyword.take([:limit, :skip, :include, :content_type, :query])
+    |> Keyword.take([:limit, :skip, :include, :content_type, :query, :links_to_entry])
     |> Keyword.merge(filters)
   end
 

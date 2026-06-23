@@ -100,7 +100,7 @@ defmodule Contentful.Mixfile do
       {:exvcr, "~> 0.12", only: :test},
       {:dogma, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.2.0", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.3.0", only: [:dev], runtime: false},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
